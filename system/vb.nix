@@ -1,6 +1,6 @@
-{ config, ... }:
+{ username, ... }:
 
 {
   virtualisation.virtualbox.guest.enable = true;
-  users.users."astavie".extraGroups = [ "vboxsf" ];
+  users.users.${username}.extraGroups = [ "vboxsf" ];
 }
