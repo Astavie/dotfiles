@@ -22,8 +22,8 @@
 
           inherit system;
           specialArgs = {
-            inherit self;
             inherit stateVersion;
+            rev = if self ? rev then self.rev else null;
           };
           modules = [
             ./hardware/vb_demo.nix

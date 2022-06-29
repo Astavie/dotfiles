@@ -1,4 +1,4 @@
-{ self, stateVersion, config, pkgs, lib, ... }:
+{ rev, stateVersion, config, pkgs, lib, ... }:
 
 {
   nix.package = pkgs.nixFlakes;
@@ -14,7 +14,7 @@
 
   # Let 'nixos-version --json' know about the Git revision
   # of this flake.
-  system.configurationRevision = lib.mkIf (self ? rev) self.rev;
+  system.configurationRevision = rev;
   system.stateVersion = stateVersion;
 
   # Select internationalisation properties.
