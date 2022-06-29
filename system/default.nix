@@ -1,17 +1,10 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { inputs, config, pkgs, lib, ... }:
 
 {
-  imports = [
-    ./hardware-configuration.nix
-  ];
-
   nix.package = pkgs.nixFlakes;
   nix.extraOptions = "experimental-features = nix-command flakes";
 
+  # # Specify the linux kernel 
   # boot.kernelPackages = pkgs.linuxKernel.packages.linux_5_18;
   
   # Use the GRUB 2 boot loader.
@@ -29,11 +22,16 @@
   console = {
     font = "Lat2-Terminus16";
     keyMap = "us";
-    useXkbConfig = true; # use xkbOptions in tty.
+    # useXkbConfig = true; # use xkbOptions in tty.
   };
 
-  # Set password for 'root'
-  users.users.root.password = "";
+  # Some handy base packages
+  environment.systemPackages = with pkgs; [
+    neovim git nixos-option home-manager
+  ];
+
+  # Timezone
+  time.timeZone = "Europe/Amsterdam";
 
   # Create user 'astavie'
   users.mutableUsers = false;
@@ -49,13 +47,5 @@
   };
 
   nix.settings.trusted-users = [ "astavie" ];
-
-  # Some handy base packages
-  environment.systemPackages = with pkgs; [
-    neovim git nixos-option
-  ];
-
-  # Timezone
-  time.timeZone = "Europe/Amsterdam";
 }
 
