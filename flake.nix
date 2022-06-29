@@ -1,19 +1,34 @@
 {
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
 
-  outputs = inputs @ { self, nixpkgs, ... }: {
+  inputs.home-manager.url = "github:rycee/home-manager/release-22.05";
+  inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+  outputs = inputs @ { self, home-manager, nixpkgs, ... }: {
+
+    homeManagerConfigurations = {
+      "astavie" = home-manager.lib.homeManagerConfiguration {
+        # system = "x86_64-linux";
+        modules = [
+          ./home/default.nix
+        ];
+      };
+    };
 
     nixosConfigurations = {
 
-      terrestrial = nixpkgs.lib.nixosSystem {
+      nixos = nixpkgs.lib.nixosSystem {
 
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };
         modules = [
-          ./configuration.nix
+          ./hardware/vb_demo.nix
+          ./system/default.nix
+          ./system/vb.nix
         ];
 
       };
+
     };
 
   };
