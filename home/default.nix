@@ -11,5 +11,5 @@
     enable = true;
     userEmail = "astavie@pm.me";
     userName = "Astavie";
-  }
+  };
 }

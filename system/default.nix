@@ -1,4 +1,4 @@
-{ inputs, config, pkgs, lib, ... }:
+{ self, stateVersion, config, pkgs, lib, ... }:
 
 {
   nix.package = pkgs.nixFlakes;
@@ -14,8 +14,8 @@
 
   # Let 'nixos-version --json' know about the Git revision
   # of this flake.
-  system.configurationRevision = with inputs; lib.mkIf (self ? rev) self.rev;
-  system.stateVersion = "22.05";
+  system.configurationRevision = lib.mkIf (self ? rev) self.rev;
+  system.stateVersion = stateVersion;
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
