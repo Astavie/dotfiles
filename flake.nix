@@ -1,5 +1,5 @@
 {
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-20.03";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
 
   outputs = { self, nixpkgs }: {
 
@@ -11,6 +11,11 @@
         modules = [
           ./configuration.nix
         ];
+
+        # Let 'nixos-version --json' know about the Git revision
+        # of this flake.
+        system.configurationRevision = with inputs; lib.mkIf (self ? rev) self.rev;
+        system.stateVersion = "22.05";
 
       };
     };
