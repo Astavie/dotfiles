@@ -4,33 +4,43 @@
   inputs.home-manager.url = "github:rycee/home-manager/release-22.05";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = inputs @ { self, home-manager, nixpkgs, ... }: {
+  outputs = { self, home-manager, nixpkgs, ... }:
+  
+    let
+      system = "x86_64-linux";
+      stateVersion = "22.05";
 
-    homeManagerConfigurations = {
-      "astavie" = home-manager.lib.homeManagerConfiguration {
-        # system = "x86_64-linux";
-        modules = [
-          ./home/default.nix
-          ./home/vb.nix
-        ];
-      };
-    };
-
-    nixosConfigurations = {
-
-      nixos = nixpkgs.lib.nixosSystem {
-
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./hardware/vb_demo.nix
-          ./system/default.nix
-          ./system/vb.nix
-        ];
-
+      users."astavie" = { modules, ... }: {
+        imports = [ ./home/default.nix ] ++ modules;
       };
 
-    };
+    in {
 
-  };
+      nixosConfigurations = {
+
+        nixos = nixpkgs.lib.nixosSystem {
+
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit self;
+            inherit stateVersion;
+          };
+          modules = [
+            ./hardware/vb_demo.nix
+            ./system/default.nix
+            ./system/vb.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users = users;
+              home-manager.extraSpecialArgs.modules = [ ./home/vb.nix ];
+            }
+          ];
+
+        };
+
+      };
+
+    };
 }
