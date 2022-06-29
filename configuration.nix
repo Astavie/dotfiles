@@ -19,6 +19,11 @@
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
 
+  # Let 'nixos-version --json' know about the Git revision
+  # of this flake.
+  system.configurationRevision = with inputs; lib.mkIf (self ? rev) self.rev;
+  system.stateVersion = "22.05";
+
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
