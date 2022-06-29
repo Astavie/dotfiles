@@ -7,40 +7,54 @@
   outputs = { self, home-manager, nixpkgs, ... }:
   
     let
-      system = "x86_64-linux";
-      stateVersion = "22.05";
+      username = "astavie";
 
-      users."astavie" = { modules, ... }: {
-        imports = [ ./home/default.nix ] ++ modules;
-      };
+      stateVersion = "22.05";
+      configurationRevision = if self ? rev then self.rev else null;
+
+      mkSystem = { modules, system }:
+        let
+        in nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit username;
+            inherit stateVersion;
+            inherit configurationRevision;
+          };
+          modules =
+            modules.hardware ++
+            modules.system ++
+            [home-manager.nixosModules.home-manager{
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.users.${username} = { modules, ... }: { imports = modules; };
+                home-manager.extraSpecialArgs.modules = modules.home;
+            }];
+        };
 
     in {
 
       nixosConfigurations = {
 
-        nixos = nixpkgs.lib.nixosSystem {
+        # VirtualBox demo of NixOS
+        nixos = mkSystem {
+          system = "x86_64-linux";
 
-          inherit system;
-          specialArgs = {
-            inherit stateVersion;
-            rev = if self ? rev then self.rev else null;
-          };
-          modules = [
+          modules.hardware = [
             ./hardware/vb_demo.nix
+          ];
+          modules.system = [
             ./system/default.nix
             ./system/vb.nix
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users = users;
-              home-manager.extraSpecialArgs.modules = [ ./home/vb.nix ];
-            }
           ];
-
+          modules.home = [
+            ./home/default.nix
+            ./home/vb.nix
+          ];
         };
 
       };
 
     };
+
 }

@@ -1,4 +1,10 @@
-{ rev, stateVersion, config, pkgs, lib, ... }:
+{
+  # custom inputs
+  configurationRevision, stateVersion, username,
+  
+  # system inputs
+  pkgs, ...
+}:
 
 {
   nix.package = pkgs.nixFlakes;
@@ -14,7 +20,7 @@
 
   # Let 'nixos-version --json' know about the Git revision
   # of this flake.
-  system.configurationRevision = rev;
+  system.configurationRevision = configurationRevision;
   system.stateVersion = stateVersion;
 
   # Select internationalisation properties.
@@ -27,17 +33,16 @@
 
   # Some handy base packages
   environment.systemPackages = with pkgs; [
-    neovim git nixos-option home-manager
+    neovim git neofetch
   ];
 
   # Timezone
   time.timeZone = "Europe/Amsterdam";
 
-  # Create user 'astavie'
+  # Create user
   users.mutableUsers = false;
-  users.users."astavie" = {
+  users.users.${username} = {
     isNormalUser = true;
-    description = "Astavie";
     password = "";
 
     # Use zsh shell
@@ -46,6 +51,6 @@
     extraGroups  = [ "wheel" "networkmanager" ];
   };
 
-  nix.settings.trusted-users = [ "astavie" ];
+  nix.settings.trusted-users = [ username ];
 }
 
