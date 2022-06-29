@@ -5,6 +5,22 @@
     enable = true;
     enableAutosuggestions = true;
     enableSyntaxHighlighting = true;
+
+    # Make history lookup match everything before cursor
+    initExtra = ''
+      bindkey "$terminfo[kcuu1]" history-beginning-search-backward
+      bindkey "$terminfo[kcud1]" history-beginning-search-forward
+
+      display-prompt() {
+        print -P "\n%K{white}%F{black}%n %~%E%k%f"
+        emulate -L zsh; ls;
+      }
+
+      add-zsh-hook chpwd display-prompt
+
+      PS1="> "
+      PS2="  "
+    '';
   };
 
   programs.git = {
