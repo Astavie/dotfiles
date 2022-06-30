@@ -8,9 +8,7 @@ in
 {
   virtualisation.virtualbox.guest.enable = true;
 
-  users.users = lib.mapAttrs' (username: usercfg:
-    lib.nameValuePair username {
+  users.users = lib.mapAttrs (username: usercfg: {
       extraGroups = [ "vboxsf" ];
-    }
-  ) superusers;
+  }) superusers;
 }
