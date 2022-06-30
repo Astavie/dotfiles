@@ -45,21 +45,19 @@ in
   # Create user
   users.mutableUsers = false;
 
-  users.users = lib.mapAttrs' (username: usercfg:
-    lib.nameValuePair username {
-      home = if usercfg ? home then usercfg.home else "/home/${username}";
+  users.users = lib.mapAttrs (username: usercfg: {
+    home = if usercfg ? home then usercfg.home else "/home/${username}";
 
-      isNormalUser = true;
-      password = usercfg.password;
+    isNormalUser = true;
+    password = usercfg.password;
 
-      packages = [ flex ];
+    packages = [ flex ];
 
-      # Use zsh shell
-      shell = pkgs.zsh;
+    # Use zsh shell
+    shell = pkgs.zsh;
 
-      extraGroups = lib.mkIf (usercfg ? superuser && usercfg.superuser) [ "wheel" "networkmanager" ];
-    }
-  ) users;
+    extraGroups = lib.mkIf (usercfg ? superuser && usercfg.superuser) [ "wheel" "networkmanager" ];
+  }) users;
 
   systemd.services = lib.mapAttrs' (username: usercfg:
     lib.nameValuePair "home-manager-${utils.escapeSystemdPath username}" {
