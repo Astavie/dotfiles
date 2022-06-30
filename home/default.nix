@@ -29,8 +29,6 @@
 
   programs.git = {
     enable = true;
-    userEmail = "astavie@pm.me";
-    userName = "Astavie";
   };
 
   # Add github to known ssh hosts

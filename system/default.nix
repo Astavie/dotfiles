@@ -1,6 +1,6 @@
 {
   # custom inputs
-  self, stateVersion, username, flakeDir,
+  users, flakeDir,
   
   # system inputs
   pkgs, utils, lib, ...
@@ -16,24 +16,15 @@ let
       exec ${pkgs.home-manager}/bin/home-manager switch --flake ''${1:-${flakeDir'}}
     fi
   '';
-  home = "/home/${username}";
 in
 {
   nix.package = pkgs.nixFlakes;
   nix.extraOptions = "experimental-features = nix-command flakes";
 
-  # # Specify the linux kernel 
-  # boot.kernelPackages = pkgs.linuxKernel.packages.linux_5_18;
-  
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
-
-  # Let 'nixos-version --json' know about the Git revision
-  # of this flake.
-  system.configurationRevision = if self ? rev then self.rev else null;
-  system.stateVersion = stateVersion;
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -53,70 +44,80 @@ in
 
   # Create user
   users.mutableUsers = false;
-  users.users.${username} = {
-    inherit home;
 
-    isNormalUser = true;
-    password = "";
+  users.users = lib.mapAttrs' (username: usercfg:
+    lib.nameValuePair username {
+      home = if usercfg ? home then usercfg.home else "/home/${username}";
 
-    packages = [ flex ];
+      isNormalUser = true;
+      password = usercfg.password;
 
-    # Use zsh shell
-    shell = pkgs.zsh;
+      packages = [ flex ];
 
-    extraGroups  = [ "wheel" "networkmanager" ];
-  };
+      # Use zsh shell
+      shell = pkgs.zsh;
 
-  systemd.services."home-manager-${utils.escapeSystemdPath username}" = {
-    # Copied from https://github.com/nix-community/home-manager/blob/master/nixos/default.nix
-    description = "Home Manager environment for ${username}";
-    wantedBy = [ "multi-user.target" ];
-    wants = [ "nix-daemon.socket" ];
-    after = [ "nix-daemon.socket" ];
-    before = [ "systemd-user-sessions.service" ];
+      extraGroups = lib.mkIf (usercfg ? superuser && usercfg.superuser) [ "wheel" "networkmanager" ];
+    }
+  ) users;
 
-    environment = {};
+  systemd.services = lib.mapAttrs' (username: usercfg:
+    lib.nameValuePair "home-manager-${utils.escapeSystemdPath username}" {
+      # Copied from https://github.com/nix-community/home-manager/blob/master/nixos/default.nix
+      description = "Home Manager environment for ${username}";
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "nix-daemon.socket" ];
+      after = [ "nix-daemon.socket" ];
+      before = [ "systemd-user-sessions.service" ];
 
-    unitConfig = { RequiresMountsFor = home; };
+      environment = {};
 
-    stopIfChanged = false;
+      unitConfig = { RequiresMountsFor = if usercfg ? home then usercfg.home else "/home/${username}"; };
 
-    serviceConfig = {
-      User = username;
-      Type = "oneshot";
-      RemainAfterExit = "yes";
-      TimeoutStartSec = 90;
-      SyslogIdentifier = "hm-activate-${username}";
+      stopIfChanged = false;
 
-      ExecStart = let
-        systemctl =
-          "XDG_RUNTIME_DIR=\${XDG_RUNTIME_DIR:-/run/user/$UID} systemctl";
+      serviceConfig = {
+        User = username;
+        Type = "oneshot";
+        RemainAfterExit = "yes";
+        TimeoutStartSec = 90;
+        SyslogIdentifier = "hm-activate-${username}";
 
-        sed = "${pkgs.gnused}/bin/sed";
+        ExecStart = let
+          systemctl =
+            "XDG_RUNTIME_DIR=\${XDG_RUNTIME_DIR:-/run/user/$UID} systemctl";
 
-        exportedSystemdVariables = lib.concatStringsSep "|" [
-          "DBUS_SESSION_BUS_ADDRESS"
-          "DISPLAY"
-          "WAYLAND_DISPLAY"
-          "XAUTHORITY"
-          "XDG_RUNTIME_DIR"
-        ];
+          sed = "${pkgs.gnused}/bin/sed";
 
-        setupEnv = pkgs.writeScript "hm-setup-env" ''
-          #! ${pkgs.runtimeShell} -el
-          # The activation script is run by a login shell to make sure
-          # that the user is given a sane environment.
-          # If the user is logged in, import variables from their current
-          # session environment.
-          eval "$(
-            ${systemctl} --user show-environment 2> /dev/null \
-            | ${sed} -En '/^(${exportedSystemdVariables})=/s/^/export /p'
-          )"
-          exec "$1"
-        '';
-      in "${setupEnv} ${flex}/bin/flex";
-    };
-  };
+          exportedSystemdVariables = lib.concatStringsSep "|" [
+            "DBUS_SESSION_BUS_ADDRESS"
+            "DISPLAY"
+            "WAYLAND_DISPLAY"
+            "XAUTHORITY"
+            "XDG_RUNTIME_DIR"
+          ];
 
-  nix.settings.trusted-users = [ username ];
+          setupEnv = pkgs.writeScript "hm-setup-env" ''
+            #! ${pkgs.runtimeShell} -el
+            # The activation script is run by a login shell to make sure
+            # that the user is given a sane environment.
+            # If the user is logged in, import variables from their current
+            # session environment.
+            eval "$(
+              ${systemctl} --user show-environment 2> /dev/null \
+              | ${sed} -En '/^(${exportedSystemdVariables})=/s/^/export /p'
+            )"
+            exec "$1"
+          '';
+        in "${setupEnv} ${flex}/bin/flex";
+      };
+    }
+  ) users;
+
+  nix.settings.trusted-users =
+    lib.attrNames (
+      lib.filterAttrs
+        (_: usercfg: usercfg ? superuser && usercfg.superuser)
+        users
+    );
 }

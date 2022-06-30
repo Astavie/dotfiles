@@ -7,59 +7,69 @@
   outputs = { self, home-manager, nixpkgs, ... }:
   
     let
-      username = "astavie";
-
       stateVersion = "22.05";
 
-      mkHome = { name, system, modules }:
-      {
-        homeConfigurations = {
-          "${name}" = home-manager.lib.homeManagerConfiguration {
-            username = name;
-            homeDirectory = "/home/${name}";
-            inherit system;
-            inherit stateVersion;
-            configuration = { ... }: { imports = modules; };
-          };
-        };
+      users.astavie = {
+        password = "";
+        superuser = true;
+        modules = [
+          ./home/default.nix
+          {
+            programs.git = {
+              userEmail = "astavie@pm.me";
+              userName = "Astavie";
+            };
+          }
+        ];
       };
 
-      mkSystem = { name, system, modules, args ? {} }:
+      mkSystem = { users, name, system, modules, extraHomeModules ? [], specialArgs ? {} }:
       {
         nixosConfigurations = {
           "${name}" = nixpkgs.lib.nixosSystem {
             inherit system;
-            inherit modules;
+
+            modules = [{
+              system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
+              system.stateVersion = stateVersion;
+            }] ++ modules;
+
             specialArgs = {
-              inherit username;
-              inherit stateVersion;
-              inherit self;
+              inherit users;
               flakeDir = null;
-            } // args;
+            } // specialArgs;
           };
         };
+
+        homeConfigurations = nixpkgs.lib.mapAttrs' (username: usercfg:
+          nixpkgs.lib.nameValuePair "${username}@${name}" (home-manager.lib.homeManagerConfiguration{
+            inherit system;
+            inherit stateVersion;
+            inherit username;
+            homeDirectory = if usercfg ? home then usercfg.home else "/home/${username}";
+            extraSpecialArgs = specialArgs;
+            configuration = { ... }: { imports = usercfg.modules ++ extraHomeModules; };
+          })
+        ) users;
       };
 
     in
-      mkHome {
-        name = username;
-        system = "x86_64-linux";
-
-        modules = [
-          ./home/default.nix
-          ./home/vb.nix
-        ];
-      } //
       mkSystem {
+        inherit users;
+
         name = "nixos";
         system = "x86_64-linux";
 
-        args.flakeDir = "/media/sf_dotfiles";
+        specialArgs.flakeDir = "/media/sf_dotfiles";
 
         modules = [
           ./hardware/vb_demo.nix
           ./system/default.nix
           ./system/vb.nix
+        ];
+
+        extraHomeModules = [
+          ./home/vb.nix
         ];
       };
 
