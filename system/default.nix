@@ -1,13 +1,13 @@
 {
   # custom inputs
   users, flakeDir,
-  
+
   # system inputs
   pkgs, utils, lib, ...
 }:
 
 let
-  flakeDir' = if flakeDir == null then ./.. else flakeDir; 
+  flakeDir' = if flakeDir == null then ./.. else flakeDir;
   flex = pkgs.writeShellScriptBin "flex" ''
     if [ "$EUID" -eq 0 ]
     then

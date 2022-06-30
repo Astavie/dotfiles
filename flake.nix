@@ -5,7 +5,7 @@
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
   outputs = { self, home-manager, nixpkgs, ... }:
-  
+
     let
       stateVersion = "22.05";
 
