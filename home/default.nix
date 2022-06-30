@@ -12,8 +12,12 @@
       bindkey "$terminfo[kcud1]" history-beginning-search-forward
 
       display-prompt() {
-        print -P "\n%K{white}%F{black}%n %~%E%k%f"
-        emulate -L zsh; ls;
+        NAKED="%d%n@%m"
+        N=$(($COLUMNS - ''${#$(print -P "''${NAKED}")} ))
+        SPACE=$(printf "%''${N}s")
+
+        print -P "\n%K{white}%F{black}%d''${SPACE}%n@%m%k%f"
+        emulate -L zsh; ls -A;
       }
 
       add-zsh-hook chpwd display-prompt
