@@ -1,5 +1,5 @@
-{ ... }:
+{ flakeDir, ... }:
 
 {
-    programs.git.extraConfig.safe.directory = "/media/sf_dotfiles";
+    programs.git.extraConfig.safe.directory = flakeDir;
 }
