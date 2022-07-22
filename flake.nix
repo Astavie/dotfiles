@@ -12,8 +12,9 @@
       # NixOS state version
       stateVersion = "22.05";
 
-      # Change this to a fork of the repo or to a local folder
-      flakeDir = "github:Astavie/dotfiles/main";
+      # Used to rebuild nixos when flakeDir is unspecified on the system
+      # Change to a fork of the repo
+      flakeRepo = "github:Astavie/dotfiles/main";
 
       # List of users, currently only "astavie"
       # Rename this user to your own username or create a new one from scratch
@@ -56,7 +57,7 @@
 
             specialArgs = {
               inherit (systemcfg) users;
-              inherit flakeDir;
+              inherit flakeRepo;
             } // (systemcfg.specialArgs or {});
           }
         ) systems;
