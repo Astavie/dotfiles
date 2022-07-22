@@ -18,9 +18,9 @@ let
 
   flexSrc = if inputs ? flakeDir then (flexInner inputs.flakeDir) else ''
     DIR=$(mktemp -d)
-    trap 'cd / && rm -rf -- "$DIR"' EXIT
     nix flake clone ${inputs.flakeRepo} --dest $DIR
     ${flexInner "$DIR"}
+    rm -rf -- "$DIR"
   '';
 
   flex = pkgs.writeShellScriptBin "flex" flexSrc;
