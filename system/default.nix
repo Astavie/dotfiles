@@ -21,7 +21,7 @@ let
     then
       DIR=$(mktemp -d)
       trap 'rm -rf -- "$DIR"' EXIT
-      nix flake clone ${inputs.flakeRepo} --dest $DIR
+      ${pkgs.nix}/bin/nix flake clone ${inputs.flakeRepo} --dest $DIR
     fi
     ${flexInner "$DIR"}
   '';
