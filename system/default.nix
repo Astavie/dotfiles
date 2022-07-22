@@ -7,7 +7,7 @@
 }:
 
 let
-  flakeDir' = if flakeDir == null then "git+https://github.com/Astavie/dotfiles" else flakeDir;
+  flakeDir' = if flakeDir == null then "github:Astavie/dotfiles/main" else flakeDir;
   flex = pkgs.writeShellScriptBin "flex" ''
     if [ "$EUID" -eq 0 ]
     then
