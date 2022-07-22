@@ -7,7 +7,7 @@
 }:
 
 let
-  flakeDir' = if flakeDir == null then ./.. else flakeDir;
+  flakeDir' = if flakeDir == null then "git+https://github.com/Astavie/dotfiles" else flakeDir;
   flex = pkgs.writeShellScriptBin "flex" ''
     if [ "$EUID" -eq 0 ]
     then
@@ -36,7 +36,7 @@ in
 
   # Some handy base packages
   environment.systemPackages = with pkgs; [
-    neovim git neofetch
+    neovim git neofetch flex
   ];
 
   # Timezone
@@ -50,8 +50,6 @@ in
 
     isNormalUser = true;
     password = usercfg.password;
-
-    packages = [ flex ];
 
     # Use zsh shell
     shell = pkgs.zsh;
