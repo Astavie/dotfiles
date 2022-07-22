@@ -67,7 +67,7 @@
               inherit (systemcfg) system;
               inherit stateVersion username;
               homeDirectory = if usercfg ? home then usercfg.home else "/home/${username}";
-              extraSpecialArgs = systemcfg.specialArgs;
+              extraSpecialArgs = systemcfg.specialArgs or {};
               configuration = { ... }: { imports = usercfg.modules ++ (systemcfg.extraHomeModules or []); };
             })
           ) systemcfg.users
