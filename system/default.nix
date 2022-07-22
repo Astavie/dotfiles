@@ -10,17 +10,17 @@ let
   flexInner = (dir: ''
     if [ "$EUID" -eq 0 ]
     then
-      exec ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${dir}}
+      ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${dir}}
     else
-      exec ${pkgs.home-manager}/bin/home-manager switch --flake ''${1:-${dir}}
+      ${pkgs.home-manager}/bin/home-manager switch --flake ''${1:-${dir}}
     fi
   '');
 
   flexSrc = if inputs ? flakeDir then (flexInner inputs.flakeDir) else ''
     DIR=$(mktemp -d)
+    trap 'rm -rf -- "$DIR"' EXIT
     nix flake clone ${inputs.flakeRepo} --dest $DIR
     ${flexInner "$DIR"}
-    rm -rf -- "$DIR"
   '';
 
   flex = pkgs.writeShellScriptBin "flex" flexSrc;
