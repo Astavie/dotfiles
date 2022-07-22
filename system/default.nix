@@ -7,13 +7,12 @@
 }:
 
 let
-  flakeDir' = if flakeDir == null then "github:Astavie/dotfiles/main" else flakeDir;
   flex = pkgs.writeShellScriptBin "flex" ''
     if [ "$EUID" -eq 0 ]
     then
-      exec ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${flakeDir'}}
+      exec ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${flakeDir}}
     else
-      exec ${pkgs.home-manager}/bin/home-manager switch --flake ''${1:-${flakeDir'}}
+      exec ${pkgs.home-manager}/bin/home-manager switch --flake ''${1:-${flakeDir}}
     fi
   '';
 in
