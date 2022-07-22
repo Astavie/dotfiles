@@ -57,20 +57,20 @@
             specialArgs = {
               inherit (systemcfg) users;
               inherit flakeDir;
-            } // systemcfg.specialArgs;
+            } // (systemcfg.specialArgs or {});
           }
         ) systems;
 
-        homeConfigurations = nixpkgs.lib.zipAttrsWith (name: values: head values) (nixpkgs.lib.mapAttrsToList (name: systemcfg:
+        homeConfigurations = nixpkgs.lib.foldr (a: b: a // b) {} (nixpkgs.lib.mapAttrsToList (name: systemcfg:
           nixpkgs.lib.mapAttrs' (username: usercfg:
             nixpkgs.lib.nameValuePair "${username}@${name}" (home-manager.lib.homeManagerConfiguration{
               inherit (systemcfg) system;
               inherit stateVersion username;
               homeDirectory = if usercfg ? home then usercfg.home else "/home/${username}";
-              extraSpecialArgs = systemcfg.specialArgs;
-              configuration = { ... }: { imports = usercfg.modules ++ systemcfg.extraHomeModules; };
+              extraSpecialArgs = systemcfg.specialArgs or {};
+              configuration = { ... }: { imports = usercfg.modules ++ (systemcfg.extraHomeModules or []); };
             })
-          ) system.users
+          ) systemcfg.users
         ) systems);
       };
 
