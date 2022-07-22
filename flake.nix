@@ -60,7 +60,7 @@
         name = "nixos";
         system = "x86_64-linux";
 
-        specialArgs.flakeDir = "/media/sf_dotfiles";
+        # specialArgs.flakeDir = "/media/sf_dotfiles";
 
         modules = [
           ./hardware/vb_demo.nix
