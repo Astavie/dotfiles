@@ -70,7 +70,7 @@
               extraSpecialArgs = systemcfg.specialArgs;
               configuration = { ... }: { imports = usercfg.modules ++ systemcfg.extraHomeModules; };
             })
-          ) system.users
+          ) systemcfg.users
         ) systems);
       };
 
