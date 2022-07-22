@@ -57,7 +57,7 @@
             specialArgs = {
               inherit (systemcfg) users;
               inherit flakeDir;
-            } // systemcfg.specialArgs;
+            } // (systemcfg.specialArgs || {});
           }
         ) systems;
 
@@ -68,7 +68,7 @@
               inherit stateVersion username;
               homeDirectory = if usercfg ? home then usercfg.home else "/home/${username}";
               extraSpecialArgs = systemcfg.specialArgs;
-              configuration = { ... }: { imports = usercfg.modules ++ systemcfg.extraHomeModules; };
+              configuration = { ... }: { imports = usercfg.modules ++ (systemcfg.extraHomeModules || []); };
             })
           ) systemcfg.users
         ) systems);
