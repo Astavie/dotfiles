@@ -17,9 +17,12 @@ let
   '');
 
   flexSrc = if inputs ? flakeDir then (flexInner inputs.flakeDir) else ''
-    DIR=$(mktemp -d)
-    trap 'rm -rf -- "$DIR"' EXIT
-    nix flake clone ${inputs.flakeRepo} --dest $DIR
+    if [ $# -eq 0 ]
+    then
+      DIR=$(mktemp -d)
+      trap 'rm -rf -- "$DIR"' EXIT
+      nix flake clone ${inputs.flakeRepo} --dest $DIR
+    fi
     ${flexInner "$DIR"}
   '';
 
