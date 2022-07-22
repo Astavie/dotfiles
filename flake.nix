@@ -61,7 +61,7 @@
           }
         ) systems;
 
-        homeConfigurations = nixpkgs.lib.zipAttrsWith (name: values: head values) (nixpkgs.lib.mapAttrsToList (name: systemcfg:
+        homeConfigurations = nixpkgs.lib.zipAttrsWith (name: values: nixpkgs.lib.head values) (nixpkgs.lib.mapAttrsToList (name: systemcfg:
           nixpkgs.lib.mapAttrs' (username: usercfg:
             nixpkgs.lib.nameValuePair "${username}@${name}" (home-manager.lib.homeManagerConfiguration{
               inherit (systemcfg) system;
