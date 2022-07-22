@@ -17,7 +17,6 @@
         SPACE=$(printf "%''${N}s")
 
         print -P "\n%K{white}%F{black}%d''${SPACE}%n@%m%k%f"
-        print -P "TEST"
         emulate -L zsh; ls -A;
       }
 
