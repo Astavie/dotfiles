@@ -35,9 +35,7 @@
       # Remove all existing systems and create your own
       systems.nixos = {
         inherit users;
-        
         system = "x86_64-linux";
-
         modules = [
           ./hardware/vb_demo.nix
           ./system/default.nix
