@@ -69,7 +69,6 @@
         ];
 
         extraHomeModules = [
-          ./home/vb.nix
         ];
       };
 
