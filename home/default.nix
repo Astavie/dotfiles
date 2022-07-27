@@ -17,7 +17,6 @@
         SPACE=$(printf "%''${N}s")
 
         print -P "\n%K{white}%F{black}%d''${SPACE}%n@%m%k%f"
-        print "TEST"
         emulate -L zsh; ls -A;
       }
 
@@ -37,10 +36,7 @@
     github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
   '';
 
-  # discover installed fonts
-  fonts.fontconfig.enable = true;
-
   home.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
+    autojump
   ];
 }

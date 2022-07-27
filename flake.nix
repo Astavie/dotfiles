@@ -25,6 +25,8 @@
         superuser = true;
         modules = [
           ./home/default.nix
+          ./home/stumpwm.nix
+          ./home/desktop.nix
           {
             programs.git = {
               userEmail = "astavie@pm.me";
@@ -43,6 +45,7 @@
           ./hardware/vb_demo.nix
           ./system/default.nix
           ./system/vb.nix
+          ./system/stumpwm.nix
         ];
       };
 
