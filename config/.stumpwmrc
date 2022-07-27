@@ -17,7 +17,7 @@
 (define-key *root-map* (kbd "RET")     (exec *terminal*))
 (define-key *root-map* (kbd "e")       (exec "$EDITOR"))
 (define-key *root-map* (kbd "SPC")     "exec")
-(define-key *root-map* (kbd "Super_L") "command-mode")
+; (define-key *root-map* (kbd "Super_L") "command-mode")
 (define-key *root-map* (kbd "ESC")     "abort")
 
 (undefine-key *root-map* *escape-fake-key*)

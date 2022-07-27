@@ -24,6 +24,8 @@
 
       PS1="> "
       PS2="  "
+
+      EDITOR=nvim
     '';
   };
 
