@@ -6,17 +6,14 @@
   "Returns the keybinding of Super+key"
   (kbd (concatenate 'string "s-" key)))
 
-(defun exec (cmd)
+(defun exec (&optional (cmd ""))
   "Returns the command to execute an arbitray command"
   (concatenate 'string "exec " cmd))
 
-(defvar *terminal* "kitty"
-  "Default terminal.")
-
 (set-prefix-key (kbd "Super_L"))
-(define-key *root-map* (kbd "RET")     (exec *terminal*))
-(define-key *root-map* (kbd "e")       (exec "$EDITOR"))
-(define-key *root-map* (kbd "SPC")     "exec")
+(define-key *root-map* (kbd "RET")     (exec "kitty"))
+(define-key *root-map* (kbd "e")       (exec "kitty nvim"))
+(define-key *root-map* (kbd "SPC")     (exec))
 ; (define-key *root-map* (kbd "Super_L") "command-mode")
 (define-key *root-map* (kbd "ESC")     "abort")
 

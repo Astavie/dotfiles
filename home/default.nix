@@ -24,7 +24,9 @@
 
       PS1="> "
       PS2="  "
+    '';
 
+    envExtra = ''
       EDITOR=nvim
     '';
   };
