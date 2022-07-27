@@ -20,6 +20,7 @@
 (define-key *root-map* (kbd "Super_L") "command-mode")
 (define-key *root-map* (kbd "ESC")     "abort")
 
+(undefine-key *root-map* *escape-fake-key*)
 (undefine-key *root-map* (kbd "c"))
 (undefine-key *root-map* (kbd "!"))
 (undefine-key *root-map* (kbd "C-a"))
