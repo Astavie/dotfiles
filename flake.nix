@@ -12,12 +12,6 @@
       # NixOS state version
       stateVersion = "22.05";
 
-      # Used by 'flex' to rebuild nixos when flakeDir is unspecified on the system
-      # This way you don't have to clone the repo on your local machine to update using 'flex'
-      # However, this does mean it has to reclone the repository every time you want to rebuild
-      # Change this to your fork of the repo
-      flakeRepo = "github:Astavie/dotfiles/main";
-
       # List of users, currently only "astavie"
       # Rename this user to your own username or create a new one from scratch
       users.astavie = {
@@ -63,7 +57,6 @@
 
             specialArgs = {
               inherit (systemcfg) users;
-              inherit flakeRepo;
             } // (systemcfg.specialArgs or {});
           }
         ) systems;

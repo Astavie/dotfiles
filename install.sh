@@ -12,7 +12,7 @@ COLOR="#7DB7E1"
 
 chmod +x ./gum
 alias gum='./gum'
-alias print='gum style --foreground "$COLOR" "" '
+alias print='gum style --foreground "$COLOR"'
 
 clear
 
@@ -74,5 +74,5 @@ print "Mounting..."
 print "Installing..."
 nixos-install --flake .\#$SYSTEM
 
-# systemctl reboot
+systemctl reboot
 
