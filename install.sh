@@ -105,7 +105,7 @@ info "Mounting..."
 
 # nixos-install has its own progress bar with more information
 info "Installing..."
-nixos-install --flake .\#$SYSTEM
+nixos-install --flake .\#$SYSTEM --no-root-passwd
 
 systemctl reboot
 
