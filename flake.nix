@@ -58,6 +58,7 @@
             modules = [{
               system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
               system.stateVersion = stateVersion;
+              networking.hostName = name;
             }] ++ systemcfg.modules;
 
             specialArgs = {
