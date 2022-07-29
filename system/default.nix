@@ -18,11 +18,15 @@ let
   '';
                                 in
 {
-  nix.package = pkgs.nixFlakes;
-  nix.extraOptions = "experimental-features = nix-command flakes";
+  # --- potentially put this in a separate hardware.nix file
 
   # UEFI boot
   boot.loader.systemd-boot.enable = true;
+
+  # ---
+
+  nix.package = pkgs.nixFlakes;
+  nix.extraOptions = "experimental-features = nix-command flakes";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";

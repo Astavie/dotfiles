@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/shexit
 
 set -e
 
@@ -8,25 +8,39 @@ then
     exit
 fi
 
-COLOR="#7DB7E1"
+RESET="\033[0m"
+RED="\033[31m"
+BLUE="\033[36m"
 
-chmod +x ./gum
-alias gum='./gum'
-alias print='gum style --foreground "$COLOR"'
+function err {
+    echo -e "${RED}$1${RESET}"
+}
+
+function info {
+    echo -e "${BLUE}$1${RESET}"
+}
 
 clear
 
-# at this moment 'gum spin' does not allow capturing of stdout, so we don't use it here
-print "Evaluating flake..."
+info "Installing dependencies..."
+
+nix-env -iA nixos.wget
+nix-env -iA nixos.zfs
+
+wget -qO- https://github.com/charmbracelet/gum/releases/download/v0.1.0/gum_0.1.0_linux_x86_64.tar.gz | tar xz gum
+
+alias gum='./gum'
+
+info "Evaluating flake..."
 FLAKE=$(nix flake show . --json --extra-experimental-features "nix-command flakes" 2> /dev/null)
 
-print "Select which NixOS system to install"
+info "Select which NixOS system to install"
 
 SYSTEM=$(echo $FLAKE | grep -Po '\w*(?=":{"type":"nixos-configuration"})' | gum choose)
 
 echo $SYSTEM
 
-print "Select the device to install system"
+info "Select the device to install system"
 
 DEVICE=$(lsblk -o name,size,type,mountpoints,label -p -n -d | gum filter | cut -d ' ' -f1)
 
@@ -38,7 +52,7 @@ fi
 
 echo $DEVICE
 
-print "Choose the size of the swap partition in GiB"
+info "Choose the size of the swap partition in GiB"
 SWAP=$(gum input --value=8 --placeholder "")
 
 [ -n "$SWAP" ] && [ "$SWAP" -eq "$SWAP" ] 2>/dev/null
@@ -51,7 +65,7 @@ echo ${SWAP}GiB
 
 gum confirm "WARNING: This will wipe all data from $DEVICE. Continue?"
 
-print "Partitioning..."
+info "Partitioning..."
     wipefs $DEVICE -a -f
     parted $DEVICE -s -- mklabel gpt
     parted $DEVICE -s -- mkpart primary 512MiB -${SWAP}GiB
@@ -59,19 +73,38 @@ print "Partitioning..."
     parted $DEVICE -s -- mkpart ESP fat32 1MiB 512MiB
     parted $DEVICE -s -- set 3 esp on
 
-print "Formatting..."
-    mkfs.ext4 -q -L nixos ${DEVICE}1
+info "Formatting..."
+    # zfs pool
+    zpool create -f nixos ${DEVICE}1
+    zfs set compression=on nixos
+
+    zfs create -p -o mountpoint=legacy nixos/local/root
+    zfs set xattr=sa                   nixos/local/root
+    zfs set acltype=posixacl           nixos/local/root
+    zfs snapshot                       nixos/local/root@blank
+
+    zfs create -p -o mountpoint=legacy nixos/local/nix
+    zfs set atime=off                  nixos/local/nix
+
+    zfs create -p -o mountpoint=legacy nixos/safe/data
+
+    # other
     mkswap -L swap ${DEVICE}2
     mkfs.fat -F 32 -n boot ${DEVICE}3
 
-print "Mounting..."
-    mount /dev/disk/by-label/nixos /mnt
-    mkdir -p /mnt/boot
-    mount /dev/disk/by-label/boot /mnt/boot
+info "Mounting..."
+    mount -t zfs nixos/local/root         /mnt
+    mkdir -p                              /mnt/boot
+    mount -t vfat /dev/disk/by-label/boot /mnt/boot
+    mkdir -p                              /mnt/nix
+    mount -t zfs nixos/local/nix          /mnt/nix
+    mkdir -p                              /mnt/data
+    mount -t zfs nixos/safe/data          /mnt/data
+
     swapon /dev/disk/by-label/swap
 
 # nixos-install has its own progress bar with more information
-print "Installing..."
+info "Installing..."
 nixos-install --flake .\#$SYSTEM
 
 systemctl reboot

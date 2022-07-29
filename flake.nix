@@ -1,10 +1,13 @@
 {
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
 
-  inputs.home-manager.url = "github:rycee/home-manager/release-22.05";
+  inputs.home-manager.url = "github:nix-community/home-manager/release-22.05";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = { self, home-manager, nixpkgs, ... }:
+  inputs.impermanence.url = "github:nix-community/impermanence";
+  inputs.impermanence.inputs.nixpkgs.follows = "nixpkgs";
+
+  outputs = { self, home-manager, nixpkgs, impermanence, ... }:
 
     let
       # --- Base configuration of users and systems ---
@@ -35,8 +38,9 @@
       systems.nixos = {
         inherit users;
         system = "x86_64-linux";
+        id = "85dd8e44";
         modules = [
-          ./hardware/vb_demo.nix
+          ./hardware/zfs.nix
           ./system/default.nix
           ./system/vb.nix
           ./system/stumpwm.nix
@@ -49,11 +53,15 @@
           nixpkgs.lib.nixosSystem {
             inherit (systemcfg) system;
 
-            modules = [{
-              system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
-              system.stateVersion = stateVersion;
-              networking.hostName = name;
-            }] ++ systemcfg.modules;
+            modules = [
+              impermanence.nixosModule
+              {
+                system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
+                system.stateVersion = stateVersion;
+                networking.hostName = name;
+                networking.hostId = systemcfg.id;
+              }
+            ] ++ systemcfg.modules;
 
             specialArgs = {
               inherit (systemcfg) users;
@@ -67,8 +75,14 @@
               inherit (systemcfg) system;
               inherit stateVersion username;
               homeDirectory = if usercfg ? home then usercfg.home else "/home/${username}";
-              extraSpecialArgs = systemcfg.specialArgs or {};
-              configuration = { ... }: { imports = usercfg.modules ++ (systemcfg.extraHomeModules or []); };
+              extraSpecialArgs = {
+                inherit username;
+              } // (systemcfg.specialArgs or {});
+              configuration = { ... }: {
+                imports = [
+                  impermanence.nixosModules.home-manager.impermanence
+                ] ++ usercfg.modules ++ (systemcfg.extraHomeModules or []);
+              };
             })
           ) systemcfg.users
         ) systems);

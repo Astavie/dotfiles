@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 
 {
   programs.zsh = {
@@ -33,6 +33,12 @@
 
   programs.git = {
     enable = true;
+  };
+
+  home.persistence."/data/${username}" = {
+    files = [
+      ".zsh_history"
+    ];
   };
 
   # Add github to known ssh hosts
