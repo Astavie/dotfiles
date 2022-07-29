@@ -35,7 +35,7 @@
 
       # List of systems
       # Remove all existing systems and create your own
-      systems.nixos = {
+      systems.vb = {
         inherit users;
         system = "x86_64-linux";
         id = "85dd8e44";
