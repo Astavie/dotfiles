@@ -11,9 +11,12 @@ let
   flex = pkgs.writeShellScriptBin "flex" ''
     if [ "$EUID" -eq 0 ]
     then
-      exec ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${flakeDir'}}
+      ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${flakeDir'}}
+      while read user; do
+        sudo -u "''${user}" flex
+      done < /etc/users
     else
-      exec ${pkgs.home-manager}/bin/home-manager switch --flake ''${1:-${flakeDir'}}
+      ${pkgs.home-manager}/bin/home-manager switch --flake ''${1:-${flakeDir'}}
     fi
   '';
                                 in
@@ -52,12 +55,16 @@ let
     extraGroups = lib.mkIf (usercfg ? superuser && usercfg.superuser) [ "wheel" "networkmanager" ];
   }) users;
 
-  users.extraUsers.root.hashedPassword = "*";
+  users.extraUsers.root.password = "tmp";
 
   nix.settings.trusted-users = lib.attrNames (
     lib.filterAttrs (_: usercfg:
       usercfg ? superuser && usercfg.superuser
     ) users
   );
+
+  # file with a list of users
+  environment.etc."users".text =
+    builtins.concatStringsSep "\n" (builtins.attrNames users);
 
 }

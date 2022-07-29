@@ -1,4 +1,4 @@
-#!/bin/shexit
+#!/bin/sh
 
 set -e
 
@@ -27,9 +27,9 @@ info "Installing dependencies..."
 nix-env -iA nixos.wget
 nix-env -iA nixos.zfs
 
-wget -qO- https://github.com/charmbracelet/gum/releases/download/v0.1.0/gum_0.1.0_linux_x86_64.tar.gz | tar xz gum
+wget -qO- https://github.com/charmbracelet/gum/releases/download/v0.1.0/gum_0.1.0_linux_x86_64.tar.gz | tar xz -C /tmp gum
 
-alias gum='./gum'
+alias gum='/tmp/gum'
 
 info "Evaluating flake..."
 FLAKE=$(nix flake show . --json --extra-experimental-features "nix-command flakes" 2> /dev/null)
@@ -103,9 +103,18 @@ info "Mounting..."
 
     swapon /dev/disk/by-label/swap
 
-# nixos-install has its own progress bar with more information
 info "Installing..."
 nixos-install --flake .\#$SYSTEM --no-root-passwd
+
+# /mnt/etc/users should now contain all users
+
+cat << EOF | chroot /mnt /bin/sh
+  
+  while read user; do
+    sudo -u "\${user}" flex
+  done < /etc/users
+
+EOF
 
 systemctl reboot
 

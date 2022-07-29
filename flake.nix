@@ -50,14 +50,6 @@
 
       # -- End of configuration --
 
-      home = nixpkgs.lib.mapAttrs (_: systemcfg:
-        nixpkgs.lib.mapAttrs (_: usercfg: {
-          imports = [
-            impermanence.nixosModules.home-manager.impermanence
-          ] ++ usercfg.modules ++ (systemcfg.sharedModules or []);
-        }) systemcfg.users
-      ) systems;
-
     in
       {
         nixosConfigurations = nixpkgs.lib.mapAttrs (name: systemcfg:
@@ -66,17 +58,11 @@
 
             modules = [
               impermanence.nixosModules.impermanence
-              home-manager.nixosModules.home-manager
               {
                 system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
                 system.stateVersion = stateVersion;
                 networking.hostName = name;
                 networking.hostId = systemcfg.id;
-
-                home-manager.useGlobalPkgs = true;
-                home-manager.useUserPackages = true;
-                home-manager.users = home."${name}";
-                home-manager.extraSpecialArgs = systemcfg.specialArgs or {};
               }
             ] ++ systemcfg.modules;
 
@@ -93,7 +79,11 @@
               inherit stateVersion username;
               homeDirectory = if usercfg ? home then usercfg.home else "/home/${username}";
               extraSpecialArgs = systemcfg.specialArgs or {};
-              configuration = home."${name}"."${username}";
+              configuration = {
+                imports = [
+                  impermanence.nixosModules.home-manager.impermanence
+                ] ++ usercfg.modules ++ (systemcfg.sharedModules or []);
+              };
             })
           ) systemcfg.users
         ) systems);
