@@ -1,4 +1,4 @@
-{ pkgs, username, ... }:
+{ pkgs, name, ... }:
 
 {
   programs.zsh = {
@@ -35,7 +35,7 @@
     enable = true;
   };
 
-  home.persistence."/data/${username}" = {
+  home.persistence."/data/${name}" = {
     files = [
       ".zsh_history"
     ];
