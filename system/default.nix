@@ -52,6 +52,8 @@ let
     extraGroups = lib.mkIf (usercfg ? superuser && usercfg.superuser) [ "wheel" "networkmanager" ];
   }) users;
 
+  users.extraUsers.root.hashedPassword = "*";
+
   systemd.services = lib.mapAttrs' (username: usercfg:
     lib.nameValuePair "home-manager-${utils.escapeSystemdPath username}" {
       # Copied from https://github.com/nix-community/home-manager/blob/master/nixos/default.nix
