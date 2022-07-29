@@ -9,10 +9,6 @@
     device = "nixos/local/nix";
     fsType = "zfs";
   };
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-label/boot";
-    fsType = "vfat";
-  };
   fileSystems."/data" = {
     device = "nixos/safe/data";
     fsType = "zfs";

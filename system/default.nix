@@ -18,13 +18,6 @@ let
   '';
                                 in
 {
-  # --- potentially put this in a separate hardware.nix file
-
-  # UEFI boot
-  boot.loader.systemd-boot.enable = true;
-
-  # ---
-
   nix.package = pkgs.nixFlakes;
   nix.extraOptions = "experimental-features = nix-command flakes";
 

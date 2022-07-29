@@ -40,6 +40,7 @@
         system = "x86_64-linux";
         id = "85dd8e44";
         modules = [
+          ./hardware/uefi.nix
           ./hardware/zfs.nix
           ./system/default.nix
           ./system/vb.nix
