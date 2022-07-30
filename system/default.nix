@@ -8,24 +8,34 @@
 
 let
   flakeDir' = if inputs ? flakeDir then inputs.flakeDir else ./..;
-  flex-build = pkgs.writeShellScriptBin "flex-build" ''
+  overflex = ''
+    if [ "$EUID" -eq 0 ]
+    then
+      echo "you're flexing too hard"
+      exit
+    fi
+  '';
+  flex = pkgs.writeShellScriptBin "flex" ''
+    ${overflex}
+
+    ${pkgs.nix}/bin/nix build "''${1:-${flakeDir'}}#homeConfigurations.$USER@$(hostname).activationPackage" --out-link /data/$USER/generation
+    /data/$USER/generation/activate
+  '';
+  flex-rehome = pkgs.writeShellScriptBin "flex-rehome" ''
     while read user; do
       mkdir -m 700 -p /data/$user
       chown $user /data/$user
       ${pkgs.nix}/bin/nix build "''${1:-${flakeDir'}}#homeConfigurations.$user@$(hostname).activationPackage" --out-link /data/$user/generation
     done < /etc/users
   '';
-  flex = pkgs.writeShellScriptBin "flex" ''
-    if [ "$EUID" -eq 0 ]
-    then
-      ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${flakeDir'}}
-      ${flex-build}/bin/flex-build
-    else
-      ${pkgs.nix}/bin/nix build "''${1:-${flakeDir'}}#homeConfigurations.$USER@$(hostname).activationPackage" --out-link /data/$USER/generation
-      /data/$USER/generation/activate
-    fi
+  flex-rebuild = pkgs.writeShellScriptBin "flex-rebuild" ''
+    ${overflex}
+
+    sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${flakeDir'}}
+    sudo ${flex-rehome}/bin/flex-rehome
+    /data/$USER/generation/activate
   '';
-                                in
+in
 {
   nix.package = pkgs.nixFlakes;
   nix.extraOptions = "experimental-features = nix-command flakes";
@@ -42,7 +52,7 @@ let
 
   # Some handy base packages
   environment.systemPackages = with pkgs; [
-    neovim git neofetch flex flex-build
+    neovim git neofetch flex flex-rebuild flex-rehome
   ];
 
   # Timezone
