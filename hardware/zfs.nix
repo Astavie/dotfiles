@@ -12,7 +12,6 @@
   fileSystems."/data" = {
     device = "nixos/safe/data";
     fsType = "zfs";
-    options = [ "mode=777" ];
   };
   
   boot.kernelParams = [ "elevator=none" "nohibernate" ];

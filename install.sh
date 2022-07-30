@@ -106,15 +106,7 @@ info "Mounting..."
 info "Installing..."
 nixos-install --flake .\#$SYSTEM --no-root-passwd
 
-# /mnt/etc/users should now contain all users
-
-cat << EOF | chroot /mnt /bin/sh
-  
-  while read user; do
-    sudo -u "\${user}" flex
-  done < /etc/users
-
-EOF
+nixos-enter -c "flex-build"
 
 systemctl reboot
 

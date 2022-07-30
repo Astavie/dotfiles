@@ -78,7 +78,9 @@
               inherit (systemcfg) system;
               inherit stateVersion username;
               homeDirectory = if usercfg ? home then usercfg.home else "/home/${username}";
-              extraSpecialArgs = systemcfg.specialArgs or {};
+              extraSpecialArgs = {
+                inherit username;
+              } // (systemcfg.specialArgs or {});
               configuration = {
                 imports = [
                   impermanence.nixosModules.home-manager.impermanence
