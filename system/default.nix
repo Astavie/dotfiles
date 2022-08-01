@@ -1,14 +1,12 @@
 {
   # custom inputs
-  users, hostname,
+  users, hostname, flakedir,
 
   # system inputs
   pkgs, utils, lib, ...
 }@inputs:
 
 let
-  flakeDir' = inputs.flakeDir or ./..;
-
   # system package
   rehome = pkgs.writeShellScriptBin "rehome" (
     builtins.concatStringsSep "\n" ([''
@@ -23,7 +21,7 @@ let
       in ''
         mkdir -m 700 -p ${datadir}
         chown ${username} ${datadir}
-        ${pkgs.nix}/bin/nix build "''${1:-${flakeDir'}}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${datadir}/generation
+        ${pkgs.nix}/bin/nix build "''${1:-${flakedir}}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${datadir}/generation
       ''
     ) users)
   );
@@ -39,13 +37,13 @@ let
   '';
   flex = (datadir: pkgs.writeShellScriptBin "flex" ''
     ${overflex}
-    ${pkgs.nix}/bin/nix build "''${1:-${flakeDir'}}#homeConfigurations.$USER@${hostname}.activationPackage" --out-link ${datadir}/generation
+    ${pkgs.nix}/bin/nix build "''${1:-${flakedir}}#homeConfigurations.$USER@${hostname}.activationPackage" --out-link ${datadir}/generation
     ${datadir}/generation/activate
   '');
   flex-rebuild = (datadir: pkgs.writeShellScriptBin "flex-rebuild" ''
     ${overflex}
-    sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${flakeDir'}}
-    sudo ${rehome}/bin/rehome ''${1:-${flakeDir'}}
+    sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${flakedir}}
+    sudo ${rehome}/bin/rehome ''${1:-${flakedir}}
     ${datadir}/generation/activate
   '');
 in

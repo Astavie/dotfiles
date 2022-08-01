@@ -40,6 +40,7 @@
         inherit users;
         system = "x86_64-linux";
         id = "85dd8e44";
+        flakedir = "/data/astavie/dotfiles";
         modules = [
           ./hardware/uefi.nix
           ./hardware/zfs.nix
@@ -70,6 +71,7 @@
             specialArgs = {
               inherit (systemcfg) users;
               hostname = name;
+              flakedir = systemcfg.flakedir or ./..;
             } // (systemcfg.specialArgs or {});
           }
         ) systems;
