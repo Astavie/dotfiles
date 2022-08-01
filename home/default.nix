@@ -45,5 +45,8 @@
   '';
 
   programs.autojump.enable = true;
-  programs.git.enable = true;
+  programs.git = {
+    enable = true;
+    extraConfig = { pull.rebase = false; };
+  };
 }
