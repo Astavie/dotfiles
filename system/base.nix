@@ -20,7 +20,7 @@ let
       chown ${usercfg.username} ${usercfg.dir.data}
       mkdir -m 700 -p ${usercfg.dir.persist}
       chown ${usercfg.username} ${usercfg.dir.persist}
-      ${pkgs.nix}/bin/nix build "''${1:-${flakedir}}#homeConfigurations.${usercfg.username}@${hostname}.activationPackage" --out-link ${usercfg.dir.data}/generation
+      ${pkgs.nix}/bin/nix build "''${1:-${flakedir}}#homeConfigurations.${usercfg.username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation
     '') users)
   );
 
@@ -35,14 +35,14 @@ let
   '';
   flex = (usercfg: pkgs.writeShellScriptBin "flex" ''
     ${overflex}
-    ${pkgs.nix}/bin/nix build "''${1:-${flakedir}}#homeConfigurations.${usercfg.username}@${hostname}.activationPackage" --out-link ${usercfg.dir.data}/generation
-    ${usercfg.dir.data}/generation/activate
+    ${pkgs.nix}/bin/nix build "''${1:-${flakedir}}#homeConfigurations.${usercfg.username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation
+    ${usercfg.dir.persist}/generation/activate
   '');
   flex-rebuild = (usercfg: pkgs.writeShellScriptBin "flex-rebuild" ''
     ${overflex}
     sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${flakedir}}
     sudo ${rehome}/bin/rehome ''${1:-${flakedir}}
-    ${usercfg.dir.data}/generation/activate
+    ${usercfg.dir.persist}/generation/activate
   '');
 in
 {
@@ -146,7 +146,7 @@ in
 
             exec "$1/activate"
           '';
-        in "${setupEnv} ${usercfg.dir.data}/generation";
+        in "${setupEnv} ${usercfg.dir.persist}/generation";
       };
     }
   ) users);
