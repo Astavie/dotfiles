@@ -53,7 +53,7 @@
   home.persistence."${dir.persist}" = {
     files = [
       ".zsh_history"
-      "./local/share/autojump/autojump.txt"
+      ".local/share/autojump/autojump.txt"
     ];
   };
 }
