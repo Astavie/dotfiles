@@ -30,7 +30,6 @@
       PS2="  "
 
       cd ${datadir}
-      neofetch
 
       add-zsh-hook chpwd display-prompt
     '';
@@ -40,22 +39,11 @@
     '';
   };
 
-  programs.git = {
-    enable = true;
-  };
-
-  home.persistence."${datadir}" = {
-    files = [
-      ".zsh_history"
-    ];
-  };
-
   # Add github to known ssh hosts
   home.file.".ssh/known_hosts".text = ''
     github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
   '';
 
-  home.packages = with pkgs; [
-    autojump
-  ];
+  programs.autojump.enable = true;
+  programs.git.enable = true;
 }

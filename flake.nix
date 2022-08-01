@@ -23,7 +23,8 @@
         modules = [
           ./home/default.nix
           ./home/stumpwm.nix
-          ./home/desktop.nix
+          ./home/coding.nix
+          ./home/persistence.nix
           {
             programs.git = {
               userEmail = "astavie@pm.me";
