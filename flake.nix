@@ -78,9 +78,10 @@
             nixpkgs.lib.nameValuePair "${username}@${name}" (home-manager.lib.homeManagerConfiguration{
               inherit (systemcfg) system;
               inherit stateVersion username;
-              homeDirectory = if usercfg ? home then usercfg.home else "/home/${username}";
+              homeDirectory = usercfg.home or "/home/${username}";
               extraSpecialArgs = {
                 inherit username;
+                datadir = usercfg.data or "/data/${username}";
               } // (systemcfg.specialArgs or {});
               configuration = {
                 imports = [

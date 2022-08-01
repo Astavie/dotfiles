@@ -7,11 +7,12 @@
 }@inputs:
 
 let
-  flakeDir' = if inputs ? flakeDir then inputs.flakeDir else ./..;
+  flakeDir' = inputs.flakeDir or ./..;
 
   # system package
   rehome = pkgs.writeShellScriptBin "rehome" (
     builtins.concatStringsSep "\n" ([''
+      set -e
       if [ "$EUID" -ne 0 ]
       then
         exec sudo "$0"
@@ -29,6 +30,7 @@ let
 
   # user packages
   overflex = ''
+    set -e
     if [ "$EUID" -eq 0 ]
     then
       echo "you're flexing too hard"
@@ -43,7 +45,7 @@ let
   flex-rebuild = (datadir: pkgs.writeShellScriptBin "flex-rebuild" ''
     ${overflex}
     sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${flakeDir'}}
-    sudo ${rehome}/bin/rehome
+    sudo ${rehome}/bin/rehome ''${1:-${flakeDir'}}
     ${datadir}/generation/activate
   '');
 in

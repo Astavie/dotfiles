@@ -1,4 +1,10 @@
-{ pkgs, username, ... }:
+{
+  # custom inputs
+  username, datadir,
+
+  # system inputs
+  pkgs, ...
+}:
 
 {
   programs.zsh = {
@@ -24,6 +30,8 @@
 
       PS1="> "
       PS2="  "
+
+      cd ${datadir}
     '';
 
     envExtra = ''
@@ -35,7 +43,7 @@
     enable = true;
   };
 
-  home.persistence."/data/${username}" = {
+  home.persistence."${datadir}" = {
     files = [
       ".zsh_history"
     ];
