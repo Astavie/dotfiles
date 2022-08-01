@@ -26,12 +26,13 @@
         emulate -L zsh; ls -A;
       }
 
-      add-zsh-hook chpwd display-prompt
-
       PS1="> "
       PS2="  "
 
       cd ${datadir}
+      neofetch
+
+      add-zsh-hook chpwd display-prompt
     '';
 
     envExtra = ''
