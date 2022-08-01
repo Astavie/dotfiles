@@ -68,6 +68,7 @@
 
             specialArgs = {
               inherit (systemcfg) users;
+              hostname = name;
             } // (systemcfg.specialArgs or {});
           }
         ) systems;

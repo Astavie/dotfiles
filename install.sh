@@ -106,7 +106,6 @@ info "Mounting..."
 info "Installing..."
 nixos-install --flake .\#$SYSTEM --no-root-passwd
 
-nixos-enter -c "flex-build"
+nixos-enter -c "rehome"
 
 systemctl reboot
-

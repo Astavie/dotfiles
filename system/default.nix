@@ -1,6 +1,6 @@
 {
   # custom inputs
-  users,
+  users, hostname,
 
   # system inputs
   pkgs, utils, lib, ...
@@ -8,6 +8,26 @@
 
 let
   flakeDir' = if inputs ? flakeDir then inputs.flakeDir else ./..;
+
+  # system package
+  rehome = pkgs.writeShellScriptBin "rehome" (
+    builtins.concatStringsSep "\n" ([''
+      if [ "$EUID" -ne 0 ]
+      then
+        exec sudo "$0"
+      fi
+    ''] ++ lib.mapAttrsToList (username: usercfg:
+      let
+        datadir = usercfg.data or "/data/${username}";
+      in ''
+        mkdir -m 700 -p ${datadir}
+        chown ${username} ${datadir}
+        ${pkgs.nix}/bin/nix build "''${1:-${flakeDir'}}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${datadir}/generation
+      ''
+    ) users)
+  );
+
+  # user packages
   overflex = ''
     if [ "$EUID" -eq 0 ]
     then
@@ -15,26 +35,17 @@ let
       exit
     fi
   '';
-  flex = pkgs.writeShellScriptBin "flex" ''
+  flex = (datadir: pkgs.writeShellScriptBin "flex" ''
     ${overflex}
-
-    ${pkgs.nix}/bin/nix build "''${1:-${flakeDir'}}#homeConfigurations.$USER@$(hostname).activationPackage" --out-link /data/$USER/generation
-    /data/$USER/generation/activate
-  '';
-  flex-rehome = pkgs.writeShellScriptBin "flex-rehome" ''
-    while read user; do
-      mkdir -m 700 -p /data/$user
-      chown $user /data/$user
-      ${pkgs.nix}/bin/nix build "''${1:-${flakeDir'}}#homeConfigurations.$user@$(hostname).activationPackage" --out-link /data/$user/generation
-    done < /etc/users
-  '';
-  flex-rebuild = pkgs.writeShellScriptBin "flex-rebuild" ''
+    ${pkgs.nix}/bin/nix build "''${1:-${flakeDir'}}#homeConfigurations.$USER@${hostname}.activationPackage" --out-link ${datadir}/generation
+    ${datadir}/generation/activate
+  '');
+  flex-rebuild = (datadir: pkgs.writeShellScriptBin "flex-rebuild" ''
     ${overflex}
-
     sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${flakeDir'}}
-    sudo ${flex-rehome}/bin/flex-rehome
-    /data/$USER/generation/activate
-  '';
+    sudo ${rehome}/bin/rehome
+    ${datadir}/generation/activate
+  '');
 in
 {
   nix.package = pkgs.nixFlakes;
@@ -52,7 +63,7 @@ in
 
   # Some handy base packages
   environment.systemPackages = with pkgs; [
-    neovim git neofetch flex flex-rebuild flex-rehome
+    neovim git neofetch rehome
   ];
 
   # Timezone
@@ -71,6 +82,13 @@ in
     shell = pkgs.zsh;
 
     extraGroups = lib.mkIf (usercfg ? superuser && usercfg.superuser) [ "wheel" "networkmanager" ];
+  
+    packages = let
+      datadir = usercfg.data or "/data/${username}";
+    in [
+      (flex-rebuild datadir)
+      (flex         datadir)
+    ];
   }) users;
 
   users.extraUsers.root.password = "tmp";
@@ -82,8 +100,8 @@ in
   );
 
   # file with a list of users
-  environment.etc."users".text =
-    builtins.concatStringsSep "\n" ((builtins.attrNames users) ++ [""]);
+  # environment.etc."users".text =
+  #   builtins.concatStringsSep "\n" ((builtins.attrNames users) ++ [""]);
 
   # activate home manager on startup
   # copied from https://github.com/nix-community/home-manager/blob/master/nixos/default.nix
@@ -132,7 +150,9 @@ in
 
             exec "$1/activate"
           '';
-        in "${setupEnv} /data/${username}/generation";
+
+          datadir = usercfg.data or "/data/${username}";
+        in "${setupEnv} ${datadir}/generation";
       };
     }
   ) users;
