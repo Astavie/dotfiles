@@ -32,7 +32,7 @@ wget -qO- https://github.com/charmbracelet/gum/releases/download/v0.1.0/gum_0.1.
 alias gum='/tmp/gum'
 
 info "Evaluating flake..."
-FLAKE=$(nix flake show . --json --extra-experimental-features "nix-command flakes" 2> /dev/null)
+FLAKE=$(nix flake show . --json --extra-experimental-features "nix-command flakes")
 
 info "Select which NixOS system to install"
 
@@ -87,6 +87,7 @@ info "Formatting..."
     zfs set atime=off                  nixos/local/nix
 
     zfs create -p -o mountpoint=legacy nixos/safe/data
+    zfs create -p -o mountpoint=legacy nixos/safe/persist
 
     # other
     mkswap -L swap ${DEVICE}2
@@ -100,6 +101,8 @@ info "Mounting..."
     mount -t zfs nixos/local/nix          /mnt/nix
     mkdir -p                              /mnt/data
     mount -t zfs nixos/safe/data          /mnt/data
+    mkdir -p                              /mnt/persist
+    mount -t zfs nixos/safe/persist       /mnt/persist
 
     swapon /dev/disk/by-label/swap
 

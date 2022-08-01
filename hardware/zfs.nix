@@ -13,6 +13,10 @@
     device = "nixos/safe/data";
     fsType = "zfs";
   };
+  fileSystems."/persist" = {
+    device = "nixos/safe/persist";
+    fsType = "zfs";
+  };
   
   boot.kernelParams = [ "elevator=none" "nohibernate" ];
   boot.initrd.postDeviceCommands = lib.mkAfter ''

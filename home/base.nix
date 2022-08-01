@@ -1,6 +1,6 @@
 {
   # custom inputs
-  username, datadir,
+  username, dir,
 
   # system inputs
   pkgs, ...
@@ -29,7 +29,7 @@
       PS1="> "
       PS2="  "
 
-      cd ${datadir}
+      cd ${dir.data}
 
       add-zsh-hook chpwd display-prompt
     '';
@@ -48,5 +48,12 @@
   programs.git = {
     enable = true;
     extraConfig = { pull.rebase = false; };
+  };
+  
+  home.persistence."${dir.persist}" = {
+    files = [
+      ".zsh_history"
+      "./local/share/autojump/autojump.txt"
+    ];
   };
 }

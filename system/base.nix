@@ -15,15 +15,13 @@ let
       then
         exec sudo "$0"
       fi
-    ''] ++ lib.mapAttrsToList (username: usercfg:
-      let
-        datadir = usercfg.data or "/data/${username}";
-      in ''
-        mkdir -m 700 -p ${datadir}
-        chown ${username} ${datadir}
-        ${pkgs.nix}/bin/nix build "''${1:-${flakedir}}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${datadir}/generation
-      ''
-    ) users)
+    ''] ++ builtins.map (usercfg: ''
+      mkdir -m 700 -p ${usercfg.dir.data}
+      chown ${usercfg.username} ${usercfg.dir.data}
+      mkdir -m 700 -p ${usercfg.dir.persist}
+      chown ${usercfg.username} ${usercfg.dir.persist}
+      ${pkgs.nix}/bin/nix build "''${1:-${flakedir}}#homeConfigurations.${usercfg.username}@${hostname}.activationPackage" --out-link ${usercfg.dir.data}/generation
+    '') users)
   );
 
   # user packages
@@ -35,16 +33,16 @@ let
       exit
     fi
   '';
-  flex = (datadir: pkgs.writeShellScriptBin "flex" ''
+  flex = (usercfg: pkgs.writeShellScriptBin "flex" ''
     ${overflex}
-    ${pkgs.nix}/bin/nix build "''${1:-${flakedir}}#homeConfigurations.$USER@${hostname}.activationPackage" --out-link ${datadir}/generation
-    ${datadir}/generation/activate
+    ${pkgs.nix}/bin/nix build "''${1:-${flakedir}}#homeConfigurations.${usercfg.username}@${hostname}.activationPackage" --out-link ${usercfg.dir.data}/generation
+    ${usercfg.dir.data}/generation/activate
   '');
-  flex-rebuild = (datadir: pkgs.writeShellScriptBin "flex-rebuild" ''
+  flex-rebuild = (usercfg: pkgs.writeShellScriptBin "flex-rebuild" ''
     ${overflex}
     sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${flakedir}}
     sudo ${rehome}/bin/rehome ''${1:-${flakedir}}
-    ${datadir}/generation/activate
+    ${usercfg.dir.data}/generation/activate
   '');
 in
 {
@@ -72,31 +70,29 @@ in
   # Create user
   users.mutableUsers = false;
 
-  users.users = lib.mapAttrs (username: usercfg: {
-    home = usercfg.home or "/home/${username}";
+  users.users = builtins.listToAttrs (builtins.map (usercfg:
+    lib.nameValuePair usercfg.username {
+      home = usercfg.dir.home;
 
-    isNormalUser = true;
-    password = usercfg.password;
+      isNormalUser = true;
+      password = usercfg.password;
 
-    # Use zsh shell
-    shell = pkgs.zsh;
+      # Use zsh shell
+      shell = pkgs.zsh;
 
-    extraGroups = lib.mkIf (usercfg ? superuser && usercfg.superuser) [ "wheel" "networkmanager" ];
-  
-    packages = let
-      datadir = usercfg.data or "/data/${username}";
-    in [
-      (flex-rebuild datadir)
-      (flex         datadir)
-    ];
-  }) users;
+      extraGroups = lib.mkIf usercfg.superuser [ "wheel" "networkmanager" ];
+    
+      packages = [
+        (flex-rebuild usercfg)
+        (flex         usercfg)
+      ];
+    }
+  ) users);
 
-  users.extraUsers.root.password = "tmp";
+  users.extraUsers.root.hashedPassword = "*";
 
-  nix.settings.trusted-users = lib.attrNames (
-    lib.filterAttrs (_: usercfg:
-      usercfg ? superuser && usercfg.superuser
-    ) users
+  nix.settings.trusted-users = builtins.map (usercfg: usercfg.username) (
+    builtins.filter (usercfg: usercfg.superuser) users
   );
 
   # file with a list of users
@@ -105,9 +101,9 @@ in
 
   # activate home manager on startup
   # copied from https://github.com/nix-community/home-manager/blob/master/nixos/default.nix
-  systemd.services = lib.mapAttrs' (username: usercfg:
-    lib.nameValuePair ("home-manager-${utils.escapeSystemdPath username}") {
-      description = "Home Manager environment for ${username}";
+  systemd.services = builtins.listToAttrs (builtins.map (usercfg:
+    lib.nameValuePair ("home-manager-${utils.escapeSystemdPath usercfg.username}") {
+      description = "Home Manager environment for ${usercfg.username}";
       wantedBy = [ "multi-user.target" ];
       wants = [ "nix-daemon.socket" ];
       after = [ "nix-daemon.socket" ];
@@ -115,16 +111,16 @@ in
 
       environment = {};
 
-      unitConfig = { RequiresMountsFor = usercfg.home or "/home/${username}"; };
+      unitConfig = { RequiresMountsFor = usercfg.dir.home; };
 
       stopIfChanged = false;
 
       serviceConfig = {
-        User = username;
+        User = usercfg.username;
         Type = "oneshot";
         RemainAfterExit = "yes";
         TimeoutStartSec = 90;
-        SyslogIdentifier = "hm-activate-${username}";
+        SyslogIdentifier = "hm-activate-${usercfg.username}";
 
         ExecStart = let
           systemctl =
@@ -150,11 +146,9 @@ in
 
             exec "$1/activate"
           '';
-
-          datadir = usercfg.data or "/data/${username}";
-        in "${setupEnv} ${datadir}/generation";
+        in "${setupEnv} ${usercfg.dir.data}/generation";
       };
     }
-  ) users;
+  ) users);
 
 }
