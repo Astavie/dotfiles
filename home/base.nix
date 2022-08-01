@@ -29,9 +29,9 @@
       PS1="> "
       PS2="  "
 
-      cd ${dir.data}
-
       add-zsh-hook chpwd display-prompt
+
+      cd ${dir.data}
     '';
 
     envExtra = ''
