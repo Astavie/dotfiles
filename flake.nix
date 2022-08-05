@@ -25,9 +25,9 @@
         password = "";
         superuser = true;
         modules = [
-          ./home/base.nix
-          ./home/coding.nix
-          ./home/stumpwm.nix
+          ./modules/home/base.nix
+          ./modules/home/coding.nix
+          ./modules/home/stumpwm.nix
           {
             programs.git = {
               userEmail = "astavie@pm.me";
@@ -49,11 +49,11 @@
           flakedir = "${users.astavie.dir.data}/dotfiles";
 
           modules = [
-            ./hardware/uefi.nix
-            ./hardware/zfs.nix
-            ./system/base.nix
-            ./system/vb.nix
-            ./system/xserver.nix
+            ./modules/system/hardware/uefi.nix
+            ./modules/system/hardware/zfs.nix
+            ./modules/system/base.nix
+            ./modules/system/vb.nix
+            ./modules/system/xserver.nix
           ];
 
           sharedModules = [

@@ -6,7 +6,7 @@
     xorg.xmodmap
   ];
 
-  home.file.".stumpwmrc".source = ../config/.stumpwmrc;
+  home.file.".stumpwmrc".source = ../../config/.stumpwmrc;
 
   home.file.".config/sx/sxrc" = {
     executable = true;

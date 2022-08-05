@@ -51,9 +51,13 @@
   };
 
   home.persistence."${dir.persist}" = {
+    removePrefixDirectory = true;
+    allowOther = true;
     files = [
-      ".zsh_history"
-      ".local/share/autojump/autojump.txt"
+      "zsh/.zsh_history"
+    ];
+    directories = [
+      "autojump/.local/share/autojump"
     ];
   };
 }

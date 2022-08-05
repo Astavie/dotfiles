@@ -51,6 +51,8 @@ in
 
   swapDevices = [{ device = "/dev/disk/by-label/swap"; }];
 
+  programs.fuse.userAllowOther = true;
+
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
