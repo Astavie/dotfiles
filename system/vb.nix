@@ -5,7 +5,7 @@ let
 in
 {
   virtualisation.virtualbox.guest.enable = true;
-  
+
   users.users = builtins.listToAttrs (builtins.map (usercfg:
     lib.nameValuePair usercfg.username {
       extraGroups = [ "vboxsf" ];

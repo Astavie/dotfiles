@@ -17,7 +17,7 @@
     device = "nixos/safe/persist";
     fsType = "zfs";
   };
-  
+
   boot.kernelParams = [ "elevator=none" "nohibernate" ];
   boot.initrd.postDeviceCommands = lib.mkAfter ''
     zfs rollback -r nixos/local/root@blank

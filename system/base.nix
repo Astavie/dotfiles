@@ -81,7 +81,7 @@ in
       shell = pkgs.zsh;
 
       extraGroups = lib.mkIf usercfg.superuser [ "wheel" "networkmanager" ];
-    
+
       packages = [
         (flex-rebuild usercfg)
         (flex         usercfg)
@@ -125,7 +125,7 @@ in
         ExecStart = let
           systemctl =
             "XDG_RUNTIME_DIR=\${XDG_RUNTIME_DIR:-/run/user/$UID} systemctl";
-          
+
           sed = "${pkgs.gnused}/bin/sed";
 
           exportedSystemdVariables = lib.concatStringsSep "|" [

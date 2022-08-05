@@ -49,7 +49,7 @@
     enable = true;
     extraConfig = { pull.rebase = false; };
   };
-  
+
   home.persistence."${dir.persist}" = {
     files = [
       ".zsh_history"

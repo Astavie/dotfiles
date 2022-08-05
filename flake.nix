@@ -44,16 +44,20 @@
           hostname = "vb";
           hostid = "85dd8e44";
           system = "x86_64-linux";
-          
+
           users = with users; [ astavie ];
           flakedir = "${users.astavie.dir.data}/dotfiles";
-          
+
           modules = [
             ./hardware/uefi.nix
             ./hardware/zfs.nix
             ./system/base.nix
             ./system/vb.nix
             ./system/xserver.nix
+          ];
+
+          sharedModules = [
+            impermanence.nixosModules.home-manager.impermanence
           ];
         })
       ];
@@ -66,15 +70,12 @@
           lib.nameValuePair systemcfg.hostname (lib.nixosSystem {
             inherit (systemcfg) system;
 
-            modules = [
-              impermanence.nixosModules.impermanence
-              {
-                system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
-                system.stateVersion = stateVersion;
-                networking.hostName = systemcfg.hostname;
-                networking.hostId = systemcfg.hostid;
-              }
-            ] ++ systemcfg.modules;
+            modules = [{
+              system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
+              system.stateVersion = stateVersion;
+              networking.hostName = systemcfg.hostname;
+              networking.hostId = systemcfg.hostid;
+            }] ++ systemcfg.modules;
 
             specialArgs = {
               inherit (systemcfg) users flakedir hostname;
@@ -95,9 +96,7 @@
               } // usercfg.specialArgs;
 
               configuration = {
-                imports = [
-                  impermanence.nixosModules.home-manager.impermanence
-                ] ++ usercfg.modules ++ systemcfg.sharedModules;
+                imports = usercfg.modules ++ systemcfg.sharedModules;
               };
             })
           ) systemcfg.users)
