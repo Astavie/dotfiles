@@ -21,7 +21,6 @@
 
   mkSystem = systemcfg: {
     inherit (systemcfg) hostname hostid system modules;
-    flakedir = systemcfg.flakedir or ./..;
     persist = systemcfg.persist or false;
 
     users = builtins.map (user: user systemcfg) systemcfg.users;

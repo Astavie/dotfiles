@@ -1,6 +1,6 @@
 {
   # custom inputs
-  users, hostname, flakedir,
+  users, hostname,
 
   # system inputs
   pkgs, utils, lib, ...
@@ -40,13 +40,13 @@ let
   '';
   flex = (usercfg: pkgs.writeShellScriptBin "flex" ''
     ${overflex}
-    ${pkgs.nix}/bin/nix build "''${1:-${flakedir}}#homeConfigurations.${usercfg.username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation
+    ${pkgs.nix}/bin/nix build "''${1:-${./../..}}#homeConfigurations.${usercfg.username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation
     ${usercfg.dir.persist}/generation/activate
   '');
   flex-rebuild = (usercfg: pkgs.writeShellScriptBin "flex-rebuild" ''
     ${overflex}
-    ${sudo} ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${flakedir}}
-    ${sudo} ${rehome}/bin/rehome ''${1:-${flakedir}}
+    ${sudo} ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${./../..}}
+    ${sudo} ${rehome}/bin/rehome ''${1:-${./../..}}
     ${usercfg.dir.persist}/generation/activate
   '');
 in

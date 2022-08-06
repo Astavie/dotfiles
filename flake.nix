@@ -47,7 +47,6 @@
           system = "x86_64-linux";
 
           users = with users; [ astavie ];
-          flakedir = "/data/astavie/dotfiles";
           persist = true;
 
           modules = [
@@ -83,7 +82,7 @@
             ] ++ systemcfg.modules;
 
             specialArgs = {
-              inherit (systemcfg) users flakedir hostname;
+              inherit (systemcfg) users hostname;
             } // systemcfg.specialArgs;
           })
         ) systems);
