@@ -7,7 +7,7 @@
 }@inputs:
 
 let
-  sudo = "${pkgs.doas}/bin/doas";
+  sudo = "doas";
 
   # list of users with ssh-keygen flag
   ssh-users = builtins.filter (usercfg: usercfg.ssh-keygen) users;
@@ -101,20 +101,16 @@ in
     }
   ) users);
 
-  postinstall = builtins.map (usercfg: {
-    generator = ''
-      ${sudo} -u ${usercfg.username} mkdir -p ${usercfg.dir.config "ssh"}/.ssh
-      ${sudo} -u ${usercfg.username} ${pkgs.openssh}/bin/ssh-keygen -t rsa -b 4096 -f ${usercfg.dir.config "ssh"}/.ssh/id_rsa -N ""
-    '';
+  postinstall.sudo = sudo;
+  postinstall.scripts = builtins.map (usercfg: {
+    script = "${pkgs.openssh}/bin/ssh-keygen -t rsa -b 4096 -f ${usercfg.dir.config "ssh"}/.ssh/id_rsa -N ''";
+    user = usercfg.username;
+    dirs = [ "${usercfg.dir.config "ssh"}/.ssh" ];
   }) ssh-users;
 
   nix.settings.trusted-users = builtins.map (usercfg: usercfg.username) (
     builtins.filter (usercfg: usercfg.superuser) users
   );
-
-  # file with a list of users
-  # environment.etc."users".text =
-  #   builtins.concatStringsSep "\n" ((builtins.attrNames users) ++ [""]);
 
   # activate home manager on startup
   # copied from https://github.com/nix-community/home-manager/blob/master/nixos/default.nix
