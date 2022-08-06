@@ -108,7 +108,9 @@ info "Mounting..."
 
 info "Installing..."
 nixos-install --flake .\#$SYSTEM --no-root-passwd
+nixos-enter -c 'rehome'
 
-nixos-enter -c "rehome"
+info "Running post-install scripts..."
+nixos-enter -c 'postinstall'
 
 systemctl reboot

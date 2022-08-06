@@ -7,6 +7,9 @@
 }@inputs:
 
 let
+  # list of users with ssh-keygen flag
+  ssh-users = builtins.filter (usercfg: usercfg.ssh-keygen) users;
+
   # system package
   rehome = pkgs.writeShellScriptBin "rehome" (
     builtins.concatStringsSep "\n" ([''
@@ -20,7 +23,7 @@ let
       chown ${usercfg.username} ${usercfg.dir.data}
       mkdir -m 700 -p ${usercfg.dir.persist}
       chown ${usercfg.username} ${usercfg.dir.persist}
-      ${pkgs.nix}/bin/nix build "''${1:-${flakedir}}#homeConfigurations.${usercfg.username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation
+      ${pkgs.nix}/bin/nix build "''${1:-${./../..}}#homeConfigurations.${usercfg.username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation
     '') users)
   );
 
@@ -51,6 +54,7 @@ in
 
   swapDevices = [{ device = "/dev/disk/by-label/swap"; }];
 
+  # Required for impermanence
   programs.fuse.userAllowOther = true;
 
   # Select internationalisation properties.
@@ -69,7 +73,7 @@ in
   # Timezone
   time.timeZone = "Europe/Amsterdam";
 
-  # Create user
+  # Create users
   users.mutableUsers = false;
 
   users.users = builtins.listToAttrs (builtins.map (usercfg:
@@ -91,7 +95,12 @@ in
     }
   ) users);
 
-  users.extraUsers.root.hashedPassword = "*";
+  postinstall = builtins.map (usercfg: {
+    generator = ''
+      sudo -u ${usercfg.username} mkdir -p ${usercfg.dir.config "ssh"}/.ssh
+      sudo -u ${usercfg.username} ${pkgs.openssh}/bin/ssh-keygen -t rsa -b 4096 -f ${usercfg.dir.config "ssh"}/.ssh/id_rsa -N ""
+    '';
+  }) ssh-users;
 
   nix.settings.trusted-users = builtins.map (usercfg: usercfg.username) (
     builtins.filter (usercfg: usercfg.superuser) users

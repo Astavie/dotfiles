@@ -24,6 +24,7 @@
         username = "astavie";
         password = "";
         superuser = true;
+        ssh-keygen = true;
         modules = [
           ./modules/home/base.nix
           ./modules/home/coding.nix
@@ -46,7 +47,8 @@
           system = "x86_64-linux";
 
           users = with users; [ astavie ];
-          flakedir = "${users.astavie.dir.data}/dotfiles";
+          flakedir = "/data/astavie/dotfiles";
+          persist = true;
 
           modules = [
             ./modules/system/hardware/uefi.nix
@@ -70,12 +72,15 @@
           lib.nameValuePair systemcfg.hostname (lib.nixosSystem {
             inherit (systemcfg) system;
 
-            modules = [{
-              system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
-              system.stateVersion = stateVersion;
-              networking.hostName = systemcfg.hostname;
-              networking.hostId = systemcfg.hostid;
-            }] ++ systemcfg.modules;
+            modules = [
+              ./modules/system/postinstall.nix
+              {
+                system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
+                system.stateVersion = stateVersion;
+                networking.hostName = systemcfg.hostname;
+                networking.hostId = systemcfg.hostid;
+              }
+            ] ++ systemcfg.modules;
 
             specialArgs = {
               inherit (systemcfg) users flakedir hostname;

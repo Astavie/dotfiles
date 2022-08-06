@@ -3,7 +3,7 @@
   username, dir,
 
   # system inputs
-  pkgs, ...
+  pkgs, lib, ...
 }:
 
 {
@@ -50,11 +50,13 @@
     extraConfig = { pull.rebase = false; };
   };
 
-  home.persistence."${dir.persist}" = {
+  home.persistence."${dir.persist}" = lib.mkIf (dir.home != dir.persist) {
     removePrefixDirectory = true;
     allowOther = true;
     files = [
       "zsh/.zsh_history"
+      "ssh/.ssh/id_rsa"
+      "ssh/.ssh/id_rsa.pub"
     ];
     directories = [
       "autojump/.local/share/autojump"
