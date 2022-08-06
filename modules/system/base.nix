@@ -7,6 +7,8 @@
 }@inputs:
 
 let
+  sudo = "${pkgs.doas}/bin/doas";
+
   # list of users with ssh-keygen flag
   ssh-users = builtins.filter (usercfg: usercfg.ssh-keygen) users;
 
@@ -16,7 +18,7 @@ let
       set -e
       if [ "$EUID" -ne 0 ]
       then
-        exec sudo "$0"
+        exec ${sudo} "$0"
       fi
     ''] ++ builtins.map (usercfg: ''
       mkdir -m 700 -p ${usercfg.dir.data}
@@ -43,8 +45,8 @@ let
   '');
   flex-rebuild = (usercfg: pkgs.writeShellScriptBin "flex-rebuild" ''
     ${overflex}
-    sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${flakedir}}
-    sudo ${rehome}/bin/rehome ''${1:-${flakedir}}
+    ${sudo} ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${flakedir}}
+    ${sudo} ${rehome}/bin/rehome ''${1:-${flakedir}}
     ${usercfg.dir.persist}/generation/activate
   '');
 in
@@ -53,6 +55,10 @@ in
   nix.extraOptions = "experimental-features = nix-command flakes";
 
   swapDevices = [{ device = "/dev/disk/by-label/swap"; }];
+
+  # Use doas, not sudo
+  security.sudo.enable = false;
+  security.doas.enable = true;
 
   # Required for impermanence
   programs.fuse.userAllowOther = true;
@@ -97,8 +103,8 @@ in
 
   postinstall = builtins.map (usercfg: {
     generator = ''
-      sudo -u ${usercfg.username} mkdir -p ${usercfg.dir.config "ssh"}/.ssh
-      sudo -u ${usercfg.username} ${pkgs.openssh}/bin/ssh-keygen -t rsa -b 4096 -f ${usercfg.dir.config "ssh"}/.ssh/id_rsa -N ""
+      ${sudo} -u ${usercfg.username} mkdir -p ${usercfg.dir.config "ssh"}/.ssh
+      ${sudo} -u ${usercfg.username} ${pkgs.openssh}/bin/ssh-keygen -t rsa -b 4096 -f ${usercfg.dir.config "ssh"}/.ssh/id_rsa -N ""
     '';
   }) ssh-users;
 
