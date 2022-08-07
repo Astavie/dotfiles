@@ -10,7 +10,7 @@ let
   sudo = "doas";
 
   # list of users with ssh-keygen flag
-  ssh-users = builtins.filter (usercfg: usercfg.ssh-keygen) users;
+  ssh-users = builtins.filter (usercfg: usercfg.specialArgs.ssh-keygen) users;
 
   # system package
   rehome = pkgs.writeShellScriptBin "rehome" (
@@ -87,7 +87,7 @@ in
       home = usercfg.dir.home;
 
       isNormalUser = true;
-      password = usercfg.password;
+      password = ""; # TODO
 
       # Use zsh shell
       shell = pkgs.zsh;
@@ -103,9 +103,9 @@ in
 
   postinstall.sudo = sudo;
   postinstall.scripts = builtins.map (usercfg: {
-    script = "${pkgs.openssh}/bin/ssh-keygen -t rsa -b 4096 -f ${usercfg.dir.config "ssh"}/.ssh/id_rsa -N ''";
+    script = "${pkgs.openssh}/bin/ssh-keygen -t rsa -b 4096 -f ${usercfg.dir.persistDir "ssh"}/.ssh/id_rsa -N ''";
     user = usercfg.username;
-    dirs = [ "${usercfg.dir.config "ssh"}/.ssh" ];
+    dirs = [ "${usercfg.dir.persistDir "ssh"}/.ssh" ];
   }) ssh-users;
 
   nix.settings.trusted-users = builtins.map (usercfg: usercfg.username) (

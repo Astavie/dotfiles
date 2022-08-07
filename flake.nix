@@ -10,89 +10,41 @@
   outputs = { self, home-manager, nixpkgs, impermanence, ... }:
 
     let
-      util = import ./lib {};
       lib = nixpkgs.lib;
-
-      # --- Base configuration of users and systems ---
-
-      # NixOS state version
-      stateVersion = "22.05";
-
-      # List of users, currently only "astavie"
-      # Rename this user to your own username or create a new one from scratch
-      users.astavie = util.mkUser {
-        username = "astavie";
-        password = "";
-        superuser = true;
-        ssh-keygen = true;
-        modules = [
-          ./modules/home/base.nix
-          ./modules/home/coding.nix
-          ./modules/home/stumpwm.nix
-          {
-            programs.git = {
-              userEmail = "astavie@pm.me";
-              userName = "Astavie";
-            };
+    in
+      rec {
+        dotfileSystems = builtins.mapAttrs (_: rawsystem:
+          lib.evalModules {
+            modules = [
+              ./modules/config
+              rawsystem
+            ];
           }
-        ];
-      };
+        ) (import ./config.nix);
 
-      # List of systems
-      # Remove all existing systems and create your own
-      systems = [
-        (util.mkSystem {
-          hostname = "vb";
-          hostid = "85dd8e44";
-          system = "x86_64-linux";
-
-          users = with users; [ astavie ];
-          persist = true;
+        nixosConfigurations = builtins.mapAttrs (_: module: let systemcfg = module.config; in lib.nixosSystem {
+          inherit (systemcfg) system;
 
           modules = [
-            ./modules/system/hardware/uefi.nix
-            ./modules/system/hardware/zfs.nix
-            ./modules/system/base.nix
-            ./modules/system/vb.nix
-            ./modules/system/xserver.nix
-          ];
+            ./modules/system/postinstall.nix
+            {
+              system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
+              system.stateVersion = systemcfg.stateVersion;
+              networking.hostName = systemcfg.hostname;
+              networking.hostId = systemcfg.hostid;
+            }
+          ] ++ systemcfg.modules;
 
-          sharedModules = [
-            impermanence.nixosModules.home-manager.impermanence
-          ];
-        })
-      ];
+          specialArgs = {
+            inherit (systemcfg) users hostname;
+          } // systemcfg.specialArgs;
+        }) dotfileSystems;
 
-      # -- End of configuration --
-
-    in
-      {
-        nixosConfigurations = builtins.listToAttrs (builtins.map (systemcfg:
-          lib.nameValuePair systemcfg.hostname (lib.nixosSystem {
-            inherit (systemcfg) system;
-
-            modules = [
-              ./modules/system/postinstall.nix
-              {
-                system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
-                system.stateVersion = stateVersion;
-                networking.hostName = systemcfg.hostname;
-                networking.hostId = systemcfg.hostid;
-              }
-            ] ++ systemcfg.modules;
-
-            specialArgs = {
-              inherit (systemcfg) users hostname;
-            } // systemcfg.specialArgs;
-          })
-        ) systems);
-
-        homeConfigurations = lib.foldr (a: b: a // b) {} (builtins.map (systemcfg:
+        homeConfigurations = lib.foldr (a: b: a // b) {} (lib.mapAttrsToList (_: module: let systemcfg = module.config; in
           builtins.listToAttrs (builtins.map (usercfg:
             lib.nameValuePair "${usercfg.username}@${systemcfg.hostname}" (home-manager.lib.homeManagerConfiguration {
-              inherit (systemcfg) system;
+              inherit (systemcfg) system stateVersion;
               inherit (usercfg) username;
-              inherit stateVersion;
               homeDirectory = usercfg.dir.home;
 
               extraSpecialArgs = {
@@ -100,11 +52,13 @@
               } // usercfg.specialArgs;
 
               configuration = {
-                imports = usercfg.modules ++ systemcfg.sharedModules;
+                imports = (if systemcfg.impermanence then [ impermanence.nixosModules.home-manager.impermanence ] else [])
+                  ++ systemcfg.sharedModules
+                  ++ usercfg.modules;
               };
             })
           ) systemcfg.users)
-        ) systems);
+        ) dotfileSystems);
       };
 
 }
