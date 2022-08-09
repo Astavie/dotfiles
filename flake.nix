@@ -27,14 +27,14 @@
       {
         inherit config;
 
-        nixosConfigurations = builtins.listToAttrs (mapAttrsToList (name: systemcfg:
-          nameValuePair name systemcfg.nixos
+        nixosConfigurations = builtins.listToAttrs (mapAttrsToList (hostname: systemcfg:
+          nameValuePair hostname systemcfg.nixos
         ) config.systems);
 
-        homeConfigurations = foldr (a: b: a // b) {} (mapAttrsToList (name: systemcfg:
-          builtins.listToAttrs (builtins.map (usercfg:
-            nameValuePair "${usercfg.username}@${name}" usercfg.hm
-          ) systemcfg.users)
+        homeConfigurations = foldr (a: b: a // b) {} (mapAttrsToList (hostname: systemcfg:
+          mapAttrs' (username: usercfg:
+            nameValuePair "${username}@${hostname}" usercfg.hm
+          ) systemcfg.users
         ) config.systems);
       };
 

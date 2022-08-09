@@ -10,7 +10,7 @@ let
   sudo = "doas";
 
   # list of users with ssh-keygen flag
-  ssh-users = builtins.filter (usercfg: usercfg.specialArgs.ssh-keygen or false) users;
+  ssh-users = lib.filterAttrs (_: usercfg: usercfg.specialArgs.ssh-keygen or false) users;
 
   # system package
   rehome = pkgs.writeShellScriptBin "rehome" (
@@ -20,12 +20,12 @@ let
       then
         exec ${sudo} "$0"
       fi
-    ''] ++ builtins.map (usercfg: ''
+    ''] ++ lib.mapAttrsToList (username: usercfg: ''
       mkdir -m 700 -p ${usercfg.dir.data}
-      chown ${usercfg.username} ${usercfg.dir.data}
+      chown ${username} ${usercfg.dir.data}
       mkdir -m 700 -p ${usercfg.dir.persist}
-      chown ${usercfg.username} ${usercfg.dir.persist}
-      ${pkgs.nix}/bin/nix build "''${1:-${./../..}}#homeConfigurations.${usercfg.username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation
+      chown ${username} ${usercfg.dir.persist}
+      ${pkgs.nix}/bin/nix build "''${1:-${./../..}}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation
     '') users)
   );
 
@@ -38,12 +38,12 @@ let
       exit
     fi
   '';
-  flex = (usercfg: pkgs.writeShellScriptBin "flex" ''
+  flex = (username: usercfg: pkgs.writeShellScriptBin "flex" ''
     ${overflex}
-    ${pkgs.nix}/bin/nix build "''${1:-${./../..}}#homeConfigurations.${usercfg.username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation
+    ${pkgs.nix}/bin/nix build "''${1:-${./../..}}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation
     ${usercfg.dir.persist}/generation/activate
   '');
-  flex-rebuild = (usercfg: pkgs.writeShellScriptBin "flex-rebuild" ''
+  flex-rebuild = (username: usercfg: pkgs.writeShellScriptBin "flex-rebuild" ''
     ${overflex}
     ${sudo} ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${./../..}}
     ${sudo} ${rehome}/bin/rehome ''${1:-${./../..}}
@@ -79,41 +79,37 @@ in
   # Create users
   users.mutableUsers = false;
 
-  users.users = builtins.listToAttrs (builtins.map (usercfg:
-    lib.nameValuePair usercfg.username {
-      home = usercfg.dir.home;
+  users.users = builtins.mapAttrs (username: usercfg: {
+    home = usercfg.dir.home;
 
-      isNormalUser = true;
-      password = ""; # TODO
+    isNormalUser = true;
+    password = ""; # TODO
 
-      # Use zsh shell
-      shell = pkgs.zsh;
+    # Use zsh shell
+    shell = pkgs.zsh;
 
-      extraGroups = lib.mkIf usercfg.superuser [ "wheel" "networkmanager" ];
+    extraGroups = lib.mkIf usercfg.superuser [ "wheel" "networkmanager" ];
 
-      packages = [
-        (flex-rebuild usercfg)
-        (flex         usercfg)
-      ];
-    }
-  ) users);
+    packages = [
+      (flex-rebuild username usercfg)
+      (flex         username usercfg)
+    ];
+  }) users;
 
   postinstall.sudo = sudo;
-  postinstall.scripts = builtins.map (usercfg: {
+  postinstall.scripts = lib.mapAttrsToList (username: usercfg: {
     script = "${pkgs.openssh}/bin/ssh-keygen -t rsa -b 4096 -f ${usercfg.dir.config "ssh"}/.ssh/id_rsa -N ''";
-    user = usercfg.username;
+    user = username;
     dirs = [ "${usercfg.dir.config "ssh"}/.ssh" ];
   }) ssh-users;
 
-  nix.settings.trusted-users = builtins.map (usercfg: usercfg.username) (
-    builtins.filter (usercfg: usercfg.superuser) users
-  );
+  nix.settings.trusted-users = builtins.attrNames (lib.filterAttrs (_: usercfg: usercfg.superuser) users);
 
   # activate home manager on startup
   # copied from https://github.com/nix-community/home-manager/blob/master/nixos/default.nix
-  systemd.services = builtins.listToAttrs (builtins.map (usercfg:
-    lib.nameValuePair ("home-manager-${utils.escapeSystemdPath usercfg.username}") {
-      description = "Home Manager environment for ${usercfg.username}";
+  systemd.services = lib.mapAttrs' (username: usercfg:
+    lib.nameValuePair ("home-manager-${utils.escapeSystemdPath username}") {
+      description = "Home Manager environment for ${username}";
       wantedBy = [ "multi-user.target" ];
       wants = [ "nix-daemon.socket" ];
       after = [ "nix-daemon.socket" ];
@@ -126,11 +122,11 @@ in
       stopIfChanged = false;
 
       serviceConfig = {
-        User = usercfg.username;
+        User = username;
         Type = "oneshot";
         RemainAfterExit = "yes";
         TimeoutStartSec = 90;
-        SyslogIdentifier = "hm-activate-${usercfg.username}";
+        SyslogIdentifier = "hm-activate-${username}";
 
         ExecStart = let
           systemctl =
@@ -159,6 +155,6 @@ in
         in "${setupEnv} ${usercfg.dir.persist}/generation";
       };
     }
-  ) users);
+  ) users;
 
 }

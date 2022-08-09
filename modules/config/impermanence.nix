@@ -2,16 +2,16 @@
 
 with lib;
 let
-  sublist = f: module: mkOption {
-    type = with types; f (submodule module);
+  subset = module: mkOption {
+    type = with types; attrsOf (submodule module);
   };
 in
 {
-  options.systems = sublist types.attrsOf ({ config, ... }: {
+  options.systems = subset ({ config, ... }: {
     options = {
       impermanence.enable = mkEnableOption "impermanence";
 
-      users = sublist types.listOf (u: {
+      users = subset ({ name, ... }@u: {
           options = {
             dir.persist = mkOption {
               type = types.path;
@@ -22,7 +22,7 @@ in
             };
           };
           config = {
-            dir.persist = mkDefault "/persist/${u.config.username}";
+            dir.persist = mkDefault "/persist/${name}";
             dir.config = mkIf config.impermanence.enable (dir: "${u.config.dir.persist}/${dir}");
           };
       });

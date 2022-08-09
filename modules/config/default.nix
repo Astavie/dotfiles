@@ -2,16 +2,10 @@
 
 with lib;
 let system =
-  { config, ... }:
+  { config, name, ... }:
   {
     options = {
       # Required options
-      hostname = mkOption {
-        type = types.str;
-        description = ''
-          The hostname of the system.
-        '';
-      };
       hostid = mkOption {
         type = types.str;
         description = ''
@@ -38,15 +32,9 @@ let system =
       };
 
       users = mkOption {
-        type = with types; listOf (submodule (u: {
+        type = with types; attrsOf (submodule ({ name, ... }@u: {
           options = {
             # Required options
-            username = mkOption {
-              type = types.str;
-              description = ''
-                The username of the user.
-              '';
-            };
             modules = mkOption {
               type = with types; listOf raw;
               description = ''
@@ -102,17 +90,18 @@ let system =
             };
           };
           config = {
-            dir.home = mkDefault "/home/${u.config.username}";
-            dir.data = mkDefault "/data/${u.config.username}";
+            dir.home = mkDefault "/home/${name}";
+            dir.data = mkDefault "/data/${name}";
             dir.config = mkDefault (_: u.config.dir.home);
 
             specialArgs = {
-              inherit (u.config) username dir;
+              inherit (u.config) dir;
+              username = name;
             };
 
             hm = home-manager.lib.homeManagerConfiguration {
               inherit (config) system stateVersion;
-              inherit (u.config) username;
+              username = name;
 
               homeDirectory = u.config.dir.home;
               extraSpecialArgs =  u.config.specialArgs;
@@ -161,7 +150,7 @@ let system =
         ({ lib, ... }: with lib; {
           system.configurationRevision = mkIf (flake ? rev) flake.rev;
           system.stateVersion = config.stateVersion;
-          networking.hostName = config.hostname;
+          networking.hostName = name;
           networking.hostId = config.hostid;
         })
       ];
@@ -186,7 +175,8 @@ let system =
       ];
 
       specialArgs = {
-        inherit (config) users hostname;
+        inherit (config) users;
+        hostname = name;
       };
 
       nixos = nixosSystem {

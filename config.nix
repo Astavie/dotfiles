@@ -1,6 +1,5 @@
 let
   users.astavie = {
-    username = "astavie";
     superuser = true;
     specialArgs.ssh-keygen = true;
     modules = [
@@ -18,12 +17,11 @@ let
 in
 {
   systems.vb = {
-    hostname = "vb";
     hostid = "85dd8e44";
     system = "x86_64-linux";
     stateVersion = "22.05";
 
-    users = with users; [ astavie ];
+    users = with users; { inherit astavie; };
     impermanence.enable = true;
 
     modules = [
