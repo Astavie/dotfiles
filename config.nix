@@ -17,7 +17,7 @@ let
   };
 in
 {
-  systems = [{
+  systems.vb = {
     hostname = "vb";
     hostid = "85dd8e44";
     system = "x86_64-linux";
@@ -33,5 +33,5 @@ in
       ./modules/system/vb.nix
       ./modules/system/xserver.nix
     ];
-  }];
+  };
 }

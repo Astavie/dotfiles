@@ -2,16 +2,16 @@
 
 with lib;
 let
-  sublist = module: mkOption {
-    type = with types; listOf (submodule module);
+  sublist = f: module: mkOption {
+    type = with types; f (submodule module);
   };
 in
 {
-  options.systems = sublist ({ config, ... }: {
+  options.systems = sublist types.attrsOf ({ config, ... }: {
     options = {
       impermanence.enable = mkEnableOption "impermanence";
 
-      users = sublist (u: {
+      users = sublist types.listOf (u: {
           options = {
             dir.persist = mkOption {
               type = types.path;

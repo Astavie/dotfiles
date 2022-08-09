@@ -25,17 +25,15 @@
       }).config;
     in
       {
-        dotfiles = {
-          systemList = builtins.concatStringsSep " " (builtins.map (systemcfg: systemcfg.hostname) config.systems);
-        };
+        inherit config;
 
-        nixosConfigurations = builtins.listToAttrs (builtins.map (systemcfg:
-          nameValuePair systemcfg.hostname systemcfg.nixos
+        nixosConfigurations = builtins.listToAttrs (mapAttrsToList (name: systemcfg:
+          nameValuePair name systemcfg.nixos
         ) config.systems);
 
-        homeConfigurations = foldr (a: b: a // b) {} (builtins.map (systemcfg:
+        homeConfigurations = foldr (a: b: a // b) {} (mapAttrsToList (name: systemcfg:
           builtins.listToAttrs (builtins.map (usercfg:
-            nameValuePair "${usercfg.username}@${systemcfg.hostname}" usercfg.hm
+            nameValuePair "${usercfg.username}@${name}" usercfg.hm
           ) systemcfg.users)
         ) config.systems);
       };

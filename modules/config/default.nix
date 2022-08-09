@@ -198,10 +198,20 @@ in
   {
     options = {
       systems = mkOption {
-        type = with types; listOf (submodule system);
+        type = with types; attrsOf (submodule system);
         description = ''
           The systems.
         '';
       };
+      list = mkOption {
+        type = types.str;
+        description = ''
+          A readable list of the systems.
+        '';
+        readOnly = true;
+      };
+    };
+    config = {
+      list = builtins.concatStringsSep " " (builtins.attrNames config.systems);
     };
   }
