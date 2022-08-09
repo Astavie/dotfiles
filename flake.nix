@@ -11,30 +11,33 @@
 
     with nixpkgs.lib;
     let
-      flake = self;
       args = {
-        inherit flake home-manager impermanence;
+        flake = self;
+        inherit home-manager impermanence;
       };
+      config = (evalModules {
+        modules = [
+          { _module.args = args; }
+          ./modules/config
+          ./modules/config/impermanence.nix
+          ./config.nix
+        ];
+      }).config;
     in
-      rec {
-        dotfileSystems = builtins.mapAttrs (_: rawsystem:
-          (evalModules {
-            modules = [
-              { _module.args = args; }
-              ./modules/config
-              ./modules/config/impermanence.nix
-              rawsystem
-            ];
-          }).config
-        ) (import ./config.nix);
+      {
+        dotfiles = {
+          systemList = builtins.concatStringsSep " " (builtins.map (systemcfg: systemcfg.hostname) config.systems);
+        };
 
-        nixosConfigurations = builtins.mapAttrs (_: systemcfg: systemcfg.nixos) dotfileSystems;
+        nixosConfigurations = builtins.listToAttrs (builtins.map (systemcfg:
+          nameValuePair systemcfg.hostname systemcfg.nixos
+        ) config.systems);
 
-        homeConfigurations = foldr (a: b: a // b) {} (mapAttrsToList (_: systemcfg:
+        homeConfigurations = foldr (a: b: a // b) {} (builtins.map (systemcfg:
           builtins.listToAttrs (builtins.map (usercfg:
             nameValuePair "${usercfg.username}@${systemcfg.hostname}" usercfg.hm
           ) systemcfg.users)
-        ) dotfileSystems);
+        ) config.systems);
       };
 
 }
