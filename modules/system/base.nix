@@ -10,7 +10,7 @@ let
   sudo = "doas";
 
   # list of users with ssh-keygen flag
-  ssh-users = builtins.filter (usercfg: usercfg.specialArgs.ssh-keygen) users;
+  ssh-users = builtins.filter (usercfg: usercfg.specialArgs.ssh-keygen or false) users;
 
   # system package
   rehome = pkgs.writeShellScriptBin "rehome" (
@@ -60,9 +60,6 @@ in
   security.sudo.enable = false;
   security.doas.enable = true;
 
-  # Required for impermanence
-  programs.fuse.userAllowOther = true;
-
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
@@ -103,9 +100,9 @@ in
 
   postinstall.sudo = sudo;
   postinstall.scripts = builtins.map (usercfg: {
-    script = "${pkgs.openssh}/bin/ssh-keygen -t rsa -b 4096 -f ${usercfg.dir.persistDir "ssh"}/.ssh/id_rsa -N ''";
+    script = "${pkgs.openssh}/bin/ssh-keygen -t rsa -b 4096 -f ${usercfg.dir.config "ssh"}/.ssh/id_rsa -N ''";
     user = usercfg.username;
-    dirs = [ "${usercfg.dir.persistDir "ssh"}/.ssh" ];
+    dirs = [ "${usercfg.dir.config "ssh"}/.ssh" ];
   }) ssh-users;
 
   nix.settings.trusted-users = builtins.map (usercfg: usercfg.username) (

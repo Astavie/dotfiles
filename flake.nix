@@ -9,54 +9,30 @@
 
   outputs = { self, home-manager, nixpkgs, impermanence, ... }:
 
+    with nixpkgs.lib;
     let
-      lib = nixpkgs.lib;
+      flake = self;
+      args = {
+        inherit flake home-manager impermanence;
+      };
     in
       rec {
         dotfileSystems = builtins.mapAttrs (_: rawsystem:
-          lib.evalModules {
+          (evalModules {
             modules = [
+              { _module.args = args; }
               ./modules/config
+              ./modules/config/impermanence.nix
               rawsystem
             ];
-          }
+          }).config
         ) (import ./config.nix);
 
-        nixosConfigurations = builtins.mapAttrs (_: module: let systemcfg = module.config; in lib.nixosSystem {
-          inherit (systemcfg) system;
+        nixosConfigurations = builtins.mapAttrs (_: systemcfg: systemcfg.nixos) dotfileSystems;
 
-          modules = [
-            ./modules/system/postinstall.nix
-            {
-              system.configurationRevision = nixpkgs.lib.mkIf (self ? rev) self.rev;
-              system.stateVersion = systemcfg.stateVersion;
-              networking.hostName = systemcfg.hostname;
-              networking.hostId = systemcfg.hostid;
-            }
-          ] ++ systemcfg.modules;
-
-          specialArgs = {
-            inherit (systemcfg) users hostname;
-          } // systemcfg.specialArgs;
-        }) dotfileSystems;
-
-        homeConfigurations = lib.foldr (a: b: a // b) {} (lib.mapAttrsToList (_: module: let systemcfg = module.config; in
+        homeConfigurations = foldr (a: b: a // b) {} (mapAttrsToList (_: systemcfg:
           builtins.listToAttrs (builtins.map (usercfg:
-            lib.nameValuePair "${usercfg.username}@${systemcfg.hostname}" (home-manager.lib.homeManagerConfiguration {
-              inherit (systemcfg) system stateVersion;
-              inherit (usercfg) username;
-              homeDirectory = usercfg.dir.home;
-
-              extraSpecialArgs = {
-                inherit (usercfg) username dir;
-              } // usercfg.specialArgs;
-
-              configuration = {
-                imports = (if systemcfg.impermanence then [ impermanence.nixosModules.home-manager.impermanence ] else [])
-                  ++ systemcfg.sharedModules
-                  ++ usercfg.modules;
-              };
-            })
+            nameValuePair "${usercfg.username}@${systemcfg.hostname}" usercfg.hm
           ) systemcfg.users)
         ) dotfileSystems);
       };

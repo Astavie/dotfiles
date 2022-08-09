@@ -24,7 +24,7 @@ in
     stateVersion = "22.05";
 
     users = with users; [ astavie ];
-    impermanence = true;
+    impermanence.enable = true;
 
     modules = [
       ./modules/system/hardware/uefi.nix

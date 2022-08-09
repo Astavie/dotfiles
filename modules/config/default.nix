@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, config, flake, home-manager, ... }:
 
 with lib;
 {
@@ -36,7 +36,7 @@ with lib;
     };
 
     users = mkOption {
-      type = with types; listOf (submodule ({ config, ... }: {
+      type = with types; listOf (submodule (u: {
         options = {
           # Required options
           username = mkOption {
@@ -82,41 +82,53 @@ with lib;
               The data directory of the user.
             '';
           };
-          dir.persist = mkOption {
-            type = types.path;
-            apply = toString;
+          dir.config = mkOption {
+            type = with types; functionTo path;
+            apply = (f: (x: toString (f x)));
             description = ''
-              The persist directory of the user.
+              A directory to place configuration files of a specific package.
+            '';
+          };
+
+          # Constants
+          hm = mkOption {
+            type = types.raw;
+            readOnly = true;
+            description = ''
+              The home manager config of this module.
             '';
           };
         };
         config = {
-          dir.home = "/home/${config.username}";
-          dir.data = "/data/${config.username}";
-          dir.persist = "/persist/${config.username}";
+          dir.home = mkDefault "/home/${u.config.username}";
+          dir.data = mkDefault "/data/${u.config.username}";
+          dir.config = mkDefault (_: u.config.dir.home);
+
+          specialArgs = {
+            inherit (u.config) username dir;
+          };
+
+          hm = home-manager.lib.homeManagerConfiguration {
+            inherit (config) system stateVersion;
+            inherit (u.config) username;
+
+            homeDirectory = u.config.dir.home;
+            extraSpecialArgs =  u.config.specialArgs;
+
+            configuration = {
+              imports =
+                config.sharedModules ++
+                u.config.modules;
+            };
+          };
         };
       }));
       description = ''
         The users of the system.
       '';
-      apply = (users: builtins.map (usercfg: {
-        inherit (usercfg) username modules superuser specialArgs;
-        dir = rec {
-          inherit (usercfg.dir) home data;
-          persist = if config.impermanence then usercfg.dir.persist else usercfg.dir.home;
-          persistDir = if home == persist then (_: home) else (dir: "${persist}/${dir}");
-        };
-      }) users);
     };
 
     # Optional options
-    impermanence = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to support impermanence.
-      '';
-    };
     specialArgs = mkOption {
       type = types.attrs;
       default = {};
@@ -130,6 +142,53 @@ with lib;
       description = ''
         The shared modules to pass to each system user.
       '';
+    };
+
+    # Constants
+    nixos = mkOption {
+      type = types.raw;
+      readOnly = true;
+      description = ''
+        The NixOS system of this module.
+      '';
+    };
+  };
+  config = {
+    modules = [
+      ../system/postinstall.nix
+      ({ lib, ... }: with lib; {
+        system.configurationRevision = mkIf (flake ? rev) flake.rev;
+        system.stateVersion = config.stateVersion;
+        networking.hostName = config.hostname;
+        networking.hostId = config.hostid;
+      })
+    ];
+
+    sharedModules = [
+      ({ lib, ... }: with lib; {
+        options.backup.files = mkOption {
+          type = with types; listOf str;
+          default = [];
+          description = ''
+            The files inside home to backup.
+          '';
+        };
+        options.backup.directories = mkOption {
+          type = with types; listOf str;
+          default = [];
+          description = ''
+            The directories inside home to backup.
+          '';
+        };
+      })
+    ];
+
+    specialArgs = {
+      inherit (config) users hostname;
+    };
+
+    nixos = nixosSystem {
+      inherit (config) system modules specialArgs;
     };
   };
 }
