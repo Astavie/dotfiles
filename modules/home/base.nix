@@ -77,7 +77,7 @@ in
 
       add-zsh-hook chpwd display-prompt
 
-      cd ${dir.data}
+      display-prompt
     '';
 
     envExtra = ''
@@ -104,5 +104,6 @@ in
 
   backup.directories = [
     "autojump/.local/share/autojump"
+    "firefox/.mozilla/firefox/default"
   ];
 }
