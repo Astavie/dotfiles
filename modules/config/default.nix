@@ -1,4 +1,4 @@
-{ lib, config, flake, home-manager, ... }:
+{ lib, config, flake, home-manager, nur, ... }:
 
 with lib;
 let system =
@@ -156,6 +156,7 @@ let system =
       ];
 
       sharedModules = [
+        nur.nixosModules.nur
         ({ lib, ... }: with lib; {
           options.backup.files = mkOption {
             type = with types; listOf str;

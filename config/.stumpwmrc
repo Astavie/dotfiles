@@ -32,7 +32,7 @@
 
 (set-module-dir (concatenate 'string (getenv "HOME") "/.stumpwm.d/modules"))
 (load-module "swm-gaps")
-(setf swm-gaps:*head-gaps-size* 20
+(setf swm-gaps:*head-gaps-size* 8
       swm-gaps:*inner-gaps-size* 4
       swm-gaps:*outer-gaps-size* 8)
 (when *initializing*

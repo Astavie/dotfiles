@@ -1,19 +1,22 @@
 {
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
 
+  inputs.nur.url = "github:nix-community/NUR";
+  inputs.nur.inputs.nixpkgs.follows = "nixpkgs";
+
   inputs.home-manager.url = "github:nix-community/home-manager/release-22.05";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
   inputs.impermanence.url = "github:nix-community/impermanence";
   inputs.impermanence.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = { self, home-manager, nixpkgs, impermanence, ... }:
+  outputs = { self, home-manager, nixpkgs, impermanence, nur, ... }:
 
     with nixpkgs.lib;
     let
       args = {
         flake = self;
-        inherit home-manager impermanence;
+        inherit home-manager impermanence nur;
       };
       config = (evalModules {
         modules = [
