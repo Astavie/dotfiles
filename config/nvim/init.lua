@@ -52,7 +52,7 @@ return require('packer').startup(function(use)
 
   -- LSP
   use 'neovim/nvim-lspconfig'
-  use { 'williamboman/nvim-lsp-installer', after = { 'telescope.nvim', 'cmp-nvim-lsp' }, config = function()
+  use { 'williamboman/nvim-lsp-installer', after = { 'telescope.nvim', 'cmp-nvim-lsp', 'nvim-lspconfig' }, config = function()
     local on_attach = function(_, bufnr)
       local nmap = function(keys, func, desc)
         if desc then
@@ -78,14 +78,20 @@ return require('packer').startup(function(use)
     local lsp_installer = require("nvim-lsp-installer")
     local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-    lsp_installer.on_server_ready(function(server)
-      server:setup {
+    require('nvim-lsp-installer').setup()
+
+    local lspconfig = require("lspconfig")
+    local servers = {
+      lspconfig.sumneko_lua,
+      lspconfig.tsserver
+    }
+
+    for _, lsp in ipairs(servers) do
+      lsp.setup {
         capabilities = capabilities,
         on_attach = on_attach
       }
-    end)
-
-    require('nvim-lsp-installer').setup()
+    end
   end}
 
   -- Completion
