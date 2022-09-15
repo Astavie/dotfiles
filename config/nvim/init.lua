@@ -83,7 +83,8 @@ return require('packer').startup(function(use)
     local lspconfig = require("lspconfig")
     local servers = {
       lspconfig.sumneko_lua,
-      lspconfig.tsserver
+      lspconfig.tsserver,
+      lspconfig.rnix
     }
 
     for _, lsp in ipairs(servers) do

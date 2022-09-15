@@ -5,7 +5,7 @@ let
     modules = [
       ./modules/home/base.nix
       ./modules/home/coding.nix
-      ./modules/home/stumpwm.nix
+      ./modules/home/herbstluftwm.nix
       {
         programs.git = {
           userEmail = "astavie@pm.me";

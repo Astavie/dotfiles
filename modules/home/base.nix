@@ -53,6 +53,10 @@ in
     ];
   };
 
+  home.packages = with pkgs; [
+    inotify-tools
+  ];
+
   programs.zsh = {
     enable = true;
     enableAutosuggestions = true;
