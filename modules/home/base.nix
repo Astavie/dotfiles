@@ -64,8 +64,12 @@ in
 
     # Make history lookup match everything before cursor
     initExtra = ''
-      bindkey "$terminfo[kcuu1]" history-beginning-search-backward
-      bindkey "$terminfo[kcud1]" history-beginning-search-forward
+      bindkey "^[[1;5C" forward-word
+      bindkey "^[[1;5D" backward-word
+      bindkey "^[[A" history-beginning-search-backward
+      bindkey "^[OA" history-beginning-search-backward
+      bindkey "^[[B" history-beginning-search-forward
+      bindkey "^[OB" history-beginning-search-forward
 
       display-prompt() {
         NAKED="%d%n@%m"

@@ -26,30 +26,33 @@ let
       hc keybind $Mod-Shift-k shift up
       hc keybind $Mod-Shift-l shift right
 
-      hc keybind $Mod-Shift-s split bottom 0.5
-      hc keybind $Mod-s       split right  0.5
-      hc keybind $Mod-Shift-e split explode
+      hc keybind $Mod-s       split auto 0.5
+      hc keybind $Mod-Shift-s split auto 0.67
+      hc keybind $Mod-e       split explode
 
       resizestep=0.02
-      hc keybind $Mod-Control-h resize left +$resizestep
-      hc keybind $Mod-Control-j resize down +$resizestep
-      hc keybind $Mod-Control-k resize up +$resizestep
+      hc keybind $Mod-Control-h resize left  +$resizestep
+      hc keybind $Mod-Control-j resize down  +$resizestep
+      hc keybind $Mod-Control-k resize up    +$resizestep
       hc keybind $Mod-Control-l resize right +$resizestep
 
       hc keybind $Mod-r remove
       hc keybind $Mod-f floating toggle
       hc keybind $Mod-p pseudotile toggle
+      hc keybind $Mod-space cycle_layout 1
 
-      hc keybind $Mod-BackSpace   cycle_monitor
-      hc keybind $Mod-Tab         cycle_all +1
-      hc keybind $Mod-Shift-Tab   cycle_all -1
-      hc keybind $Mod-c cycle
-      hc keybind $Mod-i jumpto urgent
+      hc keybind $Mod-BackSpace cycle_monitor
+      hc keybind $Mod-period    cycle +1
+      hc keybind $Mod-comma     cycle -1
+      hc keybind $Mod-u         jumpto urgent
 
       hc mouseunbind --all
       hc mousebind $Mod-Button1 move
       hc mousebind $Mod-Button2 zoom
       hc mousebind $Mod-Button3 resize
+
+      hc set default_frame_layout max
+      hc set_layout max
 
       hc unrule -F
       hc rule focus=on
@@ -60,36 +63,37 @@ let
       hc rule fixedsize floating=on
 
       hc set tree_style '╾│ ├└╼─┐'
-      hc set window_gap 12
+      hc set window_gap 0
       hc set frame_padding 0
+      hc set frame_gap 12
       hc set smart_window_surroundings 0
       hc set smart_frame_surroundings 1
       hc set mouse_recenter_gap 0
 
       hc attr theme.tiling.reset 1
       hc attr theme.floating.reset 1
-      hc set frame_border_active_color '#222222'
-      hc set frame_border_normal_color '#101010'
-      hc set frame_bg_normal_color '#565656'
-      hc set frame_bg_active_color '#345F0C'
-      hc set frame_border_width 1
-      hc set always_show_frame 1
-      hc set frame_bg_transparent 1
-      hc set frame_transparent_width 5
-      hc set frame_gap 4
+      hc attr theme.border_width       2
+      hc attr theme.outer_width        1
+      hc attr theme.inner_width        1
+      hc attr theme.padding_left       5
+      hc attr theme.outer_color '#11111b'
+      hc attr theme.inner_color '#181825'
+      hc attr theme.active.color '#f5e0dc'
+      hc attr theme.normal.color '#181825'
 
-      hc attr theme.active.color '#9fbc00'
-      hc attr theme.normal.color '#454545'
-      hc attr theme.urgent.color orange
-      hc attr theme.inner_width 1
-      hc attr theme.inner_color black
-      hc attr theme.border_width 3
-      hc attr theme.floating.border_width 4
-      hc attr theme.floating.outer_width 1
-      hc attr theme.floating.outer_color black
-      hc attr theme.active.inner_color '#3E4A00'
-      hc attr theme.active.outer_color '#3E4A00'
-      hc attr theme.background_color '#141414'
+      hc attr theme.title_when multiple_tabs
+      hc attr theme.title_height 11
+      hc attr theme.active.title_color '#1e1e2e'
+      hc attr theme.normal.title_color '#cdd6f4'
+      hc attr theme.title_align center
+      hc attr theme.title_font 'CaskaydiaCove Nerd Font:pixelsize=12'
+      hc attr theme.title_depth 1
+      hc attr theme.tab_color '#181825'
+      hc attr theme.tab_title_color '#cdd6f4'
+
+      hc set frame_bg_transparent on
+      hc set frame_padding        0
+      hc set frame_border_width   0
 
       hc unlock
 
@@ -100,20 +104,12 @@ in
   home.packages = with pkgs; [
     herbstluftwm
     feh
+    xorg.xwininfo
   ];
 
   services.picom = {
     enable = true;
     extraOptions = ''
-      corner-radius = 5;
-      round-borders = 5;
-      rounded-corners-exclude = [
-        "class_g ?= 'Notify-osd'",
-        "class_g = 'dmenu'",
-        "class_g = 'Polybar'",
-        "class_g = 'Tint2'",
-        "!window_type = 'normal'"
-      ];
       shadow = true;
       shadow-radius = 10;
       shadow-opacity = 0.5;
@@ -138,7 +134,7 @@ in
   home.file.".config/sx/sxrc" = {
     executable = true;
     text = ''
-      ${pkgs.feh}/bin/feh --bg-fill ${../../config/wallpaperlight.png} &
+      ${pkgs.feh}/bin/feh --bg-fill ${../../config/wallpaper.png} &
       ${pkgs.picom}/bin/picom &
       ${pkgs.herbstluftwm}/bin/herbstluftwm -c ${autostart}
     '';

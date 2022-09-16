@@ -1,4 +1,4 @@
-{ lib, config, flake, home-manager, nur, ... }:
+{ lib, config, flake, home-manager, nur, unstable, ... }:
 
 with lib;
 let system =
@@ -148,6 +148,9 @@ let system =
       modules = [
         ../system/postinstall.nix
         ({ lib, ... }: with lib; {
+          nixpkgs.overlays = [(final: prev: {
+            unstable = import unstable { inherit (final) system; };
+          })];
           system.configurationRevision = mkIf (flake ? rev) flake.rev;
           system.stateVersion = config.stateVersion;
           networking.hostName = name;
@@ -158,6 +161,9 @@ let system =
       sharedModules = [
         nur.nixosModules.nur
         ({ lib, ... }: with lib; {
+          config.nixpkgs.overlays = [(final: prev: {
+            unstable = import unstable { inherit (final) system; };
+          })];
           options.backup.files = mkOption {
             type = with types; listOf str;
             default = [];

@@ -51,8 +51,7 @@ return require('packer').startup(function(use)
   use { 'nvim-treesitter/nvim-treesitter-textobjects', after = 'nvim-treesitter' }
 
   -- LSP
-  use 'neovim/nvim-lspconfig'
-  use { 'williamboman/nvim-lsp-installer', after = { 'telescope.nvim', 'cmp-nvim-lsp', 'nvim-lspconfig' }, config = function()
+  use { 'neovim/nvim-lspconfig', after = { 'telescope.nvim', 'cmp-nvim-lsp' }, config = function()
     local on_attach = function(_, bufnr)
       local nmap = function(keys, func, desc)
         if desc then
@@ -75,10 +74,7 @@ return require('packer').startup(function(use)
       vim.api.nvim_buf_create_user_command(bufnr, 'Format', vim.lsp.buf.format or vim.lsp.buf.formatting, { desc = 'Format current buffer with LSP' })
     end
 
-    local lsp_installer = require("nvim-lsp-installer")
     local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-
-    require('nvim-lsp-installer').setup()
 
     local lspconfig = require("lspconfig")
     local servers = {

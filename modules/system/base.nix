@@ -70,7 +70,7 @@ in
 
   # Some handy base packages
   environment.systemPackages = with pkgs; [
-    neovim git neofetch rehome
+    git neofetch rehome
   ];
 
   # Timezone

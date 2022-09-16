@@ -10,13 +10,15 @@
   inputs.impermanence.url = "github:nix-community/impermanence";
   inputs.impermanence.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = { self, home-manager, nixpkgs, impermanence, nur, ... }:
+  inputs.unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+
+  outputs = { self, home-manager, nixpkgs, impermanence, nur, unstable, ... }:
 
     with nixpkgs.lib;
     let
       args = {
         flake = self;
-        inherit home-manager impermanence nur;
+        inherit home-manager impermanence nur unstable;
       };
       config = (evalModules {
         modules = [
