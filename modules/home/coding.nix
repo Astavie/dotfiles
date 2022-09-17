@@ -8,6 +8,7 @@ in
   fonts.fontconfig.enable = true;
 
   nixpkgs.overlays = [(final: prev: {
+    # NOTE: We need the unstable version of tree-sitter because tree-sitter-nix in 22.05 is broken
     tree-sitter = final.unstable.tree-sitter;
   })];
 
