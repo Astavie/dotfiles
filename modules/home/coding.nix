@@ -28,7 +28,7 @@ in
       source = "${pkgs.tree-sitter.builtGrammars."tree-sitter-${parser}"}/parser";
     }
   ) parsers) // {
-    ".config/nvim/init.lua".source = ../../config/nvim/init.lua;
+    ".config/nvim/init.lua".source = ../../config/nvim.lua;
     ".config/kitty/kitty.conf".source = ../../config/kitty.conf;
   };
 }

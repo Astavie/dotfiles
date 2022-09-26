@@ -54,7 +54,7 @@ in
   };
 
   home.packages = with pkgs; [
-    inotify-tools
+    helvum
   ];
 
   programs.zsh = {

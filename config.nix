@@ -6,6 +6,7 @@ let
       ./modules/home/base.nix
       ./modules/home/coding.nix
       ./modules/home/herbstluftwm.nix
+      ./modules/home/discord.nix
       {
         programs.git = {
           userEmail = "astavie@pm.me";

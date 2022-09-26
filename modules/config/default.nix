@@ -149,7 +149,10 @@ let system =
         ../system/postinstall.nix
         ({ lib, ... }: with lib; {
           nixpkgs.overlays = [(final: prev: {
-            unstable = import unstable { inherit (final) system; };
+            unstable = import unstable {
+              inherit (final) system;
+              config.allowUnfree = true;
+            };
           })];
           system.configurationRevision = mkIf (flake ? rev) flake.rev;
           system.stateVersion = config.stateVersion;
@@ -162,7 +165,10 @@ let system =
         nur.nixosModules.nur
         ({ lib, ... }: with lib; {
           config.nixpkgs.overlays = [(final: prev: {
-            unstable = import unstable { inherit (final) system; };
+            unstable = import unstable {
+              inherit (final) system;
+              config.allowUnfree = true;
+            };
           })];
           options.backup.files = mkOption {
             type = with types; listOf str;

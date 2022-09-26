@@ -68,6 +68,16 @@ in
     # useXkbConfig = true; # use xkbOptions in tty.
   };
 
+  # Sound service
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    jack.enable = true;
+  };
+
   # Some handy base packages
   environment.systemPackages = with pkgs; [
     git neofetch rehome
