@@ -26,4 +26,9 @@
   ];
 
   home.file.".config/discocss/custom.css".source = ../../config/discord.css;
+
+  backup.directories = [
+    "discord/.config/discord"
+    "discord-screenaudio/.local/share/discord-screenaudio"
+  ];
 }

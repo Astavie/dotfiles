@@ -83,6 +83,10 @@ in
     git neofetch rehome
   ];
 
+  hardware.opengl.enable = true;
+  hardware.opengl.driSupport = true;
+  hardware.opengl.driSupport32Bit = true;
+
   # Timezone
   time.timeZone = "Europe/Amsterdam";
 

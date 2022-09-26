@@ -29,6 +29,8 @@ in
 {
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
     "lastpass-password-manager"
+    "steam-original"
+    "steam"
   ];
 
   programs.firefox = {
