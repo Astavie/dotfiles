@@ -80,7 +80,7 @@ return require('packer').startup(function(use)
     local servers = {
       lspconfig.sumneko_lua,
       lspconfig.tsserver,
-      lspconfig.rnix
+      lspconfig.rnix,
     }
 
     for _, lsp in ipairs(servers) do
@@ -89,6 +89,12 @@ return require('packer').startup(function(use)
         on_attach = on_attach
       }
     end
+
+    lspconfig.hls.setup {
+      capabilities = capabilities,
+      on_attach = on_attach,
+      cmd = { "haskell-language-server-wrapper", "--lsp", "-j1" }
+    }
   end}
 
   -- Completion

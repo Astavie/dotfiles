@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 
 let
-  parsers = [ "lua" "nix" "typescript" ];
+  parsers = [ "lua" "nix" "typescript" "haskell" ];
 in
 {
   # discover installed fonts
@@ -19,6 +19,9 @@ in
     sumneko-lua-language-server
     rnix-lsp
     nodePackages.typescript-language-server
+
+    ghc
+    haskell-language-server
 
     neovim
   ];
