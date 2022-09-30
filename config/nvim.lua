@@ -18,7 +18,7 @@ vim.g.maplocalleader = ' '
 vim.wo.number = true
 vim.wo.relativenumber = true
 
-vim.cmd [[set mouse=a]]
+-- vim.cmd [[set mouse=a]]
 
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
@@ -26,6 +26,11 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 
 vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
+
+vim.keymap.set('n', '<A-h>', '<C-w>h')
+vim.keymap.set('n', '<A-j>', '<C-w>j')
+vim.keymap.set('n', '<A-k>', '<C-w>k')
+vim.keymap.set('n', '<A-l>', '<C-w>l')
 
 return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'

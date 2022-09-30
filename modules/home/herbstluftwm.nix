@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, themePath, ... }:
 
 let
   autostart = pkgs.writeShellScript "herbstluftwm-autostart" ''
@@ -134,7 +134,7 @@ in
   home.file.".config/sx/sxrc" = {
     executable = true;
     text = ''
-      ${pkgs.feh}/bin/feh --bg-fill ${../../config/wallpaper.png} &
+      ${pkgs.feh}/bin/feh --bg-fill ${themePath}/wallpaper.png &
       ${pkgs.picom}/bin/picom &
       ${pkgs.herbstluftwm}/bin/herbstluftwm -c ${autostart}
     '';

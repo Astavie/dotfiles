@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, themePath, ... }:
 
 let
   parsers = [ "lua" "nix" "typescript" "haskell" ];
@@ -32,6 +32,6 @@ in
     }
   ) parsers) // {
     ".config/nvim/init.lua".source = ../../config/nvim.lua;
-    ".config/kitty/kitty.conf".source = ../../config/kitty.conf;
+    ".config/kitty/kitty.conf".source = "${themePath}/kitty.conf";
   };
 }

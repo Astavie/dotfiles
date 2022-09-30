@@ -1,6 +1,6 @@
 {
   # custom inputs
-  username, dir,
+  username, dir, theme, themePath,
 
   # system inputs
   pkgs, lib, config, ...
@@ -56,8 +56,10 @@ in
   };
 
   home.packages = with pkgs; [
-    helvum
+    helvum mc
   ];
+
+  home.file.".local/share/mc/skins/${theme}.ini".source = "${themePath}/mc.ini";
 
   programs.zsh = {
     enable = true;
