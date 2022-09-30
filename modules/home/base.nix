@@ -56,8 +56,10 @@ in
   };
 
   home.packages = with pkgs; [
-    helvum mc
+    helvum mc gtk-engine-murrine gnome.gnome-themes-extra gimp
   ];
+
+  home.file.".themes".source = "${themePath}/gtk/";
 
   home.file.".local/share/mc/skins/${theme}.ini".source = "${themePath}/mc.ini";
 
@@ -92,6 +94,8 @@ in
 
       PS1="> "
       PS2="  "
+
+      export GTK_THEME="${import "${themePath}/gtk/theme.nix"}"
 
       add-zsh-hook chpwd display-prompt
 
