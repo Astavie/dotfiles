@@ -61,6 +61,12 @@ in
 
   home.file.".local/share/mc/skins/${theme}.ini".source = "${themePath}/mc.ini";
 
+  home.file.".config/mc/ini".text = ''
+    [Midnight-Commander]
+    skin=${theme}
+    use_internal_edit=false
+  '';
+
   programs.zsh = {
     enable = true;
     enableAutosuggestions = true;

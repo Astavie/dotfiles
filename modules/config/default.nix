@@ -52,7 +52,7 @@ let system =
             };
             theme = mkOption {
               type = types.str;
-              default = "catppuccin";
+              default = "catppuccin-mocha";
               description = ''
                 The visual theme to use for this user.
               '';

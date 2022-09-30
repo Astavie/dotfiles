@@ -1,4 +1,4 @@
-{ pkgs, themePath, ... }:
+{ pkgs, theme, themePath, ... }:
 
 let
   autostart = pkgs.writeShellScript "herbstluftwm-autostart" ''
@@ -39,12 +39,13 @@ let
       hc keybind $Mod-r remove
       hc keybind $Mod-f floating toggle
       hc keybind $Mod-p pseudotile toggle
-      hc keybind $Mod-space cycle_layout 1
 
       hc keybind $Mod-BackSpace cycle_monitor
       hc keybind $Mod-period    cycle +1
       hc keybind $Mod-comma     cycle -1
       hc keybind $Mod-u         jumpto urgent
+
+      hc keybind $Mod-space spawn "rofi" -show drun
 
       hc mouseunbind --all
       hc mousebind $Mod-Button1 move
@@ -96,15 +97,13 @@ let
       hc set frame_border_width   0
 
       hc unlock
-
-      kitty /data/$USER/
     '';
 in
 {
   home.packages = with pkgs; [
     herbstluftwm
     feh
-    xorg.xwininfo
+    rofi
   ];
 
   services.picom = {
@@ -124,12 +123,33 @@ in
         "class_g = 'spectrwm'",
         "class_g = 'dmenu'",
         "class_g = 'Easystroke'",
-        "class_g = 'Rofi'",
         "class_g = 'GLava'",
         "class_g = '_HERBST_FRAME'",
       ];
     '';
   };
+
+  home.file.".config/rofi/config.rasi".text = ''
+    configuration{
+      modi: "run,drun,window";
+      icon-theme: "Oranchelo";
+      show-icons: true;
+      terminal: "kitty";
+      drun-display-format: "{icon} {name}";
+      location: 0;
+      disable-history: false;
+      hide-scrollbar: true;
+      display-drun: "   Apps ";
+      display-run: "   Run ";
+      display-window: " 﩯  Window";
+      display-Network: " 󰤨  Network";
+      sidebar-mode: true;
+    }
+
+    @theme "${theme}"
+  '';
+
+  home.file.".local/share/rofi/themes/${theme}.rasi".source = "${themePath}/rofi.rasi";
 
   home.file.".config/sx/sxrc" = {
     executable = true;
