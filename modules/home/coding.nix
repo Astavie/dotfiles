@@ -24,6 +24,9 @@ in
     haskell-language-server
 
     neovim
+
+    nodejs
+    nodePackages.npm
   ];
 
   home.file = builtins.listToAttrs (builtins.map (parser:
