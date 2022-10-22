@@ -18,20 +18,37 @@ let
   };
 in
 {
-  systems.vb = {
-    hostid = "85dd8e44";
-    system = "x86_64-linux";
-    stateVersion = "22.05";
+  systems = {
+    terrestrial = {
+      hostid = "93ad32f0";
+      system = "x86_64-linux";
+      stateVersion = "22.05";
 
-    users = with users; { inherit astavie; };
-    impermanence.enable = true;
+      users = with users; { inherit astavie; };
+      impermanence.enable = true;
 
-    modules = [
-      ./modules/system/hardware/uefi.nix
-      ./modules/system/hardware/zfs.nix
-      ./modules/system/base.nix
-      ./modules/system/vb.nix
-      ./modules/system/xserver.nix
-    ];
+      modules = [
+        ./modules/system/hardware/uefi.nix
+        ./modules/system/hardware/zfs.nix
+        ./modules/system/base.nix
+        ./modules/system/xserver.nix
+      ];
+    };
+    vb = {
+      hostid = "85dd8e44";
+      system = "x86_64-linux";
+      stateVersion = "22.05";
+
+      users = with users; { inherit astavie; };
+      impermanence.enable = true;
+
+      modules = [
+        ./modules/system/hardware/uefi.nix
+        ./modules/system/hardware/zfs.nix
+        ./modules/system/base.nix
+        ./modules/system/vb.nix
+        ./modules/system/xserver.nix
+      ];
+    };
   };
 }
