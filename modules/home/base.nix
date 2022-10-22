@@ -31,6 +31,7 @@ in
     "lastpass-password-manager"
     "steam-original"
     "steam"
+    "discord"
   ];
 
   programs.firefox = {
@@ -82,13 +83,14 @@ in
       bindkey "^[OA" history-beginning-search-backward
       bindkey "^[[B" history-beginning-search-forward
       bindkey "^[OB" history-beginning-search-forward
+      bindkey "^[[3~" delete-char
 
       display-prompt() {
         NAKED="%d%n@%m"
         N=$(($COLUMNS - ''${#$(print -P "''${NAKED}")} ))
         SPACE=$(printf "%''${N}s")
 
-        print -P "\n%K{white}%F{black}%d''${SPACE}%n@%m%k%f"
+        print -P "\n%K{blue}%F{black}%d''${SPACE}%n@%m%k%f"
         emulate -L zsh; ls -A;
       }
 

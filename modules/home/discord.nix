@@ -2,7 +2,7 @@
 
 {
   home.packages = with pkgs; [
-    unstable.discord discocss
+    discord discocss
     (pkgs.stdenv.mkDerivation {
       pname = "discord-screenaudio";
       version = "v1.3.1";

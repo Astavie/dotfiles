@@ -10,11 +10,21 @@ let
       hc keyunbind --all
 
       Mod=Mod4
+      
+      hc set default_frame_layout max
+      hc set_layout max
+
+      hc rename default one
+      hc add two
+
+      hc keybind $Mod-o shift_to_monitor +1
+      hc keybind $Mod-i use_index +1
+      hc detect_monitors
 
       hc keybind $Mod-q close
       hc keybind $Mod-Shift-q quit
       hc keybind $Mod-Shift-r reload
-      hc keybind $Mod-Return spawn "kitty" /data/$USER/
+      hc keybind $Mod-Return spawn kitty /data/$USER/
 
       hc keybind $Mod-h focus left
       hc keybind $Mod-j focus down
@@ -45,15 +55,12 @@ let
       hc keybind $Mod-comma     cycle -1
       hc keybind $Mod-u         jumpto urgent
 
-      hc keybind $Mod-space spawn "rofi" -show drun
+      hc keybind $Mod-space spawn rofi -show drun
 
       hc mouseunbind --all
       hc mousebind $Mod-Button1 move
       hc mousebind $Mod-Button2 zoom
       hc mousebind $Mod-Button3 resize
-
-      hc set default_frame_layout max
-      hc set_layout max
 
       hc unrule -F
       hc rule focus=on
@@ -73,22 +80,22 @@ let
 
       hc attr theme.tiling.reset 1
       hc attr theme.floating.reset 1
-      hc attr theme.border_width       2
+      hc attr theme.border_width       1
       hc attr theme.outer_width        1
-      hc attr theme.inner_width        1
+      hc attr theme.inner_width        0
       hc attr theme.padding_left       5
       hc attr theme.outer_color '#11111b'
       hc attr theme.inner_color '#181825'
-      hc attr theme.active.color '#f5e0dc'
+      hc attr theme.active.color '#89b4fa'
       hc attr theme.normal.color '#181825'
 
       hc attr theme.title_when multiple_tabs
-      hc attr theme.title_height 11
+      hc attr theme.title_height 13
       hc attr theme.active.title_color '#1e1e2e'
       hc attr theme.normal.title_color '#cdd6f4'
       hc attr theme.title_align center
-      hc attr theme.title_font 'CaskaydiaCove Nerd Font:pixelsize=12'
-      hc attr theme.title_depth 1
+      hc attr theme.title_font 'CaskaydiaCove Nerd Font:pixelsize=13'
+      hc attr theme.title_depth 2
       hc attr theme.tab_color '#181825'
       hc attr theme.tab_title_color '#cdd6f4'
 
