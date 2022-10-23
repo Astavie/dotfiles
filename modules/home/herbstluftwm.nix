@@ -75,7 +75,7 @@ let
       hc set frame_padding 0
       hc set frame_gap 12
       hc set smart_window_surroundings 0
-      hc set smart_frame_surroundings 1
+      hc set smart_frame_surroundings 0
       hc set mouse_recenter_gap 0
 
       hc attr theme.tiling.reset 1
@@ -85,17 +85,17 @@ let
       hc attr theme.inner_width        0
       hc attr theme.padding_left       5
       hc attr theme.outer_color '#11111b'
-      hc attr theme.inner_color '#181825'
+      hc attr theme.inner_color '#11111b'
       hc attr theme.active.color '#89b4fa'
-      hc attr theme.normal.color '#181825'
+      hc attr theme.normal.color '#11111b'
 
       hc attr theme.title_when multiple_tabs
-      hc attr theme.title_height 13
+      hc attr theme.title_height 14
       hc attr theme.active.title_color '#1e1e2e'
       hc attr theme.normal.title_color '#cdd6f4'
       hc attr theme.title_align center
       hc attr theme.title_font 'CaskaydiaCove Nerd Font:pixelsize=13'
-      hc attr theme.title_depth 2
+      hc attr theme.title_depth 3
       hc attr theme.tab_color '#181825'
       hc attr theme.tab_title_color '#cdd6f4'
 
