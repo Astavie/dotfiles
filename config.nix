@@ -30,8 +30,10 @@ in
       modules = [
         ./modules/system/hardware/uefi.nix
         ./modules/system/hardware/zfs.nix
+        ./modules/system/hardware/nvidia.nix
         ./modules/system/base.nix
         ./modules/system/xserver.nix
+        ./modules/system/steam.nix
       ];
     };
     vb = {
@@ -48,6 +50,7 @@ in
         ./modules/system/base.nix
         ./modules/system/vb.nix
         ./modules/system/xserver.nix
+        ./modules/system/steam.nix
       ];
     };
   };

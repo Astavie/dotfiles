@@ -195,7 +195,25 @@ let system =
             '';
           };
           options.backup.directories = mkOption {
-            type = with types; listOf str;
+            type = with types; listOf (either str (submodule {
+              options = {
+                directory = mkOption {
+                  type = str;
+                  default = null;
+                  description = "The directory path to be linked.";
+                };
+                method = mkOption {
+                  type = types.enum [ "bindfs" "symlink" ];
+                  default = "bindfs";
+                  description = ''
+                    The linking method that should be used for this
+                    directory. bindfs is the default and works for most use
+                    cases, however some programs may behave better with
+                    symlinks.
+                  '';
+                };
+              };
+            }));
             default = [];
             description = ''
               The directories inside home to backup.

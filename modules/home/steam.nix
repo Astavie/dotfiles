@@ -1,12 +1,14 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    steam
-  ];
-
   backup.directories = [
-    "steam/.steam"
-    "steam/.local/share/Steam"
+    {
+      directory = "steam/.steam";
+      method = "symlink";
+    }
+    {
+      directory = "steam/.local/share/Steam";
+      method = "symlink";
+    }
   ];
 }
