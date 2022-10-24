@@ -1,4 +1,4 @@
-{ pkgs, theme, themePath, ... }:
+{ pkgs, ... }:
 
 let
   autostart = pkgs.writeShellScript "herbstluftwm-autostart" ''
@@ -155,19 +155,16 @@ in
       sidebar-mode: true;
     }
 
-    @theme "${theme}"
+    @theme "theme"
   '';
 
-  home.file.".local/share/rofi/themes/${theme}.rasi".source = "${themePath}/rofi.rasi";
-
-  # Cursor
-  home.file.".icons/default".source = "${themePath}/cursor";
-  home.file.".xsession".text = "xsetroot -cursor_name hand1";
+  home.file.".local/share/rofi/themes/theme.rasi".source = ../../config/rofi.rasi;
+  home.file.".icons/default".source = ../../config/cursor;
 
   home.file.".config/sx/sxrc" = {
     executable = true;
     text = ''
-      ${pkgs.feh}/bin/feh --bg-fill ${themePath}/wallpaper.png &
+      ${pkgs.feh}/bin/feh --bg-fill ${../../config/wallpaper.png} &
       ${pkgs.picom}/bin/picom &
       ${pkgs.herbstluftwm}/bin/herbstluftwm -c ${autostart}
     '';

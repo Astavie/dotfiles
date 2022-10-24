@@ -1,6 +1,6 @@
 {
   # custom inputs
-  username, dir, theme, themePath,
+  username, dir,
 
   # system inputs
   pkgs, lib, config, ...
@@ -58,13 +58,13 @@ in
     helvum mc gtk-engine-murrine gnome.gnome-themes-extra gimp
   ];
 
-  home.file.".themes".source = "${themePath}/gtk/";
+  home.file.".themes".source = ../../config/gtk;
 
-  home.file.".local/share/mc/skins/${theme}.ini".source = "${themePath}/mc.ini";
+  home.file.".local/share/mc/skins/theme.ini".source = ../../config/mc.ini;
 
   home.file.".config/mc/ini".text = ''
     [Midnight-Commander]
-    skin=${theme}
+    skin=theme
     use_internal_edit=false
   '';
 
@@ -95,7 +95,7 @@ in
       PS1="> "
       PS2="  "
 
-      export GTK_THEME="${import "${themePath}/gtk/theme.nix"}"
+      export GTK_THEME="${import ../../config/gtk/theme.nix}"
 
       add-zsh-hook chpwd display-prompt
 

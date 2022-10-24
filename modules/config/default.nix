@@ -50,13 +50,6 @@ let system =
                 Whether the user is a superuser.
               '';
             };
-            theme = mkOption {
-              type = types.str;
-              default = "catppuccin-mocha";
-              description = ''
-                The visual theme to use for this user.
-              '';
-            };
             specialArgs = mkOption {
               type = types.attrs;
               default = {};
@@ -95,24 +88,14 @@ let system =
                 The home manager config of this module.
               '';
             };
-            themePath = mkOption {
-              type = types.path;
-              readOnly = true;
-              apply = toString;
-              description = ''
-                The path to the parent directory of theme files.
-              '';
-            };
           };
           config = {
             dir.home = mkDefault "/home/${name}";
             dir.data = mkDefault "/data/${name}";
             dir.config = mkDefault (_: u.config.dir.home);
 
-            themePath = "${../../config/theme}/${u.config.theme}";
-
             specialArgs = {
-              inherit (u.config) dir theme themePath;
+              inherit (u.config) dir;
               username = name;
             };
 

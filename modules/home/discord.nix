@@ -1,4 +1,4 @@
-{ pkgs, themePath, ... }:
+{ pkgs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -25,7 +25,7 @@
     })
   ];
 
-  home.file.".config/discocss/custom.css".source = "${themePath}/discord.css";
+  home.file.".config/discocss/custom.css".source = ../../config/discord.css;
 
   backup.directories = [
     "discord/.config/discord"
