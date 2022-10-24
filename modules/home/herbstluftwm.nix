@@ -104,6 +104,8 @@ let
       hc set frame_border_width   0
 
       hc unlock
+      
+      xsetroot -cursor_name left_ptr
     '';
 in
 {
@@ -157,6 +159,10 @@ in
   '';
 
   home.file.".local/share/rofi/themes/${theme}.rasi".source = "${themePath}/rofi.rasi";
+
+  # Cursor
+  home.file.".icons/default".source = "${themePath}/cursor";
+  home.file.".xsession".text = "xsetroot -cursor_name hand1";
 
   home.file.".config/sx/sxrc" = {
     executable = true;
