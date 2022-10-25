@@ -3,20 +3,21 @@
 {
   home.packages = with pkgs; [
     discord discocss
-    (pkgs.stdenv.mkDerivation {
+    (pkgs.stdenv.mkDerivation rec {
       pname = "discord-screenaudio";
-      version = "v1.3.1";
+      version = "1.4.0";
 
       src = pkgs.fetchFromGitHub {
         owner = "maltejur";
         repo = "discord-screenaudio";
-        rev = "v1.3.1";
-        sha256 = "sha256-gp+RrRlbFzCdPszb06R5pEuDie5r63a3HFxzI0zXpHA=";
+        rev = "v${version}";
+        sha256 = "sha256-TOPDrJEgwny6RtVvdR+ysRR5iAtMMzkfAmw1UN3VVf0=";
         fetchSubmodules = true;
       };
 
+      depsBuildBuild = [ buildPackages.stdenv.cc ];
       nativeBuildInputs = [ qt5.wrapQtAppsHook cmake pkg-config ];
-      buildInputs = [ pipewire qt5.qtbase qt5.qtwebengine libsForQt5.knotifications ];
+      buildInputs = with qt5; with libsForQt5; [ pipewire qtbase qtwebengine knotifications kglobalaccel kxmlgui ];
 
       cmakeFlags = [
         "-DPipeWire_INCLUDE_DIRS=${pipewire.dev}/include/pipewire-0.3"
