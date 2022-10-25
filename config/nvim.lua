@@ -46,7 +46,7 @@ return require('packer').startup(function(use)
   end}
 
   -- Treesitter
-  use { 'nvim-treesitter/nvim-treesitter', config = function()
+  use { 'nvim-treesitter/nvim-treesitter', commit = '4cccb6f494eb255b32a290d37c35ca12584c74d0', config = function()
     require('nvim-treesitter.configs').setup {
       highlight = { enable = true },
       indent = { enable = true },
@@ -79,7 +79,7 @@ return require('packer').startup(function(use)
       vim.api.nvim_buf_create_user_command(bufnr, 'Format', vim.lsp.buf.format or vim.lsp.buf.formatting, { desc = 'Format current buffer with LSP' })
     end
 
-    local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+    local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
     local lspconfig = require("lspconfig")
     local servers = {
@@ -103,7 +103,7 @@ return require('packer').startup(function(use)
   end}
 
   -- Completion
-  use { 'hrsh7th/nvim-cmp', requires = { 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-cmdline' }, after = 'LuaSnip', config = function()
+  use { 'hrsh7th/nvim-cmp', requires = { 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-nvim-lsp-signature-help', 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-cmdline' }, after = 'LuaSnip', config = function()
     local cmp = require 'cmp'
     local luasnip = require 'luasnip'
 
@@ -142,6 +142,7 @@ return require('packer').startup(function(use)
       },
       sources = {
         { name = 'nvim_lsp' },
+        { name = 'nvim_lsp_signature_help' },
         { name = 'luasnip' },
         { name = 'buffer' },
       },
@@ -183,7 +184,7 @@ return require('packer').startup(function(use)
   use { 'windwp/nvim-autopairs', config = function() require('nvim-autopairs').setup() end }
 
   -- Theme
-  use { "catppuccin/nvim", as = "catppuccin", config = function()
+  use { "catppuccin/nvim", tag = "v0.2.4", as = "catppuccin", config = function()
     vim.g.catppuccin_flavour = 'mocha'
     require("catppuccin").setup()
     vim.cmd [[colorscheme catppuccin]]

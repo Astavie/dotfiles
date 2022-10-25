@@ -24,6 +24,9 @@ in
     haskell-language-server
 
     neovim
+    ripgrep
+    xclip
+    fd
 
     nodejs
     nodePackages.npm
