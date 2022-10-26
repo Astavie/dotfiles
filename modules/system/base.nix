@@ -9,9 +9,6 @@
 let
   sudo = "doas";
 
-  # list of users with ssh-keygen flag
-  ssh-users = lib.filterAttrs (_: usercfg: usercfg.specialArgs.ssh-keygen or false) users;
-
   # system package
   rehome = pkgs.writeShellScriptBin "rehome" (
     builtins.concatStringsSep "\n" ([''
@@ -51,48 +48,20 @@ let
   '');
 in
 {
-  nix.package = pkgs.nixFlakes;
-  nix.extraOptions = "experimental-features = nix-command flakes";
-
+  # Reasonable defaults
   swapDevices = [{ device = "/dev/disk/by-label/swap"; }];
-
-  # Use doas, not sudo
-  security.sudo.enable = false;
-  security.doas.enable = true;
-
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-  console = {
-    font = "Lat2-Terminus16";
-    keyMap = "us";
-    # useXkbConfig = true; # use xkbOptions in tty.
-  };
+  console.font = "Lat2-Terminus16";
 
-  # Sound service
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-  };
-
-  # Some handy base packages
-  environment.systemPackages = with pkgs; [
-    git neofetch rehome
-  ];
-
-  hardware.opengl.enable = true;
-  hardware.opengl.driSupport = true;
-  hardware.opengl.driSupport32Bit = true;
-
-  # Timezone
-  time.timeZone = "Europe/Amsterdam";
+  # Pick doas or sudo
+  security.sudo.enable = sudo == "sudo";
+  security.doas.enable = sudo == "doas";
+  postinstall.sudo = sudo;
 
   # Create users
+  environment.systemPackages = [ rehome pkgs.git ];
+  
   users.mutableUsers = false;
-
   users.users = builtins.mapAttrs (username: usercfg: {
     home = usercfg.dir.home;
 
@@ -109,13 +78,6 @@ in
       (flex         username usercfg)
     ];
   }) users;
-
-  postinstall.sudo = sudo;
-  postinstall.scripts = lib.mapAttrsToList (username: usercfg: {
-    script = "${pkgs.openssh}/bin/ssh-keygen -t rsa -b 4096 -f ${usercfg.dir.config "ssh"}/.ssh/id_rsa -N ''";
-    user = username;
-    dirs = [ "${usercfg.dir.config "ssh"}/.ssh" ];
-  }) ssh-users;
 
   nix.settings.trusted-users = builtins.attrNames (lib.filterAttrs (_: usercfg: usercfg.superuser) users);
 

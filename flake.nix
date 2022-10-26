@@ -25,6 +25,7 @@
           { _module.args = args; }
           ./modules/config
           ./modules/config/impermanence.nix
+          ./modules/config/postinstall.nix
           ./config.nix
         ];
       }).config;

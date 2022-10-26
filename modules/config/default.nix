@@ -1,7 +1,12 @@
 { lib, config, flake, home-manager, nur, unstable, ... }:
 
 with lib;
-let system =
+let
+  allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) (import ../../unfree.nix);
+  nospace  = str: filter (c: c == " ") (stringToCharacters str) == [];
+  timezone = types.nullOr (types.addCheck types.str nospace)
+    // { description = "null or string without spaces"; };
+  system =
   { config, name, ... }:
   {
     options = {
@@ -57,6 +62,13 @@ let system =
                 The special arguments to pass to the system and user modules.
               '';
             };
+            packages = mkOption {
+              type = types.functionTo (types.listOf types.package);
+              default = _: [];
+              description = ''
+                Extra packages to install for the user.
+              '';
+            };
             
             dir.home = mkOption {
               type = types.path;
@@ -104,12 +116,14 @@ let system =
               username = name;
 
               homeDirectory = u.config.dir.home;
-              extraSpecialArgs =  u.config.specialArgs;
+              extraSpecialArgs = u.config.specialArgs;
 
-              configuration = {
+              configuration = { pkgs, ...}: {
                 imports =
                   config.sharedModules ++
                   u.config.modules;
+
+                home.packages = u.config.packages pkgs;
               };
             };
           };
@@ -120,6 +134,26 @@ let system =
       };
 
       # Optional options
+      timeZone = mkOption {
+        type = timezone;
+        default = "Europe/Amsterdam";
+        example = "America/New_York";
+        description = ''
+          The time zone used when displaying times and dates. See <link
+          xlink:href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"/>
+          for a comprehensive list of possible values for this setting.
+          If null, the timezone will default to UTC and can be set imperatively
+          using timedatectl.
+        '';
+      };
+      keyMap = mkOption {
+        type = with types; either str path;
+        default = "us";
+        example = "fr";
+        description = ''
+          The keyboard mapping table for the virtual consoles.
+        '';
+      };
       specialArgs = mkOption {
         type = types.attrs;
         default = {};
@@ -146,18 +180,22 @@ let system =
     };
     config = {
       modules = [
-        ../system/postinstall.nix
-        ({ lib, ... }: with lib; {
+        ({ lib, pkgs, ... }: with lib; {
           nixpkgs.overlays = [(final: prev: {
             unstable = import unstable {
               inherit (final) system;
-              config.allowUnfree = true;
+              config = { inherit allowUnfreePredicate; };
             };
           })];
+          nixpkgs.config = { inherit allowUnfreePredicate; };
           system.configurationRevision = mkIf (flake ? rev) flake.rev;
           system.stateVersion = config.stateVersion;
           networking.hostName = name;
           networking.hostId = config.hostid;
+          nix.package = pkgs.nixFlakes;
+          nix.extraOptions = "experimental-features = nix-command flakes";
+          time.timeZone = config.timeZone;
+          console.keyMap = config.keyMap;
         })
       ];
 
@@ -167,9 +205,10 @@ let system =
           config.nixpkgs.overlays = [(final: prev: {
             unstable = import unstable {
               inherit (final) system;
-              config.allowUnfree = true;
+              config = { inherit allowUnfreePredicate; };
             };
           })];
+          config.nixpkgs.config = { inherit allowUnfreePredicate; };
           options.backup.files = mkOption {
             type = with types; listOf str;
             default = [];

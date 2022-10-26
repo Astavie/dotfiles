@@ -4,18 +4,12 @@ let
   parsers = [ "lua" "nix" "typescript" "haskell" ];
 in
 {
-  # discover installed fonts
-  fonts.fontconfig.enable = true;
-
   nixpkgs.overlays = [(final: prev: {
     # NOTE: We need the unstable version of tree-sitter because tree-sitter-nix in 22.05 is broken
     tree-sitter = final.unstable.tree-sitter;
   })];
 
   home.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
-    kitty
-
     sumneko-lua-language-server
     rnix-lsp
     nodePackages.typescript-language-server
@@ -38,6 +32,5 @@ in
     }
   ) parsers) // {
     ".config/nvim/init.lua".source = ../../config/nvim.lua;
-    ".config/kitty/kitty.conf".source = ../../config/kitty.conf;
   };
 }

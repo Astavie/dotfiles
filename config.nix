@@ -1,12 +1,21 @@
 let
   users.astavie = {
     superuser = true;
+    packages = pkgs: with pkgs; [
+      neofetch
+      helvum
+      gimp
+    ];
+
     specialArgs.ssh-keygen = true;
+
     modules = [
-      ./modules/home/base.nix
       ./modules/home/coding.nix
-      ./modules/home/herbstluftwm.nix
+      ./modules/home/commandline.nix
+      ./modules/home/desktop.nix
       ./modules/home/discord.nix
+      ./modules/home/firefox.nix
+      ./modules/home/git.nix
       ./modules/home/steam.nix
       {
         programs.git = {
@@ -28,12 +37,14 @@ in
       impermanence.enable = true;
 
       modules = [
+        ./modules/system/hardware/nvidia.nix
         ./modules/system/hardware/uefi.nix
         ./modules/system/hardware/zfs.nix
-        ./modules/system/hardware/nvidia.nix
         ./modules/system/base.nix
-        ./modules/system/xserver.nix
+        ./modules/system/pipewire.nix
+        ./modules/system/ssh.nix
         ./modules/system/steam.nix
+        ./modules/system/xserver.nix
       ];
     };
     vb = {
@@ -46,11 +57,11 @@ in
 
       modules = [
         ./modules/system/hardware/uefi.nix
+        ./modules/system/hardware/vb.nix
         ./modules/system/hardware/zfs.nix
         ./modules/system/base.nix
-        ./modules/system/vb.nix
+        ./modules/system/pipewire.nix
         ./modules/system/xserver.nix
-        ./modules/system/steam.nix
       ];
     };
   };
