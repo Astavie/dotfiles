@@ -14,6 +14,8 @@ in
     rnix-lsp
     nodePackages.typescript-language-server
 
+    cabal2nix
+    cabal-install
     ghc
     haskell-language-server
 
