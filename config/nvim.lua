@@ -45,6 +45,8 @@ return require('packer').startup(function(use)
     vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
   end}
 
+  use { 'Tetralux/odin.vim' }
+
   -- Treesitter
   use { 'nvim-treesitter/nvim-treesitter', commit = '4cccb6f494eb255b32a290d37c35ca12584c74d0', config = function()
     require('nvim-treesitter.configs').setup {
@@ -86,6 +88,7 @@ return require('packer').startup(function(use)
       lspconfig.sumneko_lua,
       lspconfig.tsserver,
       lspconfig.rnix,
+      lspconfig.ols,
     }
 
     for _, lsp in ipairs(servers) do
