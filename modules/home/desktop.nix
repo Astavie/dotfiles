@@ -10,6 +10,7 @@ in
     rofi         # app launcher
     kitty        # terminal
     mc           # file explorer
+    scrot        # screenshots
 
     # fonts
     (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
