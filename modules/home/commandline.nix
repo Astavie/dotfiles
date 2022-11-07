@@ -1,4 +1,4 @@
-{ ... }:
+{ inputs, ... }:
 
 {
   programs.zsh = {
@@ -38,6 +38,11 @@
     envExtra = ''
       EDITOR=nvim
     '';
+
+    plugins = [{
+      name = "auto-notify";
+      src = inputs.zsh-auto-notify;
+    }];
   };
 
   programs.autojump.enable = true;

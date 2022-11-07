@@ -1,4 +1,4 @@
-{ lib, config, flake, home-manager, nur, unstable, ... }:
+{ lib, config, flake, home-manager, nur, unstable, inputs, ... }:
 
 with lib;
 let
@@ -108,6 +108,7 @@ let
 
             specialArgs = {
               inherit (u.config) dir;
+              inherit inputs;
               username = name;
             };
 
@@ -246,6 +247,7 @@ let
 
       specialArgs = {
         inherit (config) users;
+        inherit inputs;
         hostname = name;
       };
 
