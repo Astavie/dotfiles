@@ -5,12 +5,13 @@ let
 in
 {
   home.packages = with pkgs; [
-    herbstluftwm # window manager
-    feh          # wallpaper
-    rofi         # app launcher
-    kitty        # terminal
-    mc           # file explorer
-    scrot        # screenshots
+    herbstluftwm    # window manager
+    feh             # wallpaper
+    rofi            # app launcher
+    kitty           # terminal
+    mc              # file explorer
+    scrot           # screenshots
+    dunst libnotify # notifications
 
     # fonts
     (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
@@ -25,6 +26,9 @@ in
   # gtk theme
   home.file.".themes".source = ../../config/gtk;
   
+  # dunst theme
+  home.file.".config/dunst/dunstrc".source = ../../config/dunstrc;
+
   # midnight commander
   home.file.".local/share/mc/skins/theme.ini".source = ../../config/mc.ini;
   home.file.".config/mc/ini".text = ''
@@ -68,6 +72,7 @@ in
     text = ''
       ${pkgs.feh}/bin/feh --bg-fill ${../../config/wallpaper.png} &
       ${pkgs.picom}/bin/picom &
+      ${pkgs.dunst}/bin/dunst &
       ${pkgs.herbstluftwm}/bin/herbstluftwm -c ${autostart}
     '';
   };
