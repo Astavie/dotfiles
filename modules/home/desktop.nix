@@ -10,7 +10,7 @@ in
     rofi            # app launcher
     kitty           # terminal
     mc              # file explorer
-    scrot           # screenshots
+    scrot xclip     # screenshots
     dunst libnotify # notifications
 
     # fonts

@@ -52,25 +52,30 @@ in
   })];
 
   home.packages = with pkgs; [
-    sumneko-lua-language-server
-    rnix-lsp
-    nodePackages.typescript-language-server
-
+    # Haskell
     cabal2nix
     cabal-install
     ghc
     haskell-language-server
 
+    # Odin
     odin
     ols
 
+    # Neovim
     neovim
     ripgrep
     xclip
     fd
 
+    # Node.js
     nodejs
     nodePackages.npm
+    nodePackages.typescript-language-server
+    
+    # Other
+    sumneko-lua-language-server
+    rnix-lsp
   ];
 
   home.file = builtins.listToAttrs (builtins.map (parser:

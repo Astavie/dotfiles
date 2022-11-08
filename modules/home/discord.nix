@@ -2,12 +2,20 @@
 
 {
   home.packages = with pkgs; [
-    discord discocss
-    (pkgs.stdenv.mkDerivation rec {
+    ((unstable.discocss.override {
+      inherit discord;
+      discordAlias = true;
+    }).overrideAttrs (self: prev: {
+      postPatch = ''
+        sed -i '/^command -v/d' discocss
+        echo 'exec $DISCOCSS_DISCORD_BIN' >> discocss
+      '';
+    }))
+    (stdenv.mkDerivation rec {
       pname = "discord-screenaudio";
       version = "1.4.0";
 
-      src = pkgs.fetchFromGitHub {
+      src = fetchFromGitHub {
         owner = "maltejur";
         repo = "discord-screenaudio";
         rev = "v${version}";
