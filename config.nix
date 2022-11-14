@@ -5,6 +5,8 @@ let
       neofetch
       helvum
       gimp
+      pavucontrol
+      htop
     ];
 
     specialArgs.ssh-keygen = true;
@@ -45,6 +47,7 @@ in
         ./modules/system/ssh.nix
         ./modules/system/steam.nix
         ./modules/system/xserver.nix
+        ./modules/system/vbhost.nix
       ];
     };
     vb = {

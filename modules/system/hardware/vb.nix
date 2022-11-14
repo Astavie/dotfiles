@@ -5,8 +5,5 @@ let
 in
 {
   virtualisation.virtualbox.guest.enable = true;
-
-  users.users = lib.mapAttrs (_: _: {
-    extraGroups = [ "vboxsf" ];
-  }) superusers;
+  users.extraGroups.vboxsf.members = builtins.attrNames superusers;
 }
