@@ -49,4 +49,6 @@
 
   backup.files       = [ "zsh/.zsh_history" ];
   backup.directories = [ "autojump/.local/share/autojump" ];
+
+  home.file.".zsh_history".force = true;
 }

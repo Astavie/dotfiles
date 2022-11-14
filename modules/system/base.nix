@@ -38,13 +38,13 @@ let
   flex = (username: usercfg: pkgs.writeShellScriptBin "flex" ''
     ${overflex}
     ${pkgs.nix}/bin/nix build "''${1:-${./../..}}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation
-    HOME_MANAGER_BACKUP_EXT=backup ${usercfg.dir.persist}/generation/activate
+    ${usercfg.dir.persist}/generation/activate
   '');
   flex-rebuild = (username: usercfg: pkgs.writeShellScriptBin "flex-rebuild" ''
     ${overflex}
     ${sudo} ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${./../..}}
     ${sudo} ${rehome}/bin/rehome ''${1:-${./../..}}
-    HOME_MANAGER_BACKUP_EXT=backup ${usercfg.dir.persist}/generation/activate
+    ${usercfg.dir.persist}/generation/activate
   '');
 in
 {
