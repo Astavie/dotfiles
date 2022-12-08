@@ -53,6 +53,14 @@ in
   i18n.defaultLocale = "en_US.UTF-8";
   console.font = "Lat2-Terminus16";
 
+  # Binary Cache for Haskell.nix
+  nix.settings.trusted-public-keys = [
+    "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
+  ];
+  nix.settings.substituters = [
+    "https://cache.iog.io"
+  ];
+
   # Pick doas or sudo
   security.sudo.enable = sudo == "sudo";
   security.doas.enable = sudo == "doas";

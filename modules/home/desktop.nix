@@ -41,7 +41,7 @@ in
 
   services.picom = {
     enable = true;
-    extraOptions = ''
+    settings = {
       shadow = true;
       shadow-radius = 10;
       shadow-opacity = 0.5;
@@ -52,14 +52,14 @@ in
       shadow-blue = 0.0;
       xinerama-shadow-crop = true;
       shadow-exclude = [
-        "class_g ?= 'Notify-osd'",
-        "class_g = 'spectrwm'",
-        "class_g = 'dmenu'",
-        "class_g = 'Easystroke'",
-        "class_g = 'GLava'",
-        "class_g = '_HERBST_FRAME'",
+        "class_g ?= 'Notify-osd'"
+        "class_g = 'spectrwm'"
+        "class_g = 'dmenu'"
+        "class_g = 'Easystroke'"
+        "class_g = 'GLava'"
+        "class_g = '_HERBST_FRAME'"
       ];
-    '';
+    };
   };
 
   home.file.".config/rofi/config.rasi".source = ../../config/rofi/config.rasi;

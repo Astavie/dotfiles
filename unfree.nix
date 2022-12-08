@@ -5,4 +5,7 @@
   "steam"
   "steam-original"
   "discord"
+  "android-studio-stable"
+  "teams"
+  "steam-run"
 ]

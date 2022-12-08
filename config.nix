@@ -2,11 +2,17 @@ let
   users.astavie = {
     superuser = true;
     packages = pkgs: with pkgs; [
+      torrential
       neofetch
       helvum
       gimp
       pavucontrol
       htop
+      teams
+
+      jdk8
+      flutter
+      android-file-transfer
     ];
 
     specialArgs.ssh-keygen = true;
@@ -19,12 +25,25 @@ let
       ./modules/home/firefox.nix
       ./modules/home/git.nix
       ./modules/home/steam.nix
-      {
+      ({ inputs, pkgs, ... }: let 
+        android-sdk = inputs.android-nixpkgs.sdk.${pkgs.system} (sdk: with sdk; [
+          build-tools-29-0-2
+          tools
+          emulator
+          patcher-v4
+          cmdline-tools-latest
+          platforms-android-31
+          platform-tools
+        ]);
+      in {
         programs.git = {
           userEmail = "astavie@pm.me";
           userName = "Astavie";
         };
-      }
+        home.packages = [ android-sdk ];
+        home.sessionVariables.ANDROID_SDK_ROOT = "${android-sdk}/share/android-sdk";
+        home.sessionVariables.ANDROID_HOME     = "${android-sdk}/share/android-sdk";
+      })
     ];
   };
 in
@@ -33,7 +52,7 @@ in
     terrestrial = {
       hostid = "93ad32f0";
       system = "x86_64-linux";
-      stateVersion = "22.05";
+      stateVersion = "22.11";
 
       users = with users; { inherit astavie; };
       impermanence.enable = true;
@@ -53,7 +72,7 @@ in
     vb = {
       hostid = "85dd8e44";
       system = "x86_64-linux";
-      stateVersion = "22.05";
+      stateVersion = "22.11";
 
       users = with users; { inherit astavie; };
       impermanence.enable = true;

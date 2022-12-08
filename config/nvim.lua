@@ -11,6 +11,25 @@ end
 
 local packer_bootstrap = ensure_packer()
 
+-- set .h files to use c
+vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
+  pattern = {"*.h"},
+  command = "set filetype=c"
+})
+
+vim.cmd([[
+augroup Binary
+  au!
+  au BufReadPre  *.bin let &bin=1
+  au BufReadPost *.bin if &bin | %!xxd
+  au BufReadPost *.bin set ft=xxd | endif
+  au BufWritePre *.bin if &bin | %s#^[^:]*: \(\%(\x\+ \)\+\) .*#\1# | %!xxd -r -p
+  au BufWritePre *.bin endif
+  au BufWritePost *.bin if &bin | %!xxd
+  au BufWritePost *.bin set nomod | endif
+augroup END
+]])
+
 vim.o.completeopt = 'menu,menuone,noselect'
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -89,6 +108,10 @@ return require('packer').startup(function(use)
       lspconfig.tsserver,
       lspconfig.rnix,
       lspconfig.ols,
+      lspconfig.hls,
+      lspconfig.dartls,
+      lspconfig.clangd,
+      lspconfig.csharp_ls,
     }
 
     for _, lsp in ipairs(servers) do
@@ -97,12 +120,6 @@ return require('packer').startup(function(use)
         on_attach = on_attach
       }
     end
-
-    lspconfig.hls.setup {
-      capabilities = capabilities,
-      on_attach = on_attach,
-      cmd = { "haskell-language-server-wrapper", "--lsp", "-j1" }
-    }
   end}
 
   -- Completion

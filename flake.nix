@@ -1,29 +1,28 @@
 {
-  inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-22.05;
+  inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-22.11;
 
-  inputs.nur.url = github:nix-community/NUR;
-  inputs.nur.inputs.nixpkgs.follows = "nixpkgs";
-
-  inputs.home-manager.url = github:nix-community/home-manager/release-22.05;
+  inputs.home-manager.url = github:nix-community/home-manager/release-22.11;
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
   inputs.impermanence.url = github:nix-community/impermanence;
-  inputs.impermanence.inputs.nixpkgs.follows = "nixpkgs";
-
+  inputs.nur.url = github:nix-community/NUR;
   inputs.unstable.url = github:nixos/nixpkgs/nixos-unstable;
 
   inputs.zsh-auto-notify.url = github:MichaelAquilina/zsh-auto-notify;
   inputs.zsh-auto-notify.flake = false;
 
-  outputs = { self, home-manager, nixpkgs, impermanence, nur, unstable, zsh-auto-notify, ... }:
+  inputs.android-nixpkgs.url = github:tadfisher/android-nixpkgs;
+  inputs.android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
+
+  outputs = { self, home-manager, nixpkgs, impermanence, nur, unstable, zsh-auto-notify, android-nixpkgs, ... }:
 
     with nixpkgs.lib;
     let
       args = {
         flake = self;
-        inherit home-manager impermanence nur unstable;
+        inherit home-manager impermanence nur unstable nixpkgs;
         inputs = {
-          inherit zsh-auto-notify;
+          inherit zsh-auto-notify android-nixpkgs;
         };
       };
       config = (evalModules {

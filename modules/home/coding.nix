@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 
 let
-  parsers = [ "lua" "nix" "typescript" "haskell" ];
+  parsers = [ "lua" "nix" "typescript" "haskell" "dart" "c-sharp" ];
   ols = pkgs.stdenv.mkDerivation {
     pname = "ols";
     version = "20221027";
@@ -31,9 +31,6 @@ let
 in
 {
   nixpkgs.overlays = [(final: prev: {
-    # NOTE: We need the unstable version of tree-sitter because tree-sitter-nix in 22.05 is broken
-    tree-sitter = final.unstable.tree-sitter;
-
     # Update odin
     odin = prev.odin.overrideAttrs (self: prev: rec {
       version = "dev-2022-10";
@@ -57,6 +54,7 @@ in
     cabal-install
     ghc
     haskell-language-server
+    stack
 
     # Odin
     odin
@@ -67,15 +65,22 @@ in
     ripgrep
     xclip
     fd
+    unixtools.xxd
+
+    # C/C++
+    clang
+    clang-tools
 
     # Node.js
     nodejs
     nodePackages.npm
     nodePackages.typescript-language-server
     
-    # Other
+    # Other languages
     sumneko-lua-language-server
     rnix-lsp
+    dart
+    dotnet-sdk_3
   ];
 
   home.file = builtins.listToAttrs (builtins.map (parser:

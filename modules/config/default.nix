@@ -1,8 +1,9 @@
-{ lib, config, flake, home-manager, nur, unstable, inputs, ... }:
+{ lib, config, flake, home-manager, nixpkgs, nur, unstable, inputs, ... }:
 
 with lib;
 let
-  allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) (import ../../unfree.nix);
+  unfree = import ../../unfree.nix;
+  allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) unfree;
   nospace  = str: filter (c: c == " ") (stringToCharacters str) == [];
   timezone = types.nullOr (types.addCheck types.str nospace)
     // { description = "null or string without spaces"; };
@@ -109,23 +110,19 @@ let
             specialArgs = {
               inherit (u.config) dir;
               inherit inputs;
-              username = name;
             };
 
             hm = home-manager.lib.homeManagerConfiguration {
-              inherit (config) system stateVersion;
-              username = name;
+              pkgs = nixpkgs.legacyPackages.${config.system};
 
-              homeDirectory = u.config.dir.home;
               extraSpecialArgs = u.config.specialArgs;
 
-              configuration = { pkgs, ...}: {
-                imports =
-                  config.sharedModules ++
-                  u.config.modules;
-
+              modules = config.sharedModules ++ u.config.modules ++ [({ pkgs, ... }: {
                 home.packages = u.config.packages pkgs;
-              };
+                home.homeDirectory = u.config.dir.home;
+                home.username = name;
+                home.stateVersion = config.stateVersion;
+              })];
             };
           };
         }));
@@ -185,10 +182,16 @@ let
           nixpkgs.overlays = [(final: prev: {
             unstable = import unstable {
               inherit (final) system;
-              config = { inherit allowUnfreePredicate; };
+              config = {
+                inherit allowUnfreePredicate;
+                permittedInsecurePackages = unfree;
+              };
             };
           })];
-          nixpkgs.config = { inherit allowUnfreePredicate; };
+          nixpkgs.config = {
+            inherit allowUnfreePredicate;
+            permittedInsecurePackages = unfree;
+          };
           system.configurationRevision = mkIf (flake ? rev) flake.rev;
           system.stateVersion = config.stateVersion;
           networking.hostName = name;
@@ -203,13 +206,21 @@ let
       sharedModules = [
         nur.nixosModules.nur
         ({ lib, ... }: with lib; {
-          config.nixpkgs.overlays = [(final: prev: {
-            unstable = import unstable {
-              inherit (final) system;
-              config = { inherit allowUnfreePredicate; };
-            };
-          })];
-          config.nixpkgs.config = { inherit allowUnfreePredicate; };
+          config.nixpkgs.overlays = [
+            (final: prev: {
+              unstable = import unstable {
+                inherit (final) system;
+                config = {
+                  inherit allowUnfreePredicate;
+                  permittedInsecurePackages = unfree;
+                };
+              };
+            })
+          ];
+          config.nixpkgs.config = {
+            inherit allowUnfreePredicate;
+            permittedInsecurePackages = unfree;
+          };
           options.backup.files = mkOption {
             type = with types; listOf str;
             default = [];
