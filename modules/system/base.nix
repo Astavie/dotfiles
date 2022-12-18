@@ -22,7 +22,7 @@ let
       chown ${username} ${usercfg.dir.data}
       mkdir -m 700 -p ${usercfg.dir.persist}
       chown ${username} ${usercfg.dir.persist}
-      ${pkgs.nix}/bin/nix build "''${1:-${./../..}}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation
+      ${pkgs.nix}/bin/nix build "''${1:-${./../..}}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation --print-build-logs
     '') users)
   );
 
@@ -37,7 +37,7 @@ let
   '';
   flex = (username: usercfg: pkgs.writeShellScriptBin "flex" ''
     ${overflex}
-    ${pkgs.nix}/bin/nix build "''${1:-${./../..}}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation
+    ${pkgs.nix}/bin/nix build "''${1:-${./../..}}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation --print-build-logs
     ${usercfg.dir.persist}/generation/activate
   '');
   flex-rebuild = (username: usercfg: pkgs.writeShellScriptBin "flex-rebuild" ''
@@ -79,7 +79,7 @@ in
     # Use zsh shell
     shell = pkgs.zsh;
 
-    extraGroups = lib.mkIf usercfg.superuser [ "wheel" "networkmanager" ];
+    extraGroups = [ "audio" "video" ] ++ lib.optionals usercfg.superuser [ "wheel" "networkmanager" ];
 
     packages = [
       (flex-rebuild username usercfg)

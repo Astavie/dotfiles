@@ -9,41 +9,26 @@ let
       pavucontrol
       htop
       teams
-
-      jdk8
-      flutter
-      android-file-transfer
+      unzip
     ];
 
     specialArgs.ssh-keygen = true;
 
     modules = [
-      ./modules/home/coding.nix
       ./modules/home/commandline.nix
       ./modules/home/desktop.nix
       ./modules/home/discord.nix
       ./modules/home/firefox.nix
       ./modules/home/git.nix
+      ./modules/home/music.nix
+      ./modules/home/neovim.nix
       ./modules/home/steam.nix
-      ({ inputs, pkgs, ... }: let 
-        android-sdk = inputs.android-nixpkgs.sdk.${pkgs.system} (sdk: with sdk; [
-          build-tools-29-0-2
-          tools
-          emulator
-          patcher-v4
-          cmdline-tools-latest
-          platforms-android-31
-          platform-tools
-        ]);
-      in {
+      {
         programs.git = {
           userEmail = "astavie@pm.me";
           userName = "Astavie";
         };
-        home.packages = [ android-sdk ];
-        home.sessionVariables.ANDROID_SDK_ROOT = "${android-sdk}/share/android-sdk";
-        home.sessionVariables.ANDROID_HOME     = "${android-sdk}/share/android-sdk";
-      })
+      }
     ];
   };
 in

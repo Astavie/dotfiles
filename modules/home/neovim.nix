@@ -1,33 +1,7 @@
 { pkgs, lib, ... }:
 
 let
-  parsers = [ "lua" "nix" "typescript" "haskell" "dart" "c-sharp" ];
-  ols = pkgs.stdenv.mkDerivation {
-    pname = "ols";
-    version = "20221027";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "DanielGavin";
-      repo = "ols";
-      rev = "ab9c17b403527bc07d65d5c47ecb25bec423ddac";
-      sha256 = "sha256-a6ii6r+zYfO8AJzrL4TWr6Qtze27CZV9MMrA+N8oX+M=";
-    };
-
-    buildInputs = [ pkgs.odin ];
-
-    postPatch = ''
-      patchShebangs build.sh
-    '';
-
-    buildPhase = ''
-      ./build.sh
-    '';
-
-    installPhase = ''
-      mkdir -p $out/bin
-      cp ols $out/bin
-    '';
-  };
+  parsers = [ "lua" "nix" "typescript" "haskell" "dart" "c_sharp" "rust" ];
 in
 {
   nixpkgs.overlays = [(final: prev: {
@@ -46,26 +20,55 @@ in
         patchShebangs build_odin.sh
       '';
     });
+
+    # Add ols
+    ols = pkgs.stdenv.mkDerivation {
+      pname = "ols";
+      version = "20221027";
+
+      src = pkgs.fetchFromGitHub {
+        owner = "DanielGavin";
+        repo = "ols";
+        rev = "ab9c17b403527bc07d65d5c47ecb25bec423ddac";
+        sha256 = "sha256-a6ii6r+zYfO8AJzrL4TWr6Qtze27CZV9MMrA+N8oX+M=";
+      };
+
+      buildInputs = [ pkgs.odin ];
+
+      postPatch = ''
+        patchShebangs build.sh
+      '';
+
+      buildPhase = ''
+        ./build.sh
+      '';
+
+      installPhase = ''
+        mkdir -p $out/bin
+        cp ols $out/bin
+      '';
+    };
   })];
 
   home.packages = with pkgs; [
-    # Haskell
-    cabal2nix
-    cabal-install
-    ghc
-    haskell-language-server
-    stack
-
-    # Odin
-    odin
-    ols
-
     # Neovim
     neovim
     ripgrep
     xclip
     fd
     unixtools.xxd
+
+    ## TODO: MOVE THE FOLLOWING PACKAGES TO LOCAL shell.nix FILES
+    # Haskell
+    cabal2nix
+    cabal-install
+    haskell.compiler.ghc942
+    haskell.packages.ghc942.haskell-language-server
+    stack
+
+    # Odin
+    odin
+    ols
 
     # C/C++
     clang
@@ -75,17 +78,26 @@ in
     nodejs
     nodePackages.npm
     nodePackages.typescript-language-server
+
+    # Rust
+    unstable.cargo
+    unstable.rustc
+    unstable.bacon
+    unstable.rust-analyzer
+
+    # C#
+    dotnet-sdk_3
+    omnisharp-roslyn
     
     # Other languages
     sumneko-lua-language-server
     rnix-lsp
     dart
-    dotnet-sdk_3
   ];
 
   home.file = builtins.listToAttrs (builtins.map (parser:
     lib.nameValuePair ".config/nvim/parser/${parser}.so" {
-      source = "${pkgs.tree-sitter.builtGrammars."tree-sitter-${parser}"}/parser";
+      source = "${pkgs.tree-sitter.builtGrammars."tree-sitter-${builtins.replaceStrings ["_"] ["-"] parser}"}/parser";
     }
   ) parsers) // {
     ".config/nvim/init.lua".source = ../../config/nvim.lua;

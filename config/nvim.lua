@@ -67,7 +67,7 @@ return require('packer').startup(function(use)
   use { 'Tetralux/odin.vim' }
 
   -- Treesitter
-  use { 'nvim-treesitter/nvim-treesitter', commit = '4cccb6f494eb255b32a290d37c35ca12584c74d0', config = function()
+  use { 'nvim-treesitter/nvim-treesitter', commit = '54028a819af7e08095fcff9418f2bafe1e8a5c4c', config = function()
     require('nvim-treesitter.configs').setup {
       highlight = { enable = true },
       indent = { enable = true },
@@ -111,7 +111,8 @@ return require('packer').startup(function(use)
       lspconfig.hls,
       lspconfig.dartls,
       lspconfig.clangd,
-      lspconfig.csharp_ls,
+      lspconfig.omnisharp,
+      lspconfig.rust_analyzer,
     }
 
     for _, lsp in ipairs(servers) do
@@ -204,7 +205,7 @@ return require('packer').startup(function(use)
   use { 'windwp/nvim-autopairs', config = function() require('nvim-autopairs').setup() end }
 
   -- Theme
-  use { "catppuccin/nvim", tag = "v0.2.4", as = "catppuccin", config = function()
+  use { "catppuccin/nvim", as = "catppuccin", config = function()
     vim.g.catppuccin_flavour = 'mocha'
     require("catppuccin").setup()
     vim.cmd [[colorscheme catppuccin]]

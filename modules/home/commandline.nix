@@ -8,6 +8,8 @@
 
     # Make history lookup match everything before cursor
     initExtra = ''
+      eval "$(direnv hook zsh)"
+
       bindkey "^[[1;5C" forward-word
       bindkey "^[[1;5D" backward-word
       bindkey "^[[A" history-beginning-search-backward
@@ -45,10 +47,16 @@
     }];
   };
 
+  programs.direnv.enable = true;
+  programs.direnv.nix-direnv.enable = true;
+
   programs.autojump.enable = true;
 
   backup.files       = [ "zsh/.zsh_history" ];
-  backup.directories = [ "autojump/.local/share/autojump" ];
+  backup.directories = [
+    "autojump/.local/share/autojump"
+    "direnv/.local/share/direnv/allow"
+  ];
 
   home.file.".zsh_history".force = true;
 }
