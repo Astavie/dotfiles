@@ -93,6 +93,9 @@ in
     sumneko-lua-language-server
     rnix-lsp
     dart
+
+    # Other tools
+    gnumake
   ];
 
   home.file = builtins.listToAttrs (builtins.map (parser:
