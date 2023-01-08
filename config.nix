@@ -10,18 +10,19 @@ let
       htop
       teams
       unzip
+      gnumake
     ];
 
     specialArgs.ssh-keygen = true;
 
     modules = [
-      ./modules/home/commandline.nix
+      ./modules/home/coding.nix
       ./modules/home/desktop.nix
       ./modules/home/discord.nix
       ./modules/home/firefox.nix
       ./modules/home/git.nix
       ./modules/home/music.nix
-      ./modules/home/neovim.nix
+      ./modules/home/shell.nix
       ./modules/home/steam.nix
       {
         programs.git = {

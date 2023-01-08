@@ -1,4 +1,4 @@
-{ lib, config, flake, home-manager, nixpkgs, nur, unstable, inputs, ... }:
+{ lib, config, flake, home-manager, nixpkgs, nur, unstable, inputs, overlays, ... }:
 
 with lib;
 let
@@ -179,7 +179,7 @@ let
     config = {
       modules = [
         ({ lib, pkgs, ... }: with lib; {
-          nixpkgs.overlays = [(final: prev: {
+          nixpkgs.overlays = overlays ++ [(final: prev: {
             unstable = import unstable {
               inherit (final) system;
               config = {
@@ -206,7 +206,7 @@ let
       sharedModules = [
         nur.nixosModules.nur
         ({ lib, ... }: with lib; {
-          config.nixpkgs.overlays = [
+          config.nixpkgs.overlays = overlays ++ [
             (final: prev: {
               unstable = import unstable {
                 inherit (final) system;

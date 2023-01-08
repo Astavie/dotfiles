@@ -1,7 +1,7 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 let 
-  android-sdk = inputs.android-nixpkgs.sdk.${pkgs.system} (sdk: with sdk; [
+  android-sdk = pkgs.androidSdk (sdk: with sdk; [
     build-tools-29-0-2
     tools
     emulator

@@ -80,8 +80,8 @@ in
     isNormalUser = true;
     password = ""; # TODO
 
-    # Use zsh shell
-    shell = pkgs.zsh;
+    # Use fish shell
+    shell = pkgs.fish;
 
     extraGroups = [ "audio" "video" ] ++ lib.optionals usercfg.superuser [ "wheel" "networkmanager" ];
 

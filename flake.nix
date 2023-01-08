@@ -14,15 +14,22 @@
   inputs.android-nixpkgs.url = github:tadfisher/android-nixpkgs;
   inputs.android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = { self, home-manager, nixpkgs, impermanence, nur, unstable, zsh-auto-notify, android-nixpkgs, ... }:
+  inputs.astapkgs.url = github:Astavie/astapkgs;
+  inputs.astapkgs.inputs.nixpkgs.follows = "nixpkgs";
+
+  outputs = { self, home-manager, nixpkgs, impermanence, nur, unstable, zsh-auto-notify, android-nixpkgs, astapkgs, ... }:
 
     with nixpkgs.lib;
     let
       args = {
         flake = self;
+        overlays = [
+          astapkgs.overlays.default
+          android-nixpkgs.overlays.default
+        ];
         inherit home-manager impermanence nur unstable nixpkgs;
         inputs = {
-          inherit zsh-auto-notify android-nixpkgs;
+          inherit zsh-auto-notify;
         };
       };
       config = (evalModules {

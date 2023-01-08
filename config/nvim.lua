@@ -111,7 +111,6 @@ return require('packer').startup(function(use)
       lspconfig.hls,
       lspconfig.dartls,
       lspconfig.clangd,
-      lspconfig.omnisharp,
       lspconfig.rust_analyzer,
     }
 
@@ -121,6 +120,10 @@ return require('packer').startup(function(use)
         on_attach = on_attach
       }
     end
+
+    lspconfig.omnisharp.setup {
+      cmd = { "dotnet", "/nix/store/yq9hbvrjda4711jb134knjw36hdrh5bs-omnisharp-roslyn-1.39.2/lib/omnisharp-roslyn/OmniSharp.dll" },
+    }
   end}
 
   -- Completion
