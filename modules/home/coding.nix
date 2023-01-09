@@ -1,18 +1,8 @@
 { pkgs, lib, ... }:
 
-let
-  parsers = [ "lua" "nix" "typescript" "haskell" "dart" "c_sharp" "rust" ];
-in
 {
+    # TODO: MOVE THE FOLLOWING PACKAGES TO LOCAL shell.nix FILES
   home.packages = with pkgs; [
-    # Neovim
-    neovim
-    ripgrep
-    xclip
-    fd
-    unixtools.xxd
-
-    ## TODO: MOVE THE FOLLOWING PACKAGES TO LOCAL shell.nix FILES
     # Haskell
     cabal2nix
     cabal-install
@@ -45,14 +35,7 @@ in
     dart
   ];
 
-  home.file = builtins.listToAttrs (builtins.map (parser:
-    lib.nameValuePair ".config/nvim/parser/${parser}.so" {
-      source = "${pkgs.tree-sitter.builtGrammars."tree-sitter-${builtins.replaceStrings ["_"] ["-"] parser}"}/parser";
-    }
-  ) parsers) // {
-    ".config/nvim/init.lua".source = ../../config/nvim.lua;
-    "odin/core".source = "${pkgs.odin}/bin/core";
-  };
+  home.file."odin/core".source = "${pkgs.odin}/bin/core";
 
   # Helix
   programs.helix.enable = true;
