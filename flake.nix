@@ -26,8 +26,17 @@
         overlays = [
           astapkgs.overlays.default
           android-nixpkgs.overlays.default
+          nur.overlay
+          (final: prev: {
+            unstable = import unstable {
+              inherit (final) system;
+              config = {
+                inherit (final.config) allowUnfreePredicate permittedInsecurePackages;
+              };
+            };
+          })
         ];
-        inherit home-manager impermanence nur unstable nixpkgs;
+        inherit home-manager impermanence nixpkgs;
         inputs = {
           inherit zsh-auto-notify;
         };

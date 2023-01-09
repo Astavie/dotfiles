@@ -1,4 +1,4 @@
-{ lib, config, flake, home-manager, nixpkgs, nur, unstable, inputs, overlays, ... }:
+{ lib, config, flake, home-manager, nixpkgs, inputs, overlays, ... }:
 
 with lib;
 let
@@ -179,15 +179,7 @@ let
     config = {
       modules = [
         ({ lib, pkgs, ... }: with lib; {
-          nixpkgs.overlays = overlays ++ [(final: prev: {
-            unstable = import unstable {
-              inherit (final) system;
-              config = {
-                inherit allowUnfreePredicate;
-                permittedInsecurePackages = unfree;
-              };
-            };
-          })];
+          nixpkgs.overlays = overlays;
           nixpkgs.config = {
             inherit allowUnfreePredicate;
             permittedInsecurePackages = unfree;
@@ -204,19 +196,8 @@ let
       ];
 
       sharedModules = [
-        nur.nixosModules.nur
         ({ lib, ... }: with lib; {
-          config.nixpkgs.overlays = overlays ++ [
-            (final: prev: {
-              unstable = import unstable {
-                inherit (final) system;
-                config = {
-                  inherit allowUnfreePredicate;
-                  permittedInsecurePackages = unfree;
-                };
-              };
-            })
-          ];
+          config.nixpkgs.overlays = overlays;
           config.nixpkgs.config = {
             inherit allowUnfreePredicate;
             permittedInsecurePackages = unfree;

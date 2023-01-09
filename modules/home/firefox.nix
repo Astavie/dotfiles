@@ -1,10 +1,4 @@
-{
-  # custom inputs
-  username, dir,
-
-  # system inputs
-  pkgs, lib, config, ...
-}:
+{ pkgs, lib, ... }:
 
 let
   buildFirefoxXpiAddon = lib.makeOverridable ({ stdenv ? pkgs.stdenv, fetchurl ? pkgs.fetchurl, pname, version, addonId, url, sha256, meta, ... }:
@@ -34,7 +28,7 @@ in
         isDefault = true;
       };
     };
-    extensions = with config.nur.repos.rycee.firefox-addons; [
+    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
       ublock-origin
       lastpass-password-manager
       i-dont-care-about-cookies

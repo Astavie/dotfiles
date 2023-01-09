@@ -12,19 +12,19 @@ in
       impermanence.enable = mkEnableOption "impermanence";
 
       users = subset ({ name, ... }@u: {
-          options = {
-            dir.persist = mkOption {
-              type = types.path;
-              apply = toString;
-              description = ''
-                The persist directory of the user.
-              '';
-            };
+        options = {
+          dir.persist = mkOption {
+            type = types.path;
+            apply = toString;
+            description = ''
+              The persist directory of the user.
+            '';
           };
-          config = {
-            dir.persist = mkDefault "/persist/${name}";
-            dir.config = mkIf config.impermanence.enable (dir: "${u.config.dir.persist}/${dir}");
-          };
+        };
+        config = {
+          dir.persist = mkDefault "/persist/${name}";
+          dir.config = mkIf config.impermanence.enable (dir: "${u.config.dir.persist}/${dir}");
+        };
       });
     };
     config = {
