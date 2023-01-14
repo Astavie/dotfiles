@@ -11,6 +11,7 @@ let
       teams
       unzip
       gnumake
+      killall
     ];
 
     specialArgs.ssh-keygen = true;

@@ -45,8 +45,8 @@ hc keybind $Mod-Control-k resize up    +$resizestep
 hc keybind $Mod-Control-l resize right +$resizestep
 
 hc keybind $Mod-r remove
-hc keybind $Mod-f floating toggle
-hc keybind $Mod-p pseudotile toggle
+hc keybind $Mod-p attr tags.focus.focused_client.floating toggle
+hc keybind $Mod-f fullscreen toggle
 
 hc keybind $Mod-BackSpace cycle_monitor
 hc keybind $Mod-period    cycle +1
@@ -78,28 +78,25 @@ hc set mouse_recenter_gap 0
 
 hc attr theme.tiling.reset 1
 hc attr theme.floating.reset 1
-hc attr theme.border_width       1
-hc attr theme.outer_width        1
-hc attr theme.inner_width        0
-hc attr theme.padding_left       5
-hc attr theme.outer_color '#11111b'
-hc attr theme.inner_color '#11111b'
-hc attr theme.active.color '#89b4fa'
-hc attr theme.normal.color '#11111b'
+hc attr theme.padding_left 3
+hc attr theme.padding_right 3
+hc attr theme.padding_bottom 3
+hc attr theme.tab_color '#11111b'
+hc attr theme.normal.color '#89b4fa'
+hc attr theme.active.color '#eba0ac'
 
-hc attr theme.title_when multiple_tabs
-hc attr theme.title_height 14
-hc attr theme.active.title_color '#1e1e2e'
-hc attr theme.normal.title_color '#cdd6f4'
+hc attr theme.title_when always
+hc attr theme.title_height 17
 hc attr theme.title_align center
-hc attr theme.title_font 'CaskaydiaCove Nerd Font:pixelsize=13'
-hc attr theme.title_depth 3
-hc attr theme.tab_color '#181825'
+hc attr theme.title_font 'CaskaydiaCove Nerd Font:pixelsize=15'
+hc attr theme.title_depth 5
+hc attr theme.title_color '#1e1e2e'
 hc attr theme.tab_title_color '#cdd6f4'
 
 hc set frame_bg_transparent on
 hc set frame_padding        0
 hc set frame_border_width   0
+hc set hide_covered_windows on
 
 hc unlock
 

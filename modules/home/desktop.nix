@@ -41,25 +41,6 @@ in
 
   services.picom = {
     enable = true;
-    settings = {
-      shadow = true;
-      shadow-radius = 10;
-      shadow-opacity = 0.5;
-      shadow-offset-x = -18;
-      shadow-offset-y = 0;
-      shadow-red = 0.0;
-      shadow-green = 0.0;
-      shadow-blue = 0.0;
-      xinerama-shadow-crop = true;
-      shadow-exclude = [
-        "class_g ?= 'Notify-osd'"
-        "class_g = 'spectrwm'"
-        "class_g = 'dmenu'"
-        "class_g = 'Easystroke'"
-        "class_g = 'GLava'"
-        "class_g = '_HERBST_FRAME'"
-      ];
-    };
   };
 
   home.file.".config/rofi/config.rasi".source = ../../config/rofi/config.rasi;
@@ -70,7 +51,7 @@ in
   home.file.".config/sx/sxrc" = {
     executable = true;
     text = ''
-      ${pkgs.feh}/bin/feh --bg-fill ${../../config/wallpaper.png} &
+      ${pkgs.feh}/bin/feh --bg-fill ${../../config/the_valley.webp} &
       ${pkgs.picom}/bin/picom &
       ${pkgs.dunst}/bin/dunst &
       ${pkgs.herbstluftwm}/bin/herbstluftwm -c ${autostart}

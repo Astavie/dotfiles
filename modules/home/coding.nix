@@ -33,11 +33,13 @@
     sumneko-lua-language-server
     rnix-lsp
     dart
+    marksman
   ];
 
   home.file."odin/core".source = "${pkgs.odin}/bin/core";
 
   # Helix
   programs.helix.enable = true;
+  programs.helix.package = pkgs.unstable.helix;
   programs.helix.settings.theme = "catppuccin_mocha";
 }

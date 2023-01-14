@@ -3,12 +3,17 @@
 {
   programs.fish = {
     enable = true;
+    shellInit = ''
+      echo -ne '\e[?1004h'
+      bind \e\[I 'kitty @set-colors ${../../config/kitty.conf}'
+      bind \e\[O 'kitty @set-colors ${../../config/kitty_unfocused.conf}'
+    '';
     functions = {
       fish_prompt = ''
         if test "$PWD" != "$PWD_PREV"
           echo
 
-          set_color -b blue
+          set_color -b red
           set_color black
           echo $PWD
           set_color normal
