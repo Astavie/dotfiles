@@ -56,6 +56,7 @@ in
   services.flatpak.enable = true;
   xdg.portal.enable = true;
   xdg.portal.extraPortals = with pkgs; [ xdg-desktop-portal-kde ];
+  programs.dconf.enable = true;
 
   # Binary Cache for Haskell.nix
   nix.settings.trusted-public-keys = [

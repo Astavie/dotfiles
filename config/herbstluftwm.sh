@@ -86,7 +86,7 @@ hc attr theme.normal.color '#89b4fa'
 hc attr theme.active.color '#eba0ac'
 
 hc attr theme.title_when always
-hc attr theme.title_height 17
+hc attr theme.title_height 16
 hc attr theme.title_align center
 hc attr theme.title_font 'CaskaydiaCove Nerd Font:pixelsize=15'
 hc attr theme.title_depth 5
