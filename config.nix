@@ -46,6 +46,7 @@ in
 
       modules = [
         ./modules/system/hardware/nvidia.nix
+        ./modules/system/hardware/dual.nix
         ./modules/system/hardware/uefi.nix
         ./modules/system/hardware/zfs.nix
         ./modules/system/base.nix
@@ -54,6 +55,25 @@ in
         ./modules/system/steam.nix
         ./modules/system/xserver.nix
         ./modules/system/vbhost.nix
+      ];
+    };
+    satellite = {
+      hostid = "92e8a3c2";
+      system = "x86_64-linux";
+      stateVersion = "22.11";
+
+      users = with users; { inherit astavie; };
+      impermanence.enable = true;
+
+      modules = [
+        ./modules/system/hardware/nvidia.nix
+        ./modules/system/hardware/uefi.nix
+        ./modules/system/hardware/zfs.nix
+        ./modules/system/base.nix
+        ./modules/system/pipewire.nix
+        ./modules/system/ssh.nix
+        ./modules/system/steam.nix
+        ./modules/system/xserver.nix
       ];
     };
     vb = {
