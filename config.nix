@@ -50,6 +50,7 @@ in
         ./modules/system/hardware/uefi.nix
         ./modules/system/hardware/zfs.nix
         ./modules/system/base.nix
+        ./modules/system/flatpak.nix
         ./modules/system/pipewire.nix
         ./modules/system/ssh.nix
         ./modules/system/steam.nix
@@ -70,6 +71,7 @@ in
         ./modules/system/hardware/uefi.nix
         ./modules/system/hardware/zfs.nix
         ./modules/system/base.nix
+        ./modules/system/flatpak.nix
         ./modules/system/pipewire.nix
         ./modules/system/ssh.nix
         ./modules/system/steam.nix

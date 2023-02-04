@@ -52,10 +52,6 @@ in
   swapDevices = [{ device = "/dev/disk/by-label/swap"; }];
   i18n.defaultLocale = "en_US.UTF-8";
   console.font = "Lat2-Terminus16";
-
-  services.flatpak.enable = true;
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = with pkgs; [ xdg-desktop-portal-kde ];
   programs.dconf.enable = true;
 
   # Binary Cache for Haskell.nix
