@@ -36,6 +36,11 @@
     marksman
   ];
 
+  home.file.".cargo/config.toml".text = ''
+    [build]
+    rustc-wrapper = "${pkgs.sccache}/bin/sccache"
+  '';
+
   home.file."odin/core".source = "${pkgs.odin}/bin/core";
 
   # Helix
