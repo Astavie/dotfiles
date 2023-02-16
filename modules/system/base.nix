@@ -1,6 +1,6 @@
 {
   # custom inputs
-  users, hostname,
+  users, hostname, impermanence,
 
   # system inputs
   pkgs, utils, lib, ...
@@ -42,6 +42,7 @@ let
   '');
   sup = (username: usercfg: pkgs.writeShellScriptBin "sup" ''
     ${overflex}
+    ${sudo} mkdir -m 700 -p ${impermanence.dir}
     ${sudo} ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-.}
     ${sudo} ${rehome}/bin/rehome ''${1:-.}
     ${usercfg.dir.persist}/generation/activate

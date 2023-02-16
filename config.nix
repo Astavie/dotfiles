@@ -63,7 +63,13 @@ in
       system = "x86_64-linux";
       stateVersion = "22.11";
 
-      users = with users; { inherit astavie; };
+      users = {
+        astavie = users.astavie // {
+          packages = pkgs: with pkgs; users.astavie.packages pkgs ++ [
+            networkmanagerapplet
+          ];
+        };
+      };
       impermanence.enable = true;
 
       modules = [
