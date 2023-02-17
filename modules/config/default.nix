@@ -179,19 +179,54 @@ let
     config = {
       modules = [
         ({ lib, pkgs, ... }: with lib; {
-          nixpkgs.overlays = overlays;
-          nixpkgs.config = {
-            inherit allowUnfreePredicate;
-            permittedInsecurePackages = unfree;
+          config = {
+            nixpkgs.overlays = overlays;
+            nixpkgs.config = {
+              inherit allowUnfreePredicate;
+              permittedInsecurePackages = unfree;
+            };
+            system.configurationRevision = mkIf (flake ? rev) flake.rev;
+            system.stateVersion = config.stateVersion;
+            networking.hostName = name;
+            networking.hostId = config.hostid;
+            nix.package = pkgs.nixFlakes;
+            nix.extraOptions = "experimental-features = nix-command flakes";
+            time.timeZone = config.timeZone;
+            console.keyMap = config.keyMap;
           };
-          system.configurationRevision = mkIf (flake ? rev) flake.rev;
-          system.stateVersion = config.stateVersion;
-          networking.hostName = name;
-          networking.hostId = config.hostid;
-          nix.package = pkgs.nixFlakes;
-          nix.extraOptions = "experimental-features = nix-command flakes";
-          time.timeZone = config.timeZone;
-          console.keyMap = config.keyMap;
+
+          options.backup.files = mkOption {
+            type = with types; listOf str;
+            default = [];
+            description = ''
+              The files inside root to backup.
+            '';
+          };
+          options.backup.directories = mkOption {
+            type = with types; listOf (either str (submodule {
+              options = {
+                directory = mkOption {
+                  type = str;
+                  default = null;
+                  description = "The directory path to be linked.";
+                };
+                method = mkOption {
+                  type = types.enum [ "bindfs" "symlink" ];
+                  default = "bindfs";
+                  description = ''
+                    The linking method that should be used for this
+                    directory. bindfs is the default and works for most use
+                    cases, however some programs may behave better with
+                    symlinks.
+                  '';
+                };
+              };
+            }));
+            default = [];
+            description = ''
+              The directories inside root to backup.
+            '';
+          };
         })
       ];
 

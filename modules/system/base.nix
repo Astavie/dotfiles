@@ -1,6 +1,6 @@
 {
   # custom inputs
-  users, hostname,
+  users, hostname, impermanence,
 
   # system inputs
   pkgs, utils, lib, ...
@@ -22,7 +22,7 @@ let
       chown ${username} ${usercfg.dir.data}
       mkdir -m 700 -p ${usercfg.dir.persist}
       chown ${username} ${usercfg.dir.persist}
-      ${pkgs.nix}/bin/nix build "''${1:-${./../..}}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation --print-build-logs
+      ${pkgs.nix}/bin/nix build "''${1:-.}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation --print-build-logs
     '') users)
   );
 
@@ -35,13 +35,14 @@ let
       exit
     fi
   '';
-  sup = (username: usercfg: pkgs.writeShellScriptBin "sup" ''
+  flex = (username: usercfg: pkgs.writeShellScriptBin "flex" ''
     ${overflex}
     ${pkgs.nix}/bin/nix build "''${1:-.}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation --print-build-logs
     ${usercfg.dir.persist}/generation/activate
   '');
-  supyall = (username: usercfg: pkgs.writeShellScriptBin "supyall" ''
+  sup = (username: usercfg: pkgs.writeShellScriptBin "sup" ''
     ${overflex}
+    ${sudo} mkdir -m 700 -p ${impermanence.dir}
     ${sudo} ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-.}
     ${sudo} ${rehome}/bin/rehome ''${1:-.}
     ${usercfg.dir.persist}/generation/activate
@@ -53,11 +54,6 @@ in
   i18n.defaultLocale = "en_US.UTF-8";
   console.font = "Lat2-Terminus16";
   programs.dconf.enable = true;
-  services.avahi.enable = true;
-  services.avahi.publish.enable = true;
-  services.avahi.publish.userServices = true;
-  networking.firewall.allowedTCPPorts = [ 9757 9758 9759 ];
-  networking.firewall.allowedUDPPorts = [ 9757 9758 9759 ];
 
   # Binary Cache for Haskell.nix
   nix.settings.trusted-public-keys = [
@@ -88,8 +84,8 @@ in
     extraGroups = [ "audio" "video" ] ++ lib.optionals usercfg.superuser [ "wheel" "networkmanager" ];
 
     packages = [
-      (supyall username usercfg)
-      (sup     username usercfg)
+      (sup  username usercfg)
+      (flex username usercfg)
     ];
   }) users;
 

@@ -45,8 +45,8 @@ in
       impermanence.enable = true;
 
       modules = [
+        ./modules/system/hardware/terrestrial.nix
         ./modules/system/hardware/nvidia.nix
-        ./modules/system/hardware/dual.nix
         ./modules/system/hardware/uefi.nix
         ./modules/system/hardware/zfs.nix
         ./modules/system/base.nix
@@ -63,10 +63,17 @@ in
       system = "x86_64-linux";
       stateVersion = "22.11";
 
-      users = with users; { inherit astavie; };
+      users = {
+        astavie = users.astavie // {
+          packages = pkgs: with pkgs; users.astavie.packages pkgs ++ [
+            networkmanagerapplet
+          ];
+        };
+      };
       impermanence.enable = true;
 
       modules = [
+        ./modules/system/hardware/satellite.nix
         ./modules/system/hardware/nvidia.nix
         ./modules/system/hardware/uefi.nix
         ./modules/system/hardware/zfs.nix

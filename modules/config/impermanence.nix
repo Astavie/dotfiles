@@ -11,6 +11,15 @@ in
     options = {
       impermanence.enable = mkEnableOption "impermanence";
 
+      impermanence.dir = mkOption {
+        type = types.path;
+        apply = toString;
+        default = "/persist/root";
+        description = ''
+          The persist directory of the system environment.
+        '';
+      };
+
       users = subset ({ name, ... }@u: {
         options = {
           dir.persist = mkOption {
@@ -28,9 +37,18 @@ in
       });
     };
     config = {
-      modules = mkIf config.impermanence.enable [{
-        programs.fuse.userAllowOther = true;
-      }];
+      specialArgs = {
+        impermanence.dir = config.impermanence.dir;
+      };
+      modules = mkIf config.impermanence.enable [
+        impermanence.nixosModule
+        (s: {
+          programs.fuse.userAllowOther = true;
+          environment.persistence."${config.impermanence.dir}" = {
+            inherit (s.config.backup) files directories;
+          };
+        })
+      ];
       sharedModules = mkIf config.impermanence.enable [
         impermanence.nixosModules.home-manager.impermanence
         (h: {
