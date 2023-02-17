@@ -31,19 +31,19 @@ let
     set -e
     if [ "$EUID" -eq 0 ]
     then
-      echo "you're flexing too hard"
+      echo "you're shouting too hard"
       exit
     fi
   '';
-  flex = (username: usercfg: pkgs.writeShellScriptBin "flex" ''
+  sup = (username: usercfg: pkgs.writeShellScriptBin "sup" ''
     ${overflex}
-    ${pkgs.nix}/bin/nix build "''${1:-${./../..}}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation --print-build-logs
+    ${pkgs.nix}/bin/nix build "''${1:-.}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation --print-build-logs
     ${usercfg.dir.persist}/generation/activate
   '');
-  flex-rebuild = (username: usercfg: pkgs.writeShellScriptBin "flex-rebuild" ''
+  supyall = (username: usercfg: pkgs.writeShellScriptBin "supyall" ''
     ${overflex}
-    ${sudo} ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-${./../..}}
-    ${sudo} ${rehome}/bin/rehome ''${1:-${./../..}}
+    ${sudo} ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-.}
+    ${sudo} ${rehome}/bin/rehome ''${1:-.}
     ${usercfg.dir.persist}/generation/activate
   '');
 in
@@ -53,6 +53,11 @@ in
   i18n.defaultLocale = "en_US.UTF-8";
   console.font = "Lat2-Terminus16";
   programs.dconf.enable = true;
+  services.avahi.enable = true;
+  services.avahi.publish.enable = true;
+  services.avahi.publish.userServices = true;
+  networking.firewall.allowedTCPPorts = [ 9757 9758 9759 ];
+  networking.firewall.allowedUDPPorts = [ 9757 9758 9759 ];
 
   # Binary Cache for Haskell.nix
   nix.settings.trusted-public-keys = [
@@ -83,8 +88,8 @@ in
     extraGroups = [ "audio" "video" ] ++ lib.optionals usercfg.superuser [ "wheel" "networkmanager" ];
 
     packages = [
-      (flex-rebuild username usercfg)
-      (flex         username usercfg)
+      (supyall username usercfg)
+      (sup     username usercfg)
     ];
   }) users;
 

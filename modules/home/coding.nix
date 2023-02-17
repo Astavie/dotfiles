@@ -36,6 +36,18 @@
     marksman
   ];
 
+  # backup openxr runtimes
+  backup.directories = [
+    "openxr/.config/openxr"
+  ];
+
+  # make rust use sccache
+  home.file.".cargo/config.toml".text = ''
+    [build]
+    rustc-wrapper = "${pkgs.sccache}/bin/sccache"
+  '';
+
+  # save odin core files for ols to use
   home.file."odin/core".source = "${pkgs.odin}/bin/core";
 
   # Helix
