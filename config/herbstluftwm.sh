@@ -82,16 +82,17 @@ hc attr theme.padding_left 3
 hc attr theme.padding_right 3
 hc attr theme.padding_bottom 3
 hc attr theme.tab_color '#11111b'
-hc attr theme.normal.color '#89b4fa'
-hc attr theme.active.color '#eba0ac'
+hc attr theme.normal.color '#11111b'
+hc attr theme.active.color '#89b4fa'
 
 hc attr theme.title_when always
 hc attr theme.title_height 16
 hc attr theme.title_align center
 hc attr theme.title_font 'CaskaydiaCove Nerd Font:pixelsize=15'
 hc attr theme.title_depth 5
-hc attr theme.title_color '#1e1e2e'
-hc attr theme.tab_title_color '#cdd6f4'
+hc attr theme.normal.title_color '#89b4fa'
+hc attr theme.active.title_color '#1e1e2e'
+hc attr theme.tab_title_color '#7f849c'
 
 hc set frame_bg_transparent on
 hc set frame_padding        0
