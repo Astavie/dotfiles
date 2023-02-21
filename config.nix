@@ -12,9 +12,11 @@ let
       peek
     ] ++ (if full then [
       # custom packages for terrestrial
+      x11vnc
     ] else [
       # custom packages for satellite
       networkmanagerapplet
+      turbovnc
     ]);
 
     specialArgs.ssh-keygen = true;

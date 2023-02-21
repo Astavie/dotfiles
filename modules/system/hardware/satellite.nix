@@ -26,6 +26,10 @@ in
   hardware.opengl.driSupport = true;
   hardware.opengl.driSupport32Bit = true;
 
+  # ssh client
+  programs.ssh.forwardX11 = true;
+  programs.ssh.setXAuthLocation = true;
+
   # networking
   networking.networkmanager.enable = true;
   networking.wireless.iwd.enable = true;
