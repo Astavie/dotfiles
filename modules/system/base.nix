@@ -31,7 +31,7 @@ let
     set -e
     if [ "$EUID" -eq 0 ]
     then
-      echo "you're flexing too hard"
+      echo "you're shouting too hard"
       exit
     fi
   '';
