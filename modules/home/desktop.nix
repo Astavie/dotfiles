@@ -9,7 +9,7 @@ in
     feh             # wallpaper
     rofi            # app launcher
     kitty           # terminal
-    mc              # file explorer
+    # mc            # file explorer (already in shell.nix)
     scrot xclip     # screenshots
     dunst libnotify # notifications
 
@@ -22,32 +22,17 @@ in
   ];
 
   fonts.fontconfig.enable = true;
-  
-  # gtk theme
+  services.picom.enable = true;
+
+  # theme
   home.file.".themes".source = ../../config/gtk;
-  
-  # dunst theme
   home.file.".config/dunst/dunstrc".source = ../../config/dunstrc;
-
-  # midnight commander
-  home.file.".local/share/mc/skins/theme.ini".source = ../../config/mc.ini;
-  home.file.".config/mc/ini".text = ''
-    [Midnight-Commander]
-    skin=theme
-    use_internal_edit=false
-  '';
-
   home.file.".config/kitty/kitty.conf".source = ../../config/kitty.conf;
-
-  services.picom = {
-    enable = true;
-  };
-
   home.file.".config/rofi/config.rasi".source = ../../config/rofi/config.rasi;
   home.file.".local/share/rofi/themes/theme.rasi".source = ../../config/rofi/theme.rasi;
-  
   home.file.".icons/default".source = ../../config/cursor;
 
+  # startup
   home.file.".config/sx/sxrc" = {
     executable = true;
     text = ''
