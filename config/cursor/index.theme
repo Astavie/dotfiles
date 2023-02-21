@@ -1,1 +1,4 @@
-[Icon Theme]\nName=WindowsHands\nInherits=WindowsHands
+[Icon Theme]
+Name=Posy's Cursor Black
+Comment=Posy's improved cursors, black set.
+Example=left_ptr
