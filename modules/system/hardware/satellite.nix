@@ -21,6 +21,11 @@ in
     nvidiaBusId = "PCI:1:0:0";
   };
 
+  # opengl
+  hardware.opengl.enable = true;
+  hardware.opengl.driSupport = true;
+  hardware.opengl.driSupport32Bit = true;
+
   # networking
   networking.networkmanager.enable = true;
   networking.wireless.iwd.enable = true;

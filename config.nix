@@ -1,28 +1,29 @@
 let
-  users.astavie = {
+  astavie = full: {
     superuser = true;
     packages = pkgs: with pkgs; [
       torrential
       neofetch
-      # helvum
       gimp
       pavucontrol
       htop
-      # teams
       unzip
       gnumake
       peek
-    ];
+    ] ++ (if full then [
+      # custom packages for terrestrial
+    ] else [
+      # custom packages for satellite
+      networkmanagerapplet
+    ]);
 
     specialArgs.ssh-keygen = true;
 
     modules = [
-      ./modules/home/coding.nix
       ./modules/home/desktop.nix
       ./modules/home/discord.nix
       ./modules/home/firefox.nix
       ./modules/home/git.nix
-      ./modules/home/music.nix
       ./modules/home/shell.nix
       ./modules/home/steam.nix
       {
@@ -31,7 +32,13 @@ let
           userName = "Astavie";
         };
       }
-    ];
+    ] ++ (if full then [
+      # custom modules for terrestrial
+      ./modules/home/coding.nix
+      ./modules/home/music.nix
+    ] else [
+      # custom modules for satellite
+    ]);
   };
 in
 {
@@ -41,12 +48,13 @@ in
       system = "x86_64-linux";
       stateVersion = "22.11";
 
-      users = with users; { inherit astavie; };
+      users = {
+        astavie = astavie true;
+      };
       impermanence.enable = true;
 
       modules = [
         ./modules/system/hardware/terrestrial.nix
-        ./modules/system/hardware/nvidia.nix
         ./modules/system/hardware/uefi.nix
         ./modules/system/hardware/zfs.nix
         ./modules/system/base.nix
@@ -64,17 +72,12 @@ in
       stateVersion = "22.11";
 
       users = {
-        astavie = users.astavie // {
-          packages = pkgs: with pkgs; users.astavie.packages pkgs ++ [
-            networkmanagerapplet
-          ];
-        };
+        astavie = astavie false;
       };
       impermanence.enable = true;
 
       modules = [
         ./modules/system/hardware/satellite.nix
-        ./modules/system/hardware/nvidia.nix
         ./modules/system/hardware/uefi.nix
         ./modules/system/hardware/zfs.nix
         ./modules/system/base.nix
@@ -90,7 +93,9 @@ in
       system = "x86_64-linux";
       stateVersion = "22.11";
 
-      users = with users; { inherit astavie; };
+      users = {
+        astavie = astavie false;
+      };
       impermanence.enable = true;
 
       modules = [
