@@ -4,11 +4,11 @@ let
     packages = pkgs: with pkgs; [
       torrential
       neofetch
-      helvum
+      # helvum
       gimp
       pavucontrol
       htop
-      teams
+      # teams
       unzip
       gnumake
       peek
