@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   hardware.nvidia.modesetting.enable = true;
@@ -8,13 +8,12 @@
   services.avahi.enable = true;
   services.avahi.publish.enable = true;
   services.avahi.publish.userServices = true;
-  networking.firewall.allowedTCPPorts = [ 9757 9758 9759 ];
+  networking.firewall.allowedTCPPorts = [ 9757 9758 9759 ] ++ [ 4656 ]; # audio server
   networking.firewall.allowedUDPPorts = [ 9757 9758 9759 ];
 
   # ssh server
   services.openssh = {
     enable = true;
-    forwardX11 = true;
     passwordAuthentication = false;
     kbdInteractiveAuthentication = false;
   };
