@@ -8,6 +8,7 @@ let
     export __VK_LAYER_NV_optimus=NVIDIA_only
     exec "$@"
   '';
+  
 in
 {
   hardware.nvidia.modesetting.enable = true;
@@ -25,10 +26,6 @@ in
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
   hardware.opengl.driSupport32Bit = true;
-
-  # ssh client
-  programs.ssh.forwardX11 = true;
-  programs.ssh.setXAuthLocation = true;
 
   # networking
   networking.networkmanager.enable = true;
