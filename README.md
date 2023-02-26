@@ -10,6 +10,6 @@ sudo sh install.sh
 
 ```sh
 doas nix-channel --update
-mkdir /persist/astavie/steam/.steam
-mkdir /persist/astavie/steam/.local/share/Steam
+mkdir -p /persist/astavie/steam/.steam
+mkdir -p /persist/astavie/steam/.local/share/Steam
 ```

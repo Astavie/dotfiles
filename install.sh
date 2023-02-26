@@ -107,6 +107,7 @@ info "Mounting..."
     swapon /dev/disk/by-label/swap
 
 info "Installing..."
+mkdir /mnt/persist/root
 nixos-install --flake .\#$SYSTEM --no-root-passwd
 nixos-enter -c 'rehome'
 

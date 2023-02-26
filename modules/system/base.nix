@@ -22,7 +22,7 @@ let
       chown ${username} ${usercfg.dir.data}
       mkdir -m 700 -p ${usercfg.dir.persist}
       chown ${username} ${usercfg.dir.persist}
-      ${pkgs.nix}/bin/nix build "''${1:-.}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation --print-build-logs
+      ${pkgs.nix}/bin/nix build "''${1:-${../..}}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation --print-build-logs
     '') users)
   );
 
