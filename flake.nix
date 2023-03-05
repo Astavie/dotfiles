@@ -17,7 +17,10 @@
   inputs.astapkgs.url = github:Astavie/astapkgs;
   inputs.astapkgs.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = { self, home-manager, nixpkgs, impermanence, nur, unstable, zsh-auto-notify, android-nixpkgs, astapkgs, ... }:
+  inputs.fenix.url = github:nix-community/fenix;
+  inputs.fenix.inputs.nixpkgs.follows = "unstable";
+
+  outputs = { self, home-manager, nixpkgs, impermanence, nur, unstable, zsh-auto-notify, android-nixpkgs, astapkgs, fenix, ... }:
 
     with nixpkgs.lib;
     let
@@ -27,6 +30,7 @@
           astapkgs.overlays.default
           android-nixpkgs.overlays.default
           nur.overlay
+          fenix.overlays.default
           (final: prev: {
             unstable = import unstable {
               inherit (final) system;

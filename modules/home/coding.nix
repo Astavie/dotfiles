@@ -24,10 +24,9 @@
     nodePackages.typescript-language-server
 
     # Rust
-    unstable.cargo
-    unstable.rustc
-    unstable.bacon
-    unstable.rust-analyzer
+    fenix.default.toolchain
+    rust-analyzer-nightly
+    bacon
 
     # Other languages
     sumneko-lua-language-server

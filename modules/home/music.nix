@@ -3,7 +3,6 @@
 {
   home.packages = with pkgs; [
     ardour
-    sfizz
     yabridge
     yabridgectl
     soundfont-fluid
@@ -11,6 +10,7 @@
   ];
 
   home.file.".vst/sfizz.vst3".source = "${pkgs.sfizz}/lib/vst3/sfizz.vst3";
+  home.file.".vst/helm".source = "${pkgs.helm}/lib/lxvst";
 
   backup.directories = [
     "vst_windows/.wine/drive_c"
