@@ -25,19 +25,14 @@
 
     # Rust
     fenix.default.toolchain
-    rust-analyzer-nightly
-    bacon
+    unstable.rust-analyzer
+    unstable.bacon
 
     # Other languages
     sumneko-lua-language-server
     rnix-lsp
     dart
     marksman
-  ];
-
-  # backup openxr runtimes
-  backup.directories = [
-    "openxr/.config/openxr"
   ];
 
   # make rust use sccache

@@ -16,9 +16,10 @@
 
   inputs.astapkgs.url = github:Astavie/astapkgs;
   inputs.astapkgs.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.astapkgs.inputs.fenix.follows = "fenix";
 
   inputs.fenix.url = github:nix-community/fenix;
-  inputs.fenix.inputs.nixpkgs.follows = "unstable";
+  inputs.fenix.inputs.nixpkgs.follows = "nixpkgs";
 
   outputs = { self, home-manager, nixpkgs, impermanence, nur, unstable, zsh-auto-notify, android-nixpkgs, astapkgs, fenix, ... }:
 

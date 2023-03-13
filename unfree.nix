@@ -8,4 +8,5 @@
   "android-studio-stable"
   "teams"
   "steam-run"
+  "cudatoolkit"
 ]

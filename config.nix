@@ -38,6 +38,7 @@ let
       # custom modules for terrestrial
       ./modules/home/coding.nix
       ./modules/home/music.nix
+      ./modules/home/vr.nix
     ] else [
       # custom modules for satellite
     ]);
