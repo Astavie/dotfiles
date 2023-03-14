@@ -1,37 +1,51 @@
 {
-  inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-22.11;
+  inputs = {
+    nixpkgs.url = github:NixOS/nixpkgs/nixos-22.11;
 
-  inputs.home-manager.url = github:nix-community/home-manager/release-22.11;
-  inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager.url = github:nix-community/home-manager/release-22.11;
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-  inputs.impermanence.url = github:nix-community/impermanence;
-  inputs.nur.url = github:nix-community/NUR;
-  inputs.unstable.url = github:nixos/nixpkgs/nixos-unstable;
+    impermanence.url = github:nix-community/impermanence;
+    nur.url = github:nix-community/NUR;
+    unstable.url = github:nixos/nixpkgs/nixos-unstable;
 
-  inputs.zsh-auto-notify.url = github:MichaelAquilina/zsh-auto-notify;
-  inputs.zsh-auto-notify.flake = false;
+    zsh-auto-notify.url = github:MichaelAquilina/zsh-auto-notify;
+    zsh-auto-notify.flake = false;
 
-  inputs.android-nixpkgs.url = github:tadfisher/android-nixpkgs;
-  inputs.android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
+    fenix.url = github:nix-community/fenix;
+    fenix.inputs.nixpkgs.follows = "nixpkgs";
 
-  inputs.astapkgs.url = github:Astavie/astapkgs;
-  inputs.astapkgs.inputs.nixpkgs.follows = "nixpkgs";
-  inputs.astapkgs.inputs.fenix.follows = "fenix";
+    # ---- OVERLAYS ----
+    overlay-android = {
+      url = github:tadfisher/android-nixpkgs;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-  inputs.fenix.url = github:nix-community/fenix;
-  inputs.fenix.inputs.nixpkgs.follows = "nixpkgs";
+    overlay-astapkgs = {
+      url = github:Astavie/astapkgs;
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.fenix.follows = "fenix";
+    };
 
-  outputs = { self, home-manager, nixpkgs, impermanence, nur, unstable, zsh-auto-notify, android-nixpkgs, astapkgs, fenix, ... }:
+    overlay-stardust-xr-server = {
+      url = github:StardustXR/server;
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.fenix.follows = "fenix";
+    };
+  };
+
+  outputs = { self, home-manager, nixpkgs, impermanence, nur, unstable, zsh-auto-notify, fenix, ... }@urls:
 
     with nixpkgs.lib;
     let
+      overlay-names = builtins.filter (hasPrefix "overlay-") (mapAttrsToList (name: _: name) urls);
+      overlays = builtins.map (name: urls.${name}.overlays.default) overlay-names;
+
       args = {
         flake = self;
-        overlays = [
-          astapkgs.overlays.default
-          android-nixpkgs.overlays.default
-          nur.overlay
+        overlays = overlays ++ [
           fenix.overlays.default
+          nur.overlay
           (final: prev: {
             unstable = import unstable {
               inherit (final) system;
