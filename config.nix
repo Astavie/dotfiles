@@ -17,6 +17,10 @@ let
       # custom packages for satellite
       networkmanagerapplet
       turbovnc
+
+      vscode
+      docker
+      docker-compose
     ]);
 
     specialArgs.ssh-keygen = true;
@@ -84,6 +88,7 @@ in
         ./modules/system/hardware/uefi.nix
         ./modules/system/hardware/zfs.nix
         ./modules/system/base.nix
+        ./modules/system/docker.nix
         ./modules/system/flatpak.nix
         ./modules/system/pipewire.nix
         ./modules/system/ssh.nix

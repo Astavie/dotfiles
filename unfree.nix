@@ -9,4 +9,5 @@
   "teams"
   "steam-run"
   "cudatoolkit"
+  "vscode"
 ]
