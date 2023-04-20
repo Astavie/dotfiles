@@ -54,6 +54,7 @@ in
   i18n.defaultLocale = "en_US.UTF-8";
   console.font = "Lat2-Terminus16";
   programs.dconf.enable = true;
+  boot.supportedFilesystems = [ "ntfs" ];
 
   services.avahi.enable = true;
   services.avahi.nssmdns = true;
