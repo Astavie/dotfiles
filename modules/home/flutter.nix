@@ -14,6 +14,7 @@ in
 {
   home.packages = [
     jdk8
+    dart
     flutter
     android-file-transfer
     android-sdk

@@ -1,6 +1,5 @@
 { lib, ... }:
 
-
 with lib;
 let
   subset = module: mkOption {

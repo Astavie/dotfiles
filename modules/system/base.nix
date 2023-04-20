@@ -55,13 +55,8 @@ in
   console.font = "Lat2-Terminus16";
   programs.dconf.enable = true;
 
-  # Binary Cache for Haskell.nix
-  nix.settings.trusted-public-keys = [
-    "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
-  ];
-  nix.settings.substituters = [
-    "https://cache.iog.io"
-  ];
+  services.avahi.enable = true;
+  services.avahi.nssmdns = true;
 
   # Pick doas or sudo
   security.sudo.enable = sudo == "sudo";
