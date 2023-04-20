@@ -10,6 +10,9 @@ let
       unzip
       gnumake
       peek
+
+      skim
+      silver-searcher
     ] ++ (if full then [
       # custom packages for terrestrial
       x11vnc
