@@ -4,8 +4,8 @@
   # TODO: MOVE THE FOLLOWING PACKAGES TO LOCAL shell.nix FILES
   home.packages = with pkgs; [
     # Odin
-    odin
-    ols
+    # odin
+    # ols
 
     # C/C++
     clang
@@ -24,7 +24,6 @@
     # Other languages
     sumneko-lua-language-server
     rnix-lsp
-    marksman
   ];
 
   # make rust use sccache
@@ -34,5 +33,5 @@
   '';
 
   # save odin core files for ols to use
-  home.file."odin/core".source = "${pkgs.odin}/bin/core";
+  # home.file."odin/core".source = "${pkgs.odin}/bin/core";
 }

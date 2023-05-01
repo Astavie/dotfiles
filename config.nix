@@ -19,6 +19,7 @@ let
     ] else [
       # custom packages for satellite
       networkmanagerapplet
+      sutils
       turbovnc
 
       vscode
@@ -35,6 +36,7 @@ let
       ./modules/home/git.nix
       ./modules/home/shell.nix
       ./modules/home/steam.nix
+      ./modules/home/coding.nix
       {
         programs.git = {
           userEmail = "astavie@pm.me";
@@ -43,7 +45,6 @@ let
       }
     ] ++ (if full then [
       # custom modules for terrestrial
-      ./modules/home/coding.nix
       ./modules/home/music.nix
       ./modules/home/vr.nix
     ] else [

@@ -27,7 +27,7 @@ let
   );
 
   # user packages
-  overflex = ''
+  shout = ''
     set -e
     if [ "$EUID" -eq 0 ]
     then
@@ -35,13 +35,13 @@ let
       exit
     fi
   '';
-  flex = (username: usercfg: pkgs.writeShellScriptBin "flex" ''
-    ${overflex}
+  uup = (username: usercfg: pkgs.writeShellScriptBin "uup" ''
+    ${shout}
     ${pkgs.nix}/bin/nix build "''${1:-.}#homeConfigurations.${username}@${hostname}.activationPackage" --out-link ${usercfg.dir.persist}/generation --print-build-logs
     ${usercfg.dir.persist}/generation/activate
   '');
   sup = (username: usercfg: pkgs.writeShellScriptBin "sup" ''
-    ${overflex}
+    ${shout}
     ${sudo} mkdir -m 700 -p ${impermanence.dir}
     ${sudo} ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-.}
     ${sudo} ${rehome}/bin/rehome ''${1:-.}
@@ -81,7 +81,7 @@ in
 
     packages = [
       (sup  username usercfg)
-      (flex username usercfg)
+      (uup username usercfg)
     ];
   }) users;
 
