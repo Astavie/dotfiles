@@ -7,7 +7,7 @@
     enable = true;
     functions = {
       s = ''
-        kitty +kitten ssh $argv
+        ssh $argv
       '';
       spaceflight = ''
         set -l ip (awk '/^  HostName / { print $2 }' ~/.ssh/config)
