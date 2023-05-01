@@ -22,7 +22,7 @@ hc detect_monitors
 hc keybind $Mod-q close
 hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload
-hc keybind $Mod-Return spawn kitty /data/$USER/
+hc keybind $Mod-Return spawn alacritty --working-directory /data/$USER/
 
 hc keybind $Mod-h focus left
 hc keybind $Mod-j focus down

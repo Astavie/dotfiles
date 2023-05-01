@@ -4,8 +4,8 @@
   # TODO: MOVE THE FOLLOWING PACKAGES TO LOCAL shell.nix FILES
   home.packages = with pkgs; [
     # Odin
-    odin
-    ols
+    # odin
+    # ols
 
     # C/C++
     clang
@@ -33,5 +33,5 @@
   '';
 
   # save odin core files for ols to use
-  home.file."odin/core".source = "${pkgs.odin}/bin/core";
+  # home.file."odin/core".source = "${pkgs.odin}/bin/core";
 }
