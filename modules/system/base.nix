@@ -65,6 +65,7 @@ in
   postinstall.sudo = sudo;
 
   # Create users
+  programs.fish.enable = true;
   environment.systemPackages = [ rehome pkgs.git ];
   
   users.mutableUsers = false;

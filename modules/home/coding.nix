@@ -3,10 +3,6 @@
 {
   # TODO: MOVE THE FOLLOWING PACKAGES TO LOCAL shell.nix FILES
   home.packages = with pkgs; [
-    # Odin
-    # odin
-    # ols
-
     # C/C++
     clang
     clang-tools
@@ -18,8 +14,8 @@
 
     # Rust
     fenix.default.toolchain
-    unstable.rust-analyzer
-    unstable.bacon
+    rust-analyzer
+    bacon
 
     # Other languages
     sumneko-lua-language-server
@@ -31,7 +27,4 @@
     [build]
     rustc-wrapper = "${pkgs.sccache}/bin/sccache"
   '';
-
-  # save odin core files for ols to use
-  # home.file."odin/core".source = "${pkgs.odin}/bin/core";
 }

@@ -14,8 +14,10 @@
   # ssh server
   services.openssh = {
     enable = true;
-    passwordAuthentication = false;
-    kbdInteractiveAuthentication = false;
+    settings = {
+      passwordAuthentication = false;
+      kbdInteractiveAuthentication = false;
+    };
   };
 
   users.users."astavie".openssh.authorizedKeys.keys = [

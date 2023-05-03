@@ -13,6 +13,8 @@ let
 
       skim
       silver-searcher
+
+      teams-for-linux
     ] ++ (if full then [
       # custom packages for terrestrial
       x11vnc

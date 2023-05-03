@@ -65,7 +65,6 @@
 
   # Helix
   programs.helix.enable = true;
-  programs.helix.package = pkgs.unstable.helix;
   programs.helix.settings.theme = "catppuccin_mocha";
   home.sessionVariables.EDITOR = "${config.programs.helix.package}/bin/hx";
 

@@ -1,13 +1,12 @@
 {
   inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-22.11;
+    nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
 
-    home-manager.url = github:nix-community/home-manager/release-22.11;
+    home-manager.url = github:nix-community/home-manager/master;
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     impermanence.url = github:nix-community/impermanence;
     nur.url = github:nix-community/NUR;
-    unstable.url = github:nixos/nixpkgs/nixos-unstable;
 
     zsh-auto-notify.url = github:MichaelAquilina/zsh-auto-notify;
     zsh-auto-notify.flake = false;
@@ -32,9 +31,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.fenix.follows = "fenix";
     };
+
+    overlay-stardust-xr-flatland = {
+      url = github:StardustXR/flatland;
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.fenix.follows = "fenix";
+    };
   };
 
-  outputs = { self, home-manager, nixpkgs, impermanence, nur, unstable, zsh-auto-notify, fenix, ... }@urls:
+  outputs = { self, home-manager, nixpkgs, impermanence, nur, zsh-auto-notify, fenix, ... }@urls:
 
     with nixpkgs.lib;
     let
@@ -46,14 +51,6 @@
         overlays = overlays ++ [
           fenix.overlays.default
           nur.overlay
-          (final: prev: {
-            unstable = import unstable {
-              inherit (final) system;
-              config = {
-                inherit (final.config) allowUnfreePredicate permittedInsecurePackages;
-              };
-            };
-          })
         ];
         inherit home-manager impermanence nixpkgs;
         inputs = {

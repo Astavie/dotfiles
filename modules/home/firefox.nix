@@ -26,21 +26,21 @@ in
     profiles = {
       default = {
         isDefault = true;
+        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+          ublock-origin
+          lastpass-password-manager
+          i-dont-care-about-cookies
+          (buildFirefoxXpiAddon {
+            pname = "catppuccin-mocha-lavender";
+            version = "old";
+            addonId = "{8446b178-c865-4f5c-8ccc-1d7887811ae3}";
+            url = "https://github.com/catppuccin/firefox/releases/download/old/catppuccin_mocha_lavender.xpi";
+            sha256 = "70292b0b8652cbab408d15d261dc5150f690fb5bbaf96f4e7317256c7d9b7933";
+            meta = {};
+          })
+        ];
       };
     };
-    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-      ublock-origin
-      lastpass-password-manager
-      i-dont-care-about-cookies
-      (buildFirefoxXpiAddon {
-        pname = "catppuccin-mocha-lavender";
-        version = "old";
-        addonId = "{8446b178-c865-4f5c-8ccc-1d7887811ae3}";
-        url = "https://github.com/catppuccin/firefox/releases/download/old/catppuccin_mocha_lavender.xpi";
-        sha256 = "70292b0b8652cbab408d15d261dc5150f690fb5bbaf96f4e7317256c7d9b7933";
-        meta = {};
-      })
-    ];
   };
 
   backup.directories = [

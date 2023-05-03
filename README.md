@@ -13,3 +13,7 @@ doas nix-channel --update
 mkdir -p /persist/astavie/steam/.steam
 mkdir -p /persist/astavie/steam/.local/share/Steam
 ```
+
+# issues
+
+- flatpak packages get lost on reload

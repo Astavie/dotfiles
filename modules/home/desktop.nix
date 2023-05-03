@@ -32,8 +32,8 @@ in
 
       font.normal.family = "cozette";
 
-      font.offset.x = 1.0;
-      font.offset.y = 0.0;
+      font.offset.x = 1;
+      font.offset.y = 0;
 
       cursor.style.shape = "Beam";
 
