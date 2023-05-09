@@ -39,6 +39,7 @@ let
       ./modules/home/shell.nix
       ./modules/home/steam.nix
       ./modules/home/coding.nix
+      ./modules/home/minecraft-dev.nix
       {
         programs.git = {
           userEmail = "astavie@pm.me";
