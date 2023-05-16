@@ -10,4 +10,5 @@
   "steam-run"
   "cudatoolkit"
   "vscode"
+  "linuxsampler"
 ]

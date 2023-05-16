@@ -7,6 +7,8 @@
     yabridgectl
     soundfont-fluid
     wineWowPackages.staging
+    qsampler
+    linuxsampler
   ];
 
   home.file.".vst/sfizz.vst3".source = "${pkgs.sfizz}/lib/vst3/sfizz.vst3";

@@ -18,6 +18,17 @@ let
     ] ++ (if full then [
       # custom packages for terrestrial
       x11vnc
+
+      prismlauncher
+      (openjdk8.overrideAttrs (final: prev: rec {
+        version = "8u312-ga";
+        src = fetchFromGitHub {
+          owner = "openjdk";
+          repo = "jdk8u";
+          rev = "jdk${version}";
+          sha256 = "sha256-y8bcg3+BJjs3xnfFXDw2D7fvgUNAgyQnuC1FxzbfF20=";
+        };
+      }))
     ] else [
       # custom packages for satellite
       networkmanagerapplet
@@ -39,7 +50,6 @@ let
       ./modules/home/shell.nix
       ./modules/home/steam.nix
       ./modules/home/coding.nix
-      ./modules/home/minecraft-dev.nix
       {
         programs.git = {
           userEmail = "astavie@pm.me";
@@ -50,8 +60,10 @@ let
       # custom modules for terrestrial
       ./modules/home/music.nix
       ./modules/home/vr.nix
+      # ./modules/home/minecraft-dev.nix
     ] else [
       # custom modules for satellite
+      ./modules/home/music.nix
     ]);
   };
 in
