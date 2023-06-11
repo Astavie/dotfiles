@@ -49,7 +49,7 @@ let
       # custom modules for terrestrial
       ./modules/home/music.nix
       ./modules/home/vr.nix
-      # ./modules/home/minecraft-dev.nix
+      ./modules/home/minecraft-dev.nix
       ./modules/home/minecraft.nix
     ] else [
       # custom modules for satellite
@@ -62,7 +62,7 @@ in
     terrestrial = {
       hostid = "93ad32f0";
       system = "x86_64-linux";
-      stateVersion = "22.11";
+      stateVersion = "23.05";
 
       users = {
         astavie = astavie true;
@@ -81,11 +81,15 @@ in
         ./modules/system/xserver.nix
         ./modules/system/vbhost.nix
       ];
+
+      sharedModules = [
+        ./modules/home/pipewire.nix
+      ];
     };
     satellite = {
       hostid = "92e8a3c2";
       system = "x86_64-linux";
-      stateVersion = "22.11";
+      stateVersion = "23.05";
 
       users = {
         astavie = astavie false;
@@ -104,11 +108,15 @@ in
         ./modules/system/steam.nix
         ./modules/system/xserver.nix
       ];
+
+      sharedModules = [
+        ./modules/home/pipewire.nix
+      ];
     };
     vb = {
       hostid = "85dd8e44";
       system = "x86_64-linux";
-      stateVersion = "22.11";
+      stateVersion = "23.05";
 
       users = {
         astavie = astavie false;
@@ -122,6 +130,10 @@ in
         ./modules/system/base.nix
         ./modules/system/pipewire.nix
         ./modules/system/xserver.nix
+      ];
+
+      sharedModules = [
+        ./modules/home/pipewire.nix
       ];
     };
   };

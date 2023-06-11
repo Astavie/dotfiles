@@ -59,6 +59,11 @@ in
   services.avahi.enable = true;
   services.avahi.nssmdns = true;
 
+  services.zerotierone.enable = true;
+  backup.directories = [
+    "/var/lib/zerotier-one"
+  ];
+
   # Pick doas or sudo
   security.sudo.enable = sudo == "sudo";
   security.doas.enable = sudo == "doas";
@@ -81,7 +86,7 @@ in
     extraGroups = [ "audio" "video" ] ++ lib.optionals usercfg.superuser [ "wheel" "networkmanager" ];
 
     packages = [
-      (sup  username usercfg)
+      (sup username usercfg)
       (uup username usercfg)
     ];
   }) users;

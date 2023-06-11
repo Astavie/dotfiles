@@ -8,9 +8,6 @@
     impermanence.url = github:nix-community/impermanence;
     nur.url = github:nix-community/NUR;
 
-    zsh-auto-notify.url = github:MichaelAquilina/zsh-auto-notify;
-    zsh-auto-notify.flake = false;
-
     fenix.url = github:nix-community/fenix;
     fenix.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -39,7 +36,7 @@
     };
   };
 
-  outputs = { self, home-manager, nixpkgs, impermanence, nur, zsh-auto-notify, fenix, ... }@urls:
+  outputs = { self, home-manager, nixpkgs, impermanence, nur, fenix, ... }@urls:
 
     with nixpkgs.lib;
     let
@@ -53,9 +50,6 @@
           nur.overlay
         ];
         inherit home-manager impermanence nixpkgs;
-        inputs = {
-          inherit zsh-auto-notify;
-        };
       };
       config = (evalModules {
         modules = [

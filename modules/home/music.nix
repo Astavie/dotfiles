@@ -18,5 +18,6 @@
     "vst_windows/.wine/drive_c"
     "vst_windows/.vst/yabridge"
     "ardour/.config/ardour7"
+    "ardour/.cache/ardour7"
   ];
 }

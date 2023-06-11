@@ -12,6 +12,4 @@
     "discord-screenaudio/.var/app/de.shorsh.discord-screenaudio/data/discord-screenaudio"
     "flatpak/.local/share/flatpak"
   ];
-
-  xdg.systemDirs.data = [ "${config.home.homeDirectory}/.local/share/flatpak/exports/share" ];
 }

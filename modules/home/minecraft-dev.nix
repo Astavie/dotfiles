@@ -32,7 +32,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-5Sd90f8OLGF5frcGPSTnKpIOeasqaQueyTerOpRkf84=";
+    outputHash = "sha256-0vkNcHk5y8hMrPDgeoUyrbnek/nEzPDNeTkEmaRPZQQ=";
   };
   hotswap-agent = with pkgs; stdenv.mkDerivation {
     name = "hotswap-agent";
@@ -82,8 +82,8 @@ in
         })
         (fetchpatch {
           # gradle dependency support
-          url = "https://github.com/Astavie/java-language-server/commit/a876a3691fc88c2f7e75d63d7ae10bf299620df1.patch";
-          sha256 = "sha256-t4FXxHuqFQ7sCHX46zCHZol23AsqYLmLGl+LmpPGGh4=";
+          url = "https://github.com/Astavie/java-language-server/commit/63ce834a6d2637b9406591c1d4e9387b26ab8461.patch";
+          sha256 = "sha256-bgQOWFIzt5R70dXr2Ecnlzc2K2nFe9c0ntiP3520Fyk=";
         })
       ];
 
@@ -95,7 +95,7 @@ in
   ];
 
   # java LSP
-  programs.helix.languages = [{
+  programs.helix.languages.language = [{
     name = "java";
     scope = "source.java";
     injection-regex = "java";

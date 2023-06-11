@@ -11,4 +11,5 @@
   "cudatoolkit"
   "vscode"
   "linuxsampler"
+  "zerotierone"
 ]

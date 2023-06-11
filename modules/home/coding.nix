@@ -20,6 +20,7 @@
     # Other languages
     sumneko-lua-language-server
     rnix-lsp
+    marksman
   ];
 
   # make rust use sccache
