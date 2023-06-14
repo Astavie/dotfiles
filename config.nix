@@ -15,6 +15,7 @@ let
       silver-searcher
 
       teams-for-linux
+      parsec-bin
     ] ++ (if full then [
       # custom packages for terrestrial
       x11vnc
