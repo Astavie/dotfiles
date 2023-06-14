@@ -78,7 +78,7 @@ in
   home.file.".config/sx/sxrc" = {
     executable = true;
     text = ''
-      ${pkgs.feh}/bin/feh --bg-fill ${../../config/the_valley.webp} &
+      ${pkgs.feh}/bin/feh --bg-fill ${../../config/pluto.jpg} &
       ${pkgs.picom}/bin/picom &
       ${pkgs.dunst}/bin/dunst &
       ${pkgs.herbstluftwm}/bin/herbstluftwm -c ${autostart}

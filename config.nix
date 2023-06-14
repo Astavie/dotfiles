@@ -2,27 +2,28 @@ let
   astavie = full: {
     superuser = true;
     packages = pkgs: with pkgs; [
-      torrential
-      neofetch
-      gimp
+      # base
       pavucontrol
-      htop
       unzip
       gnumake
-      peek
-
+      neofetch
+      htop
+      sutils
       skim
       silver-searcher
 
+      # apps
+      torrential
+      gimp
       teams-for-linux
       parsec-bin
+      peek
     ] ++ (if full then [
       # custom packages for terrestrial
       x11vnc
     ] else [
       # custom packages for satellite
       networkmanagerapplet
-      sutils
       turbovnc
 
       vscode
