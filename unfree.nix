@@ -1,16 +1,14 @@
 [
-  "lastpass-password-manager"
   "nvidia-x11"
   "nvidia-settings"
+  "cudatoolkit"
   "steam"
   "steam-original"
+  "steam-run"
   "discord"
   "android-studio-stable"
   "teams"
-  "steam-run"
-  "cudatoolkit"
   "vscode"
-  "linuxsampler"
   "zerotierone"
   "parsec-bin"
 ]

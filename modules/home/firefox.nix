@@ -28,7 +28,7 @@ in
         isDefault = true;
         extensions = with pkgs.nur.repos.rycee.firefox-addons; [
           ublock-origin
-          lastpass-password-manager
+          bitwarden
           i-dont-care-about-cookies
           (buildFirefoxXpiAddon {
             pname = "catppuccin-mocha-lavender";
