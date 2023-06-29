@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{  ... }:
 
 {
   backup.directories = [

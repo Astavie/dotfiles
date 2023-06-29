@@ -1,42 +1,45 @@
 {
   inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    home-manager.url = github:nix-community/home-manager;
+    home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    impermanence.url = github:nix-community/impermanence;
-    nur.url = github:nix-community/NUR;
+    impermanence.url = "github:nix-community/impermanence";
+    nur.url = "github:nix-community/NUR";
 
-    fenix.url = github:nix-community/fenix;
+    fenix.url = "github:nix-community/fenix";
     fenix.inputs.nixpkgs.follows = "nixpkgs";
+
+    musnix.url = "github:musnix/musnix";
+    musnix.inputs.nixpkgs.follows = "nixpkgs";
 
     # ---- OVERLAYS ----
     overlay-android = {
-      url = github:tadfisher/android-nixpkgs;
+      url = "github:tadfisher/android-nixpkgs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     overlay-astapkgs = {
-      url = github:Astavie/astapkgs;
+      url = "github:Astavie/astapkgs";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.fenix.follows = "fenix";
     };
 
     overlay-stardust-xr-server = {
-      url = github:StardustXR/server;
+      url = "github:StardustXR/server";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.fenix.follows = "fenix";
     };
 
     overlay-stardust-xr-flatland = {
-      url = github:StardustXR/flatland;
+      url = "github:StardustXR/flatland";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.fenix.follows = "fenix";
     };
   };
 
-  outputs = { self, home-manager, nixpkgs, impermanence, nur, fenix, ... }@urls:
+  outputs = { self, home-manager, nixpkgs, impermanence, nur, fenix, musnix, ... }@urls:
 
     with nixpkgs.lib;
     let
@@ -49,7 +52,7 @@
           fenix.overlays.default
           nur.overlay
         ];
-        inherit home-manager impermanence nixpkgs;
+        inherit home-manager impermanence nixpkgs musnix;
       };
       config = (evalModules {
         modules = [

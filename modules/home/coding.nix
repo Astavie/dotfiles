@@ -1,31 +1,37 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
-  # TODO: MOVE THE FOLLOWING PACKAGES TO LOCAL shell.nix FILES
-  home.packages = with pkgs; [
-    # C/C++
-    clang
-    clang-tools
-
-    # Node.js
-    nodejs
-    nodePackages.npm
-    nodePackages.typescript-language-server
-
-    # Rust
-    fenix.default.toolchain
-    rust-analyzer
-    bacon
-
-    # Other languages
-    sumneko-lua-language-server
-    rnix-lsp
-    marksman
-  ];
+  # nix language server
+  home.packages = with pkgs; [ nil ];
 
   # make rust use sccache
   home.file.".cargo/config.toml".text = ''
     [build]
     rustc-wrapper = "${pkgs.sccache}/bin/sccache"
   '';
+
+  # LSP settings
+  programs.helix.languages.language = [{
+    name = "java";
+    scope = "source.java";
+    injection-regex = "java";
+    file-types = ["java"];
+    roots = ["pom.xml"];
+    language-server = { command = "java-language-server"; };
+    indent = { tab-width = 4; unit = "    "; };
+    debugger = {
+      name = "java-debug-adapter";
+      transport = "stdio";
+      command = "java-debug-adapter";
+      args = [ "--quiet" ];
+      templates = [
+        {
+          name = "attach to jvm";
+          request = "attach";
+          completion = [{ name = "port"; default = "5005"; }];
+          args = { port = "{0}"; sourceRoots = [ "src/main/java" "src/client/java" ]; };
+        }
+      ];
+    };
+  }];
 }

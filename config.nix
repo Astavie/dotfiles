@@ -25,22 +25,18 @@ let
       # custom packages for satellite
       networkmanagerapplet
       turbovnc
-
-      vscode
-      docker
-      docker-compose
     ]);
 
     specialArgs.ssh-keygen = true;
 
     modules = [
+      ./modules/home/coding.nix
       ./modules/home/desktop.nix
       ./modules/home/discord.nix
       ./modules/home/firefox.nix
       ./modules/home/git.nix
       ./modules/home/shell.nix
       ./modules/home/steam.nix
-      ./modules/home/coding.nix
       {
         programs.git = {
           userEmail = "astavie@pm.me";
@@ -49,10 +45,9 @@ let
       }
     ] ++ (if full then [
       # custom modules for terrestrial
+      ./modules/home/minecraft.nix
       ./modules/home/music.nix
       ./modules/home/vr.nix
-      ./modules/home/minecraft-dev.nix
-      ./modules/home/minecraft.nix
     ] else [
       # custom modules for satellite
       ./modules/home/music.nix
