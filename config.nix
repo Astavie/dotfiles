@@ -110,6 +110,58 @@ in
         ./modules/home/pipewire.nix
       ];
     };
+    ahti = {
+      hostid = "34cb7c4a";
+      system = "x86_64-linux";
+      stateVersion = "23.05";
+
+      users.ahti = {
+	superuser = true;
+        packages = pkgs: with pkgs; [
+          pavucontrol
+          unzip
+          gnumake
+          neofetch
+          htop
+          sutils
+          skim
+          silver-searcher
+
+          gimp
+          peek
+        ];
+
+        specialArgs.ssh-keygen = true;
+
+        modules = [
+          ./modules/home/coding.nix
+          ./modules/home/desktop.nix
+          ./modules/home/firefox.nix
+          ./modules/home/git.nix
+          ./modules/home/shell.nix
+          {
+            programs.git = {
+              userEmail = "astavie@pm.me";
+              userName = "Astavie";
+            };
+          }
+        ];
+      };
+
+      modules = [
+        ./modules/system/hardware/meteorite-ahti.nix
+        ./modules/system/hardware/zfs.nix
+        ./modules/system/hardware/uefi.nix
+        ./modules/system/base.nix
+        ./modules/system/pipewire.nix
+        ./modules/system/ssh.nix
+        ./modules/system/xserver.nix
+      ];
+ 
+      sharedModules = [
+        ./modules/home/pipewire.nix
+      ];
+    };
     vb = {
       hostid = "85dd8e44";
       system = "x86_64-linux";
