@@ -15,9 +15,10 @@ let
       # apps
       torrential
       gimp
-      teams-for-linux
-      parsec-bin
       peek
+
+      # teams-for-linux
+      # parsec-bin
     ] ++ (if full then [
       # custom packages for terrestrial
       x11vnc
@@ -30,7 +31,6 @@ let
     specialArgs.ssh-keygen = true;
 
     modules = [
-      ./modules/home/coding.nix
       ./modules/home/desktop.nix
       ./modules/home/discord.nix
       ./modules/home/firefox.nix
@@ -50,7 +50,6 @@ let
       ./modules/home/vr.nix
     ] else [
       # custom modules for satellite
-      ./modules/home/music.nix
     ]);
   };
 in
@@ -134,7 +133,6 @@ in
         specialArgs.ssh-keygen = true;
 
         modules = [
-          ./modules/home/coding.nix
           ./modules/home/desktop.nix
           ./modules/home/firefox.nix
           ./modules/home/git.nix

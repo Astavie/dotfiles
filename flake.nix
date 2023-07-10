@@ -8,9 +8,6 @@
     impermanence.url = "github:nix-community/impermanence";
     nur.url = "github:nix-community/NUR";
 
-    fenix.url = "github:nix-community/fenix";
-    fenix.inputs.nixpkgs.follows = "nixpkgs";
-
     musnix.url = "github:musnix/musnix";
     musnix.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -23,23 +20,10 @@
     overlay-astapkgs = {
       url = "github:Astavie/astapkgs";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.fenix.follows = "fenix";
-    };
-
-    overlay-stardust-xr-server = {
-      url = "github:StardustXR/server";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.fenix.follows = "fenix";
-    };
-
-    overlay-stardust-xr-flatland = {
-      url = "github:StardustXR/flatland";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.fenix.follows = "fenix";
     };
   };
 
-  outputs = { self, home-manager, nixpkgs, impermanence, nur, fenix, musnix, ... }@urls:
+  outputs = { self, home-manager, nixpkgs, impermanence, nur, musnix, ... }@urls:
 
     with nixpkgs.lib;
     let
@@ -49,7 +33,6 @@
       args = {
         flake = self;
         overlays = overlays ++ [
-          fenix.overlays.default
           nur.overlay
         ];
         inherit home-manager impermanence nixpkgs musnix;

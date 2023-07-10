@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 
 {
-  home.packages = with pkgs; [ mc pulseaudio ];
+  home.packages = with pkgs; [ mc pulseaudio nil ];
 
   programs.fish = {
     enable = true;
@@ -67,6 +67,37 @@
   programs.helix.enable = true;
   programs.helix.settings.theme = "catppuccin_mocha";
   home.sessionVariables.EDITOR = "${config.programs.helix.package}/bin/hx";
+
+  # make rust use sccache
+  home.file.".cargo/config.toml".text = ''
+    [build]
+    rustc-wrapper = "${pkgs.sccache}/bin/sccache"
+  '';
+
+  # LSP settings
+  programs.helix.languages.language = [{
+    name = "java";
+    scope = "source.java";
+    injection-regex = "java";
+    file-types = ["java"];
+    roots = ["pom.xml"];
+    language-server = { command = "java-language-server"; };
+    indent = { tab-width = 4; unit = "    "; };
+    debugger = {
+      name = "java-debug-adapter";
+      transport = "stdio";
+      command = "java-debug-adapter";
+      args = [ "--quiet" ];
+      templates = [
+        {
+          name = "attach to jvm";
+          request = "attach";
+          completion = [{ name = "port"; default = "5005"; }];
+          args = { port = "{0}"; sourceRoots = [ "src/main/java" "src/client/java" ]; };
+        }
+      ];
+    };
+  }];
 
   # midnight commander
   home.file.".local/share/mc/skins/theme.ini".source = ../../config/mc.ini;
