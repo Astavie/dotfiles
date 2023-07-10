@@ -1,15 +1,24 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   hardware.nvidia.modesetting.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
 
+  # musnix
+  musnix.enable = true;
+
   # avahi for wyvrn
   services.avahi.enable = true;
+  services.avahi.nssmdns = true;
+  services.avahi.openFirewall = true;
   services.avahi.publish.enable = true;
   services.avahi.publish.userServices = true;
-  networking.firewall.allowedTCPPorts = [ 9757 9758 9759 ] ++ [ 4656 ]; # audio server
-  networking.firewall.allowedUDPPorts = [ 9757 9758 9759 ];
+
+  # printing
+  services.printing.enable = true;
+
+  # audio server
+  networking.firewall.allowedTCPPorts = [ 4656 ];
 
   # ssh server
   services.openssh = {

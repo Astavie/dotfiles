@@ -3,7 +3,7 @@
 {
   services.easyeffects = {
     enable = true;
-    preset = "Noise Reduction";
+    preset = "Noise\\ Reduction";
   };
   backup.directories = [
     "pipewire/.local/state/wireplumber"

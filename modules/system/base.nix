@@ -4,7 +4,7 @@
 
   # system inputs
   pkgs, utils, lib, ...
-}@inputs:
+}:
 
 let
   sudo = "doas";

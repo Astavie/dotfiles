@@ -7,7 +7,5 @@
   home.packages = with pkgs; [
     wivrn-server
     wivrn-client-install
-    stardust-xr.server
-    stardust-xr.flatland
   ];
 }

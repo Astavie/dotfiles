@@ -1,4 +1,4 @@
-{ lib, config, impermanence, ... }:
+{ lib, impermanence, ... }:
 
 with lib;
 let

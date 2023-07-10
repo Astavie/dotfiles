@@ -12,7 +12,7 @@ let
   ]);
 in 
 {
-  home.packages = [
+  home.packages = with pkgs; [
     jdk8
     dart
     flutter

@@ -1,4 +1,4 @@
-{ lib, config, flake, home-manager, nixpkgs, inputs, overlays, ... }:
+{ lib, config, flake, home-manager, nixpkgs, inputs, overlays, musnix, ... }:
 
 with lib;
 let
@@ -178,6 +178,7 @@ let
     };
     config = {
       modules = [
+        musnix.nixosModules.musnix
         ({ lib, pkgs, ... }: with lib; {
           config = {
             nixpkgs.overlays = overlays;

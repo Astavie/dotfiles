@@ -25,22 +25,18 @@ let
       # custom packages for satellite
       networkmanagerapplet
       turbovnc
-
-      vscode
-      docker
-      docker-compose
     ]);
 
     specialArgs.ssh-keygen = true;
 
     modules = [
+      ./modules/home/coding.nix
       ./modules/home/desktop.nix
       ./modules/home/discord.nix
       ./modules/home/firefox.nix
       ./modules/home/git.nix
       ./modules/home/shell.nix
       ./modules/home/steam.nix
-      ./modules/home/coding.nix
       {
         programs.git = {
           userEmail = "astavie@pm.me";
@@ -49,10 +45,9 @@ let
       }
     ] ++ (if full then [
       # custom modules for terrestrial
+      ./modules/home/minecraft.nix
       ./modules/home/music.nix
       ./modules/home/vr.nix
-      ./modules/home/minecraft-dev.nix
-      ./modules/home/minecraft.nix
     ] else [
       # custom modules for satellite
       ./modules/home/music.nix
@@ -111,6 +106,58 @@ in
         ./modules/system/xserver.nix
       ];
 
+      sharedModules = [
+        ./modules/home/pipewire.nix
+      ];
+    };
+    ahti = {
+      hostid = "34cb7c4a";
+      system = "x86_64-linux";
+      stateVersion = "23.05";
+
+      users.ahti = {
+	superuser = true;
+        packages = pkgs: with pkgs; [
+          pavucontrol
+          unzip
+          gnumake
+          neofetch
+          htop
+          sutils
+          skim
+          silver-searcher
+
+          gimp
+          peek
+        ];
+
+        specialArgs.ssh-keygen = true;
+
+        modules = [
+          ./modules/home/coding.nix
+          ./modules/home/desktop.nix
+          ./modules/home/firefox.nix
+          ./modules/home/git.nix
+          ./modules/home/shell.nix
+          {
+            programs.git = {
+              userEmail = "astavie@pm.me";
+              userName = "Astavie";
+            };
+          }
+        ];
+      };
+
+      modules = [
+        ./modules/system/hardware/meteorite-ahti.nix
+        ./modules/system/hardware/zfs.nix
+        ./modules/system/hardware/uefi.nix
+        ./modules/system/base.nix
+        ./modules/system/pipewire.nix
+        ./modules/system/ssh.nix
+        ./modules/system/xserver.nix
+      ];
+ 
       sharedModules = [
         ./modules/home/pipewire.nix
       ];
