@@ -47,6 +47,11 @@ in
           environment.persistence."${config.impermanence.dir}" = {
             inherit (s.config.backup) files directories;
           };
+
+          # zfs rollback
+          boot.initrd.postDeviceCommands = s.lib.mkAfter ''
+            zfs rollback -r nixos/local/root@blank
+          '';
         })
       ];
       sharedModules = mkIf config.impermanence.enable [

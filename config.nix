@@ -116,7 +116,7 @@ in
       stateVersion = "23.05";
 
       users.ahti = {
-	superuser = true;
+      	superuser = true;
         packages = pkgs: with pkgs; [
           pavucontrol
           unzip
@@ -129,6 +129,7 @@ in
 
           gimp
           peek
+      torrential
         ];
 
         specialArgs.ssh-keygen = true;

@@ -72,7 +72,30 @@ in
   home.file.".config/dunst/dunstrc".source = ../../config/dunstrc;
   home.file.".config/rofi/config.rasi".source = ../../config/rofi/config.rasi;
   home.file.".local/share/rofi/themes/theme.rasi".source = ../../config/rofi/theme.rasi;
-  home.file.".icons/default".source = ../../config/cursor;
+
+  # home.file.".icons/default".source = ../../config/cursor;
+
+  home.pointerCursor = 
+    let 
+      getFrom = url: hash: name: {
+          gtk.enable = true;
+          x11.enable = true;
+          name = name;
+          size = 24;
+          package = 
+            pkgs.runCommand "moveUp" {} ''
+              mkdir -p $out/share/icons
+              ln -s ${pkgs.fetchzip {
+                url = url;
+                hash = hash;
+              }} $out/share/icons/${name}
+          '';
+        };
+    in
+      getFrom 
+        "https://github.com/ganwell/dmz-cursors/releases/download/v1.0/dmz-black.tar.xz"
+        "sha256-mf60uHFEjWGTk1QZ4AA54g3yJUGipF2ZLNQK7oUGQ4I="
+        "DMZ-Black";
 
   # startup
   home.file.".config/sx/sxrc" = {

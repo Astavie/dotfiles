@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ ... }:
 
 {
   fileSystems."/" = {
@@ -19,9 +19,6 @@
   };
 
   boot.kernelParams = [ "elevator=none" "nohibernate" ];
-  boot.initrd.postDeviceCommands = lib.mkAfter ''
-    zfs rollback -r nixos/local/root@blank
-  '';
 
   services.zfs = {
     autoScrub.enable = true;
