@@ -1,7 +1,12 @@
 { pkgs, config, ... }:
 
 {
-  home.packages = with pkgs; [ mc pulseaudio nil ];
+  home.packages = with pkgs; [
+    mc
+    pulseaudio
+    nil
+    shell_gpt
+  ];
 
   programs.fish = {
     enable = true;
@@ -61,6 +66,7 @@
     "autojump/.local/share/autojump"
     "direnv/.local/share/direnv/allow"
     "fish/.local/share/fish"
+    "shell_gpt/.config/shell_gpt"
   ];
 
   # Helix
