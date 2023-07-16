@@ -33,7 +33,9 @@
   home.file.".config/hypr/hyprland.conf".text = ''
     monitor = ,preferred,auto,auto
     env = XCURSOR_SIZE,24
+
     exec-once = hyprpaper
+    exec-once = systemctl --user start easyeffects.service
 
     input {
       follow_mouse = 2
@@ -71,7 +73,7 @@
     $mod = SUPER
 
     bind = $mod, return, exec, fish -c 'alacritty --working-directory $GLOBAL_PWD'
-    bind = $mod, space, exec, exec $(tofi-run --config ${../res/glassmorphism/tofi})
+    bind = $mod, space, exec, exec $(tofi-drun --config ${../res/glassmorphism/tofi})
     bind = $mod, Q, killactive,
     bind = $mod SHIFT, Q, exit,
     bind = $mod, P, togglefloating,

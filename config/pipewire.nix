@@ -22,6 +22,7 @@ in
       ];
       packages = mkIf config.pipewire.enable (with pkgs; [
         pavucontrol
+        helvum
       ]);
     };
   };
