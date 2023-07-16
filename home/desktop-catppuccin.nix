@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  autostart = pkgs.writeShellScript "autostart" (builtins.readFile ../res/herbstluftwm.sh);
+  autostart = pkgs.writeShellScript "autostart" (builtins.readFile ../res/catppuccin/herbstluftwm.sh);
 in
 {
   home.packages = with pkgs; [
@@ -67,10 +67,12 @@ in
   services.picom.enable = true;
 
   # theme
-  home.file.".themes".source = ../res/gtk;
-  home.file.".config/dunst/dunstrc".source = ../res/dunstrc;
-  home.file.".config/rofi/config.rasi".source = ../res/rofi/config.rasi;
-  home.file.".local/share/rofi/themes/theme.rasi".source = ../res/rofi/theme.rasi;
+  home.file.".themes".source = ../res/catppuccin/gtk;
+  home.file.".config/dunst/dunstrc".source = ../res/catppuccin/dunstrc;
+  home.file.".config/rofi/config.rasi".source = ../res/catppuccin/rofi/config.rasi;
+  home.file.".local/share/rofi/themes/theme.rasi".source = ../res/catppuccin/rofi/theme.rasi;
+  home.file.".local/share/mc/skins/theme.ini".source = ../res/catppuccin/mc.ini;
+  home.file.".config/discocss/custom.css".source = ../res/catppuccin/discord.css;
 
   home.pointerCursor = 
     let 
@@ -98,7 +100,7 @@ in
   home.file.".config/sx/sxrc" = {
     executable = true;
     text = ''
-      ${pkgs.feh}/bin/feh --bg-fill ${../res/pluto.jpg} &
+      ${pkgs.feh}/bin/feh --bg-fill ${../res/catppuccin/pluto.jpg} &
       ${pkgs.picom}/bin/picom &
       ${pkgs.dunst}/bin/dunst &
       ${pkgs.herbstluftwm}/bin/herbstluftwm -c ${autostart}

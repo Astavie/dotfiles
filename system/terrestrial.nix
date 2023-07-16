@@ -32,7 +32,7 @@
     flatpak.enable = true;
 
     modules = [
-      ../home/desktop.nix
+      ../home/desktop-catppuccin.nix
       ../home/discord.nix
       ../home/firefox.nix
       ../home/git.nix
