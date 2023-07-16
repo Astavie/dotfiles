@@ -53,6 +53,7 @@ let
 in
 {
   home.packages = [
+    pkgs.xdg-utils
     discocss
     xwaylandvideobridge
   ];
