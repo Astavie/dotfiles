@@ -1,4 +1,4 @@
-{ lib, config, flake, home-manager, nixpkgs, inputs, overlays, musnix, ... }:
+{ lib, config, flake, home-manager, nixpkgs, overlays, musnix, ... }:
 
 with lib;
 let
@@ -7,11 +7,16 @@ let
   nospace  = str: filter (c: c == " ") (stringToCharacters str) == [];
   timezone = types.nullOr (types.addCheck types.str nospace)
     // { description = "null or string without spaces"; };
-  system =
-  { config, name, ... }:
+in
   {
     options = {
       # Required options
+      hostname = mkOption {
+        type = types.str;
+        description = ''
+          The hostname of the system.
+        '';
+      };
       hostid = mkOption {
         type = types.str;
         description = ''
@@ -56,13 +61,6 @@ let
                 Whether the user is a superuser.
               '';
             };
-            specialArgs = mkOption {
-              type = types.attrs;
-              default = {};
-              description = ''
-                The special arguments to pass to the system and user modules.
-              '';
-            };
             packages = mkOption {
               type = types.functionTo (types.listOf types.package);
               default = _: [];
@@ -93,6 +91,15 @@ let
               '';
             };
 
+            # TODO: remove the use for the following option
+            specialArgs = mkOption {
+              type = types.attrs;
+              default = {};
+              description = ''
+                The special arguments to pass to the system and user modules.
+              '';
+            };
+
             # Constants
             hm = mkOption {
               type = types.raw;
@@ -109,7 +116,6 @@ let
 
             specialArgs = {
               inherit (u.config) dir;
-              inherit inputs;
             };
 
             hm = home-manager.lib.homeManagerConfiguration {
@@ -152,6 +158,8 @@ let
           The keyboard mapping table for the virtual consoles.
         '';
       };
+
+      # TODO: remove the use for the following two options
       specialArgs = mkOption {
         type = types.attrs;
         default = {};
@@ -188,7 +196,7 @@ let
             };
             system.configurationRevision = mkIf (flake ? rev) flake.rev;
             system.stateVersion = config.stateVersion;
-            networking.hostName = name;
+            networking.hostName = config.hostname;
             networking.hostId = config.hostid;
             nix.package = pkgs.nixFlakes;
             nix.extraOptions = "experimental-features = nix-command flakes";
@@ -275,33 +283,11 @@ let
 
       specialArgs = {
         inherit (config) users;
-        inherit inputs;
-        hostname = name;
+        hostname = config.hostname;
       };
 
       nixos = nixosSystem {
         inherit (config) system modules specialArgs;
       };
-    };
-  };
-in
-  {
-    options = {
-      systems = mkOption {
-        type = with types; attrsOf (submodule system);
-        description = ''
-          The systems.
-        '';
-      };
-      list = mkOption {
-        type = types.str;
-        description = ''
-          A readable list of the systems.
-        '';
-        readOnly = true;
-      };
-    };
-    config = {
-      list = builtins.concatStringsSep " " (builtins.attrNames config.systems);
     };
   }

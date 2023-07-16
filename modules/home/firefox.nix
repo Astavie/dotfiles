@@ -29,7 +29,6 @@ in
         extensions = with pkgs.nur.repos.rycee.firefox-addons; [
           ublock-origin
           bitwarden
-          i-dont-care-about-cookies
           (buildFirefoxXpiAddon {
             pname = "catppuccin-mocha-lavender";
             version = "old";

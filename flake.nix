@@ -27,6 +27,16 @@
 
     with nixpkgs.lib;
     let
+      systems = [
+        ./system/terrestrial.nix
+        ./system/satellite.nix
+        ./system/vb.nix
+      ];
+      modules = [
+        ./modules/config/impermanence.nix
+        ./modules/config/postinstall.nix
+      ];
+
       overlay-names = builtins.filter (hasPrefix "overlay-") (mapAttrsToList (name: _: name) urls);
       overlays = builtins.map (name: urls.${name}.overlays.default) overlay-names;
 
@@ -37,28 +47,25 @@
         ];
         inherit home-manager impermanence nixpkgs musnix;
       };
-      config = (evalModules {
+
+      configs = builtins.map (config: (evalModules {
         modules = [
           { _module.args = args; }
           ./modules/config
-          ./modules/config/impermanence.nix
-          ./modules/config/postinstall.nix
-          ./config.nix
-        ];
-      }).config;
+          config
+        ] ++ modules;
+      }).config) systems;
     in
       {
-        inherit config;
+        nixosConfigurations = builtins.listToAttrs (builtins.map (systemcfg:
+          nameValuePair systemcfg.hostname systemcfg.nixos
+        ) configs);
 
-        nixosConfigurations = builtins.listToAttrs (mapAttrsToList (hostname: systemcfg:
-          nameValuePair hostname systemcfg.nixos
-        ) config.systems);
-
-        homeConfigurations = foldr (a: b: a // b) {} (mapAttrsToList (hostname: systemcfg:
+        homeConfigurations = foldr (a: b: a // b) {} (builtins.map (systemcfg:
           mapAttrs' (username: usercfg:
-            nameValuePair "${username}@${hostname}" usercfg.hm
+            nameValuePair "${username}@${systemcfg.hostname}" usercfg.hm
           ) systemcfg.users
-        ) config.systems);
+        ) configs);
       };
 
 }
