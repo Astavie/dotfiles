@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  autostart = pkgs.writeShellScript "autostart" (builtins.readFile ../../config/herbstluftwm.sh);
+  autostart = pkgs.writeShellScript "autostart" (builtins.readFile ../res/herbstluftwm.sh);
 in
 {
   home.packages = with pkgs; [
@@ -21,8 +21,7 @@ in
     gnome.gnome-themes-extra
   ];
 
-  # home.file.".local/share/fonts/misc/cozette.bdf".source = ../../config/cozette_scaled.bdf;
-  home.file.".local/share/fonts/misc/cozette.bdf".source = ../../config/cozette.bdf;
+  home.file.".local/share/fonts/misc/cozette.bdf".source = ../res/cozette.bdf;
 
   # terminal emulator
   programs.alacritty = {
@@ -68,12 +67,10 @@ in
   services.picom.enable = true;
 
   # theme
-  home.file.".themes".source = ../../config/gtk;
-  home.file.".config/dunst/dunstrc".source = ../../config/dunstrc;
-  home.file.".config/rofi/config.rasi".source = ../../config/rofi/config.rasi;
-  home.file.".local/share/rofi/themes/theme.rasi".source = ../../config/rofi/theme.rasi;
-
-  # home.file.".icons/default".source = ../../config/cursor;
+  home.file.".themes".source = ../res/gtk;
+  home.file.".config/dunst/dunstrc".source = ../res/dunstrc;
+  home.file.".config/rofi/config.rasi".source = ../res/rofi/config.rasi;
+  home.file.".local/share/rofi/themes/theme.rasi".source = ../res/rofi/theme.rasi;
 
   home.pointerCursor = 
     let 
@@ -101,7 +98,7 @@ in
   home.file.".config/sx/sxrc" = {
     executable = true;
     text = ''
-      ${pkgs.feh}/bin/feh --bg-fill ${../../config/pluto.jpg} &
+      ${pkgs.feh}/bin/feh --bg-fill ${../res/pluto.jpg} &
       ${pkgs.picom}/bin/picom &
       ${pkgs.dunst}/bin/dunst &
       ${pkgs.herbstluftwm}/bin/herbstluftwm -c ${autostart}

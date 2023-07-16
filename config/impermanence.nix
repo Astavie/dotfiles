@@ -32,35 +32,33 @@ in
       config = {
         dir.persist = mkDefault "/persist/${name}";
         dir.config = mkIf config.impermanence.enable (dir: "${u.config.dir.persist}/${dir}");
+
+        modules = mkIf config.impermanence.enable [
+          impermanence.nixosModules.home-manager.impermanence
+          (h: {
+            home.persistence."${u.config.dir.persist}" = {
+              removePrefixDirectory = true;
+              allowOther = true;
+              inherit (h.config.backup) files directories;
+            };
+          })
+        ];
       };
     });
   };
   config = {
-    specialArgs = {
-      impermanence.dir = config.impermanence.dir;
-    };
     modules = mkIf config.impermanence.enable [
       impermanence.nixosModule
-      (s: {
+      ({
         programs.fuse.userAllowOther = true;
         environment.persistence."${config.impermanence.dir}" = {
-          inherit (s.config.backup) files directories;
+          inherit (config.backup) files directories;
         };
 
         # zfs rollback
-        boot.initrd.postDeviceCommands = s.lib.mkAfter ''
+        boot.initrd.postDeviceCommands = mkAfter ''
           zfs rollback -r nixos/local/root@blank
         '';
-      })
-    ];
-    sharedModules = mkIf config.impermanence.enable [
-      impermanence.nixosModules.home-manager.impermanence
-      (h: {
-        home.persistence."${h.dir.persist}" = {
-          removePrefixDirectory = true;
-          allowOther = true;
-          inherit (h.config.backup) files directories;
-        };
       })
     ];
   };

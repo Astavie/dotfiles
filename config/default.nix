@@ -2,7 +2,7 @@
 
 with lib;
 let
-  unfree = import ../../unfree.nix;
+  unfree = import ../unfree.nix;
   allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) unfree;
   nospace  = str: filter (c: c == " ") (stringToCharacters str) == [];
   timezone = types.nullOr (types.addCheck types.str nospace)
@@ -62,7 +62,7 @@ in
               '';
             };
             packages = mkOption {
-              type = types.functionTo (types.listOf types.package);
+              type = types.listOf types.package;
               default = _: [];
               description = ''
                 Extra packages to install for the user.
@@ -90,13 +90,36 @@ in
                 A directory to place configuration files of a specific package.
               '';
             };
-
-            # TODO: remove the use for the following option
-            specialArgs = mkOption {
-              type = types.attrs;
-              default = {};
+            backup.files = mkOption {
+              type = with types; listOf str;
+              default = [];
               description = ''
-                The special arguments to pass to the system and user modules.
+                The files inside home to backup.
+              '';
+            };
+            backup.directories = mkOption {
+              type = with types; listOf (either str (submodule {
+                options = {
+                  directory = mkOption {
+                    type = str;
+                    default = null;
+                    description = "The directory path to be linked.";
+                  };
+                  method = mkOption {
+                    type = types.enum [ "bindfs" "symlink" ];
+                    default = "bindfs";
+                    description = ''
+                      The linking method that should be used for this
+                      directory. bindfs is the default and works for most use
+                      cases, however some programs may behave better with
+                      symlinks.
+                    '';
+                  };
+                };
+              }));
+              default = [];
+              description = ''
+                The directories inside home to backup.
               '';
             };
 
@@ -114,21 +137,60 @@ in
             dir.data = mkDefault "/data/${name}";
             dir.config = mkDefault (_: u.config.dir.home);
 
-            specialArgs = {
-              inherit (u.config) dir;
-            };
-
             hm = home-manager.lib.homeManagerConfiguration {
               pkgs = nixpkgs.legacyPackages.${config.system};
 
-              extraSpecialArgs = u.config.specialArgs;
+              extraSpecialArgs = {
+                inherit (u.config) dir;
+              };
 
-              modules = config.sharedModules ++ u.config.modules ++ [({ pkgs, ... }: {
-                home.packages = u.config.packages pkgs;
-                home.homeDirectory = u.config.dir.home;
-                home.username = name;
-                home.stateVersion = config.stateVersion;
-              })];
+              modules = u.config.modules ++ [{
+                config = {
+                  home.packages = u.config.packages;
+                  home.homeDirectory = u.config.dir.home;
+                  home.username = name;
+                  home.stateVersion = config.stateVersion;
+                  nixpkgs.overlays = overlays;
+                  nixpkgs.config = {
+                    inherit allowUnfreePredicate;
+                    permittedInsecurePackages = unfree;
+                  };
+                };
+
+                # TODO: remove the use for the following two options
+                options.backup.files = mkOption {
+                  type = with types; listOf str;
+                  default = u.config.backup.files;
+                  description = ''
+                    The files inside home to backup.
+                  '';
+                };
+                options.backup.directories = mkOption {
+                  type = with types; listOf (either str (submodule {
+                    options = {
+                      directory = mkOption {
+                        type = str;
+                        default = null;
+                        description = "The directory path to be linked.";
+                      };
+                      method = mkOption {
+                        type = types.enum [ "bindfs" "symlink" ];
+                        default = "bindfs";
+                        description = ''
+                          The linking method that should be used for this
+                          directory. bindfs is the default and works for most use
+                          cases, however some programs may behave better with
+                          symlinks.
+                        '';
+                      };
+                    };
+                  }));
+                  default = u.config.backup.directories;
+                  description = ''
+                    The directories inside home to backup.
+                  '';
+                };
+              }];
             };
           };
         }));
@@ -158,20 +220,44 @@ in
           The keyboard mapping table for the virtual consoles.
         '';
       };
-
-      # TODO: remove the use for the following two options
-      specialArgs = mkOption {
-        type = types.attrs;
-        default = {};
+      sudo = mkOption {
+        type = types.enum [ "doas" "sudo" ];
+        default = "doas";
+        example = "sudo";
         description = ''
-          The special arguments to pass to the system modules.
+          What package to use for sudo
         '';
       };
-      sharedModules = mkOption {
-        type = with types; listOf raw;
+      backup.files = mkOption {
+        type = with types; listOf str;
         default = [];
         description = ''
-          The shared modules to pass to each system user.
+          The files inside root to backup.
+        '';
+      };
+      backup.directories = mkOption {
+        type = with types; listOf (either str (submodule {
+          options = {
+            directory = mkOption {
+              type = str;
+              default = null;
+              description = "The directory path to be linked.";
+            };
+            method = mkOption {
+              type = types.enum [ "bindfs" "symlink" ];
+              default = "bindfs";
+              description = ''
+                The linking method that should be used for this
+                directory. bindfs is the default and works for most use
+                cases, however some programs may behave better with
+                symlinks.
+              '';
+            };
+          };
+        }));
+        default = [];
+        description = ''
+          The directories inside root to backup.
         '';
       };
 
@@ -181,6 +267,13 @@ in
         readOnly = true;
         description = ''
           The NixOS system of this module.
+        '';
+      };
+      superusers = mkOption {
+        type = with types; listOf string;
+        readOnly = true;
+        description = ''
+          The list of superusers.
         '';
       };
     };
@@ -202,92 +295,21 @@ in
             nix.extraOptions = "experimental-features = nix-command flakes";
             time.timeZone = config.timeZone;
             console.keyMap = config.keyMap;
-          };
 
-          options.backup.files = mkOption {
-            type = with types; listOf str;
-            default = [];
-            description = ''
-              The files inside root to backup.
-            '';
-          };
-          options.backup.directories = mkOption {
-            type = with types; listOf (either str (submodule {
-              options = {
-                directory = mkOption {
-                  type = str;
-                  default = null;
-                  description = "The directory path to be linked.";
-                };
-                method = mkOption {
-                  type = types.enum [ "bindfs" "symlink" ];
-                  default = "bindfs";
-                  description = ''
-                    The linking method that should be used for this
-                    directory. bindfs is the default and works for most use
-                    cases, however some programs may behave better with
-                    symlinks.
-                  '';
-                };
-              };
-            }));
-            default = [];
-            description = ''
-              The directories inside root to backup.
-            '';
+            security.sudo.enable = config.sudo == "sudo";
+            security.doas.enable = config.sudo == "doas";
+
+            # NOTE: we could add options for this?
+            console.font = ../res/cozette.psf;
+            boot.supportedFilesystems = [ "ntfs" ];
           };
         })
       ];
-
-      sharedModules = [
-        ({ lib, ... }: with lib; {
-          config.nixpkgs.overlays = overlays;
-          config.nixpkgs.config = {
-            inherit allowUnfreePredicate;
-            permittedInsecurePackages = unfree;
-          };
-          options.backup.files = mkOption {
-            type = with types; listOf str;
-            default = [];
-            description = ''
-              The files inside home to backup.
-            '';
-          };
-          options.backup.directories = mkOption {
-            type = with types; listOf (either str (submodule {
-              options = {
-                directory = mkOption {
-                  type = str;
-                  default = null;
-                  description = "The directory path to be linked.";
-                };
-                method = mkOption {
-                  type = types.enum [ "bindfs" "symlink" ];
-                  default = "bindfs";
-                  description = ''
-                    The linking method that should be used for this
-                    directory. bindfs is the default and works for most use
-                    cases, however some programs may behave better with
-                    symlinks.
-                  '';
-                };
-              };
-            }));
-            default = [];
-            description = ''
-              The directories inside home to backup.
-            '';
-          };
-        })
-      ];
-
-      specialArgs = {
-        inherit (config) users;
-        hostname = config.hostname;
-      };
 
       nixos = nixosSystem {
-        inherit (config) system modules specialArgs;
+        inherit (config) system modules;
       };
+
+      superusers = builtins.attrNames (lib.filterAttrs (_: usercfg: usercfg.superuser) config.users);
     };
   }

@@ -33,25 +33,35 @@
         ./system/vb.nix
       ];
       modules = [
-        ./modules/config/impermanence.nix
-        ./modules/config/postinstall.nix
+        ./config/hardware.nix
+        ./config/users.nix
+        ./config/impermanence.nix
+        ./config/postinstall.nix
+        ./config/services.nix
+
+        ./config/ssh.nix
+        ./config/steam.nix
+        ./config/vbhost.nix
+        ./config/docker.nix
+        ./config/flatpak.nix
+        ./config/xserver.nix
+        ./config/pipewire.nix
       ];
 
       overlay-names = builtins.filter (hasPrefix "overlay-") (mapAttrsToList (name: _: name) urls);
       overlays = builtins.map (name: urls.${name}.overlays.default) overlay-names;
 
-      args = {
-        flake = self;
-        overlays = overlays ++ [
-          nur.overlay
-        ];
-        inherit home-manager impermanence nixpkgs musnix;
-      };
-
       configs = builtins.map (config: (evalModules {
         modules = [
-          { _module.args = args; }
-          ./modules/config
+          ({ config, ... }: {
+            _module.args = {
+              flake = self;
+              overlays = overlays ++ [ nur.overlay ];
+              inherit home-manager impermanence nixpkgs musnix;
+              inherit (config.nixos) pkgs;
+            };
+          })
+          ./config
           config
         ] ++ modules;
       }).config) systems;

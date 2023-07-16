@@ -1,4 +1,14 @@
+{ pkgs, ... }:
 
+let
+  nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
+    export __NV_PRIME_RENDER_OFFLOAD=1
+    export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
+    export __GLX_VENDOR_LIBRARY_NAME=nvidia
+    export __VK_LAYER_NV_optimus=NVIDIA_only
+    exec "$@"
+  '';
+in
 {
   hostname = "satellite";
   hostid = "92e8a3c2";
@@ -7,7 +17,7 @@
 
   users.astavie = {
     superuser = true;
-    packages = pkgs: with pkgs; [
+    packages = with pkgs; [
       # base
       pavucontrol
       unzip
@@ -29,15 +39,15 @@
       # parsec-bin
     ];
 
-    specialArgs.ssh-keygen = true;
+    ssh.enable = true;
+    flatpak.enable = true;
 
     modules = [
-      ../modules/home/desktop.nix
-      ../modules/home/discord.nix
-      ../modules/home/firefox.nix
-      ../modules/home/git.nix
-      ../modules/home/shell.nix
-      ../modules/home/steam.nix
+      ../home/desktop.nix
+      ../home/discord.nix
+      ../home/firefox.nix
+      ../home/git.nix
+      ../home/shell.nix
       {
         programs.git = {
           userEmail = "astavie@pm.me";
@@ -46,22 +56,38 @@
       }
     ];
   };
+
   impermanence.enable = true;
+  steam.enable = true;
+  docker.enable = true;
 
-  modules = [
-    ../modules/system/hardware/satellite.nix
-    ../modules/system/hardware/uefi.nix
-    ../modules/system/hardware/zfs.nix
-    ../modules/system/base.nix
-    ../modules/system/docker.nix
-    ../modules/system/flatpak.nix
-    ../modules/system/pipewire.nix
-    ../modules/system/ssh.nix
-    ../modules/system/steam.nix
-    ../modules/system/xserver.nix
-  ];
+  xserver.enable = true;
+  pipewire.enable = true;
 
-  sharedModules = [
-    ../modules/home/pipewire.nix
+  modules = [{
+    # nvidia
+    hardware.nvidia.modesetting.enable = true;
+    services.xserver.videoDrivers = [ "nvidia" "intel" ];
+
+    environment.systemPackages = [ nvidia-offload ];
+    hardware.nvidia.prime = {
+      offload.enable = true;
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";
+    };
+
+    # networking
+    networking.networkmanager.enable = true;
+    networking.wireless.iwd.enable = true;
+    networking.networkmanager.wifi.backend = "iwd";
+
+    # cpu
+    hardware.enableRedistributableFirmware = true;
+    hardware.cpu.intel.updateMicrocode = true;
+    powerManagement.cpuFreqGovernor = "powersave";
+  }];
+
+  backup.directories = [
+    "/etc/NetworkManager/system-connections"
   ];
 }

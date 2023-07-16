@@ -8,8 +8,4 @@
       init.defaultBranch = "main";
     };
   };
-
-  backup.directories = [
-    "ssh/.ssh"
-  ];
 }

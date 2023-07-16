@@ -106,7 +106,7 @@
   }];
 
   # midnight commander
-  home.file.".local/share/mc/skins/theme.ini".source = ../../config/mc.ini;
+  home.file.".local/share/mc/skins/theme.ini".source = ../res/mc.ini;
   home.file.".config/mc/ini".text = ''
     [Midnight-Commander]
     skin=theme
