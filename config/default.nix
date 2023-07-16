@@ -155,12 +155,14 @@ in
                     inherit allowUnfreePredicate;
                     permittedInsecurePackages = unfree;
                   };
+                  backup.files = u.config.backup.files;
+                  backup.directories = u.config.backup.directories;
                 };
 
                 # TODO: remove the use for the following two options
                 options.backup.files = mkOption {
                   type = with types; listOf str;
-                  default = u.config.backup.files;
+                  default = [];
                   description = ''
                     The files inside home to backup.
                   '';
@@ -185,7 +187,7 @@ in
                       };
                     };
                   }));
-                  default = u.config.backup.directories;
+                  default = [];
                   description = ''
                     The directories inside home to backup.
                   '';
@@ -300,7 +302,7 @@ in
             security.doas.enable = config.sudo == "doas";
 
             # NOTE: we could add options for this?
-            console.font = ../res/cozette.psf;
+            # console.font = ../res/cozette.psf;
             boot.supportedFilesystems = [ "ntfs" ];
           };
         })
