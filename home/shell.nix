@@ -51,9 +51,11 @@
 
           ls -AC -w $COLUMNS --group-directories-first -F --color
         end
-        
+  
         echo '> '
         set -g PWD_PREV $PWD
+
+        set -U GLOBAL_PWD $PWD
       '';
     };
   };
@@ -71,7 +73,6 @@
 
   # Helix
   programs.helix.enable = true;
-  programs.helix.settings.theme = "catppuccin_mocha";
   home.sessionVariables.EDITOR = "${config.programs.helix.package}/bin/hx";
 
   # make rust use sccache

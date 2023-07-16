@@ -30,9 +30,10 @@
 
     ssh.enable = true;
     flatpak.enable = true;
+    hyprland.enable = true;
 
     modules = [
-      ../home/desktop-catppuccin.nix
+      ../home/desktop-glassmorphism.nix
       ../home/discord.nix
       ../home/firefox.nix
       ../home/git.nix
@@ -53,7 +54,6 @@
   steam.enable = true;
   vbhost.enable = true;
 
-  xserver.enable = true;
   pipewire.enable = true;
 
   modules = [{

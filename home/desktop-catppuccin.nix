@@ -21,6 +21,7 @@ in
     gnome.gnome-themes-extra
   ];
 
+  fonts.fontconfig.enable = true;
   home.file.".local/share/fonts/misc/cozette.bdf".source = ../res/cozette.bdf;
 
   # terminal emulator
@@ -57,13 +58,9 @@ in
         bright.magenta = "#f5c2e7";
         bright.cyan    = "#94e2d5";
         bright.white   = "#a6adc8";
-
-        transparent_background_colors = true;
       };
     };
   };
-
-  fonts.fontconfig.enable = true;
   services.picom.enable = true;
 
   # theme
@@ -73,6 +70,8 @@ in
   home.file.".local/share/rofi/themes/theme.rasi".source = ../res/catppuccin/rofi/theme.rasi;
   home.file.".local/share/mc/skins/theme.ini".source = ../res/catppuccin/mc.ini;
   home.file.".config/discocss/custom.css".source = ../res/catppuccin/discord.css;
+  home.file.".config/helix/themes/catppuccin.toml".source = ../res/catppuccin/helix.toml;
+  programs.helix.settings.theme = "catppuccin";
 
   home.pointerCursor = 
     let 

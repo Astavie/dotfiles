@@ -46,6 +46,7 @@
         ./config/flatpak.nix
         ./config/xserver.nix
         ./config/pipewire.nix
+        ./config/hyprland.nix
       ];
 
       overlay-names = builtins.filter (hasPrefix "overlay-") (mapAttrsToList (name: _: name) urls);

@@ -5,7 +5,7 @@ let
   subset = module: mkOption {
     type = with types; attrsOf (submodule module);
   };
-  flatpak-users = lib.filterAttrs (_: usercfg: usercfg.flatpak.enable) config.users;
+  flatpak-users = filterAttrs (_: usercfg: usercfg.flatpak.enable) config.users;
 in
 {
   options.users = subset (u: {
