@@ -47,6 +47,7 @@
         ./config/xserver.nix
         ./config/pipewire.nix
         ./config/hyprland.nix
+        ./config/wireshark.nix
       ];
 
       overlay-names = builtins.filter (hasPrefix "overlay-") (mapAttrsToList (name: _: name) urls);

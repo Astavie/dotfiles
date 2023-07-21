@@ -20,7 +20,7 @@ in
       packages = mkIf u.config.hyprland.enable [
         hyprland
       ];
-      modules = [{
+      modules = mkIf u.config.hyprland.enable [{
         home.sessionVariables = {
           LIBVA_DRIVER_NAME = "nvidia";
           XDG_SESSION_TYPE = "wayland";
@@ -41,7 +41,7 @@ in
     };
   });
 
-  config.modules = mkIf (hyprland-users != []) [{
+  config.modules = mkIf (builtins.attrNames hyprland-users != []) [{
     programs.dconf.enable = true;
     programs.xwayland.enable = true;
     security.polkit.enable = true;
