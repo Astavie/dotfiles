@@ -5,7 +5,7 @@ let
   subset = module: mkOption {
     type = with types; attrsOf (submodule module);
   };
-  ssh-users = lib.filterAttrs (_: usercfg: usercfg.ssh.enable) config.users;
+  ssh-users = filterAttrs (_: usercfg: usercfg.ssh.enable) config.users;
 in
 {
   options.users = subset (u: {

@@ -22,7 +22,7 @@ in
     };
   });
 
-  config.modules = mkIf (flatpak-users != []) [({ pkgs, ... }: {
+  config.modules = mkIf (builtins.attrNames flatpak-users != []) [({ pkgs, ... }: {
     # environment.systemPackages = [ pkgs.flatpak ];
     security.polkit.enable = true;
     services.dbus.packages = [ pkgs.flatpak ];
