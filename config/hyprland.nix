@@ -46,6 +46,7 @@ in
     programs.xwayland.enable = true;
     security.polkit.enable = true;
     hardware.opengl.enable = true;
+    fonts.enableDefaultFonts = true;
 
     xdg.portal = {
       enable = true;

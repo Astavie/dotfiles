@@ -87,6 +87,9 @@
     services.xserver.screenSection = ''
       Option "metamodes" "nvidia-auto-select { ForceCompositionPipeline = On, ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On }, nvidia-auto-select { ForceCompositionPipeline = On, ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On }"
     '';
+
+    # firmware
+    hardware.enableRedistributableFirmware = true;
   }];
 
   backup.directories = [
