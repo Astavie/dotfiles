@@ -73,6 +73,12 @@
 
   # Helix
   programs.helix.enable = true;
+  programs.helix.settings.editor = {
+    line-number = "relative";
+    completion-replace = true;
+    lsp.display-messages = true;
+    lsp.display-inlay-hints = true;
+  };
   home.sessionVariables.EDITOR = "${config.programs.helix.package}/bin/hx";
 
   # make rust use sccache

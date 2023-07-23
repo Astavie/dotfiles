@@ -31,6 +31,7 @@
     ssh.enable = true;
     flatpak.enable = true;
     hyprland.enable = true;
+    wireshark.enable = true;
 
     modules = [
       ../home/desktop-glassmorphism.nix
