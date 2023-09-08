@@ -12,4 +12,5 @@
   "vscode"
   "zerotierone"
   "parsec-bin"
+  "linuxsampler"
 ]

@@ -1,8 +1,8 @@
 { pkgs, ... }:
 
 let
-  discord = pkgs.discord-canary;
-  discord-name = "DiscordCanary";
+  discord = pkgs.discord;
+  discord-name = "Discord";
   discocss = with pkgs; stdenvNoCC.mkDerivation rec {
     pname = "discocss";
     version = "0.2.3";
@@ -62,7 +62,7 @@ in
 {
   home.packages = [
     pkgs.xdg-utils
-    discocss
+    discord
     xwaylandvideobridge
   ];
 

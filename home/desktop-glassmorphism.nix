@@ -6,6 +6,7 @@
     tofi                     # app launcher
     grim slurp wl-clipboard  # screenshots
                              # notifications
+    opentabletdriver         # wacom
 
     # fonts
     (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
@@ -97,6 +98,9 @@
     bind = $mod SHIFT, comma, movetoworkspace, e-1
     bind = $mod SHIFT, period, movetoworkspace, e+1
     bind = $mod, N, movetoworkspace, empty
+
+    bind = $mod, R, swapactiveworkspaces, current +1
+    bind = $mod, O, movewindow, mon:+1
 
     bindm = $mod, mouse:272, movewindow
     bindm = $mod, mouse:273, resizewindow

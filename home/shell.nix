@@ -78,6 +78,7 @@
     completion-replace = true;
     lsp.display-messages = true;
     lsp.display-inlay-hints = true;
+    # soft-wrap.enable = true;
   };
   home.sessionVariables.EDITOR = "${config.programs.helix.package}/bin/hx";
 

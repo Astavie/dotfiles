@@ -24,8 +24,13 @@
       peek
       x11vnc
 
+      popcorntime
+      vlc
+
       # teams-for-linux
       # parsec-bin
+
+      godot_4
     ];
 
     ssh.enable = true;
@@ -68,6 +73,9 @@
 
     # audio server
     networking.firewall.allowedTCPPorts = [ 4656 ];
+
+    # ds tunneling
+    networking.firewall.allowedUDPPorts = [ 29519 ];
 
     # ssh server
     services.openssh = {
