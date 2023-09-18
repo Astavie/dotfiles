@@ -34,7 +34,6 @@
     ];
 
     ssh.enable = true;
-    flatpak.enable = true;
     hyprland.enable = true;
     wireshark.enable = true;
 
@@ -46,7 +45,6 @@
       ../home/shell.nix
       ../home/minecraft.nix
       ../home/music.nix
-      ../home/vr.nix
       {
         programs.git = {
           userEmail = "astavie@pm.me";

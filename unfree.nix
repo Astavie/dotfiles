@@ -7,7 +7,6 @@
   "steam-run"
   "discord"
   "discord-canary"
-  "android-studio-stable"
   "teams"
   "vscode"
   "zerotierone"
