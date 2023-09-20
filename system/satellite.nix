@@ -35,6 +35,9 @@ in
       networkmanagerapplet
       turbovnc
 
+      popcorntime
+      vlc
+
       # teams-for-linux
       # parsec-bin
     ];
@@ -79,8 +82,8 @@ in
 
     # networking
     networking.networkmanager.enable = true;
-    networking.wireless.iwd.enable = true;
-    networking.networkmanager.wifi.backend = "iwd";
+    # networking.wireless.iwd.enable = true;
+    networking.networkmanager.wifi.backend = "wpa_supplicant";
 
     # cpu
     hardware.enableRedistributableFirmware = true;
