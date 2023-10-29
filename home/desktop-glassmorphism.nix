@@ -82,8 +82,8 @@
     bind = $mod, P, togglefloating,
     bind = $mod SHIFT, P, exec, grim -g "$(slurp)" -t png - | wl-copy  -t image/png
 
-    bind = $mod, U, exec, [float] alacritty --hold -e uup /data/astavie/dotfiles/
-    bind = $mod SHIFT, U, exec, [float] alacritty --hold -e sup /data/astavie/dotfiles/
+    bind = $mod, U, exec, [float] alacritty --hold -e time uup /data/astavie/dotfiles/
+    bind = $mod SHIFT, U, exec, [float] alacritty --hold -e time sup /data/astavie/dotfiles/
 
     bind = $mod, H, movefocus, l
     bind = $mod, J, movefocus, d
