@@ -43,7 +43,6 @@ in
     ];
 
     ssh.enable = true;
-    flatpak.enable = true;
     wireshark.enable = true;
 
     modules = [

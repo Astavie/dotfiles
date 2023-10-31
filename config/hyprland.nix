@@ -7,7 +7,7 @@ let
   };
   hyprland = pkgs.hyprland.override {
     enableXWayland = true;
-    nvidiaPatches = true;
+    enableNvidiaPatches = true;
   };
   hyprland-users = filterAttrs (_: usercfg: usercfg.hyprland.enable) config.users;
 in
@@ -46,7 +46,7 @@ in
     programs.xwayland.enable = true;
     security.polkit.enable = true;
     hardware.opengl.enable = true;
-    fonts.enableDefaultFonts = true;
+    fonts.enableDefaultPackages = true;
 
     xdg.portal = {
       enable = true;

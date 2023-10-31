@@ -12,11 +12,6 @@
     musnix.inputs.nixpkgs.follows = "nixpkgs";
 
     # ---- OVERLAYS ----
-    overlay-android = {
-      url = "github:tadfisher/android-nixpkgs";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     overlay-astapkgs = {
       url = "github:Astavie/astapkgs";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -43,7 +38,6 @@
         ./config/steam.nix
         ./config/vbhost.nix
         ./config/docker.nix
-        ./config/flatpak.nix
         ./config/xserver.nix
         ./config/pipewire.nix
         ./config/hyprland.nix
