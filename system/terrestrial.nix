@@ -22,7 +22,6 @@
       torrential
       gimp
       peek
-      x11vnc
 
       popcorntime
       vlc
