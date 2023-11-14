@@ -6,57 +6,66 @@
   system = "x86_64-linux";
   stateVersion = "23.05";
 
-  users.astavie = {
-    superuser = true;
-    packages = with pkgs; [
-      # base
-      unzip
-      gnumake
-      neofetch
-      htop
-      sutils
-      skim
-      silver-searcher
+  users = {
+    astavie = {
+      superuser = true;
+      packages = with pkgs; [
+        # base
+        unzip
+        gnumake
+        neofetch
+        htop
+        sutils
+        skim
+        silver-searcher
 
-      # apps
-      torrential
-      gimp
-      peek
+        # apps
+        torrential
+        gimp
+        peek
 
-      popcorntime
-      vlc
+        popcorntime
+        vlc
 
-      # teams-for-linux
-      # parsec-bin
+        godot_4
+      ];
 
-      godot_4
-    ];
+      ssh.enable = true;
+      hyprland.enable = true;
+      wireshark.enable = true;
 
-    ssh.enable = true;
-    hyprland.enable = true;
-    wireshark.enable = true;
-
-    modules = [
-      ../home/desktop-glassmorphism.nix
-      ../home/discord.nix
-      ../home/firefox.nix
-      ../home/git.nix
-      ../home/shell.nix
-      ../home/minecraft.nix
-      ../home/music.nix
-      {
-        programs.git = {
-          userEmail = "astavie@pm.me";
-          userName = "Astavie";
-        };
-      }
-    ];
+      modules = [
+        ../home/desktop-glassmorphism.nix
+        ../home/discord.nix
+        ../home/firefox.nix
+        ../home/git.nix
+        ../home/shell.nix
+        ../home/minecraft.nix
+        ../home/music.nix
+        {
+          programs.git = {
+            userEmail = "astavie@pm.me";
+            userName = "Astavie";
+          };
+        }
+      ];
+    };
+    streamer = {
+      modules = [
+        ../home/desktop-catppuccin.nix
+        ../home/discord.nix
+        ../home/firefox.nix
+        ../home/shell.nix
+        ../home/minecraft.nix
+      ];
+    };
   };
 
   impermanence.enable = true;
   steam.enable = true;
   vbhost.enable = true;
 
+  xserver.enable = true;
   pipewire.enable = true;
 
   modules = [{

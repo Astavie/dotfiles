@@ -37,8 +37,8 @@
       sup = (username: usercfg: pkgs.writeShellScriptBin "sup" ''
         ${shout}
         ${config.sudo} mkdir -m 700 -p ${config.impermanence.dir}
-        ${config.sudo} ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-.}
         ${config.sudo} ${rehome}/bin/rehome ''${1:-.}
+        ${config.sudo} ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-.}
         ${usercfg.dir.persist}/generation/activate
       '');
     in
