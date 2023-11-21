@@ -21,8 +21,15 @@ let
   );
 in
 {
+  home.packages = [
+    pkgs.firefoxpwa
+  ];
+
   programs.firefox = {
     enable = true;
+    package = pkgs.firefox.override (old: {
+      nativeMessagingHosts = old.nativeMessagingHosts or [] ++ [ pkgs.firefoxpwa ];
+    });
     profiles = {
       default = {
         isDefault = true;

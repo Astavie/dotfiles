@@ -51,6 +51,9 @@
       ];
     };
     streamer = {
+      packages = with pkgs; [
+        discord-screenaudio
+      ];
       modules = [
         ../home/desktop-catppuccin.nix
         ../home/discord.nix

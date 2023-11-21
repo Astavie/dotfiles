@@ -68,6 +68,14 @@ in
   pipewire.enable = true;
 
   modules = [{
+    # docker
+    virtualisation.docker.enable = true;
+    virtualisation.docker.rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
+    users.extraGroups.docker.members = [ "astavie" ];
+
     # nvidia
     hardware.nvidia.modesetting.enable = true;
     services.xserver.videoDrivers = [ "nvidia" "intel" ];
@@ -81,7 +89,6 @@ in
 
     # networking
     networking.networkmanager.enable = true;
-    # networking.wireless.iwd.enable = true;
     networking.networkmanager.wifi.backend = "wpa_supplicant";
 
     # cpu
