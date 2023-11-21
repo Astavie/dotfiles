@@ -23,6 +23,8 @@ in
 
         # Game specific directories
         "factorio/.factorio"
+        "paradox/.paradoxlauncher"
+        "paradox/.local/share/Paradox Interactive"
       ];
     };
   };

@@ -68,7 +68,9 @@
   xserver.enable = true;
   pipewire.enable = true;
 
-  modules = [{
+  modules = let
+    range = start: end: if start > end then [] else [ start ] ++ range (start + 1) end;
+  in [{
     # musnix
     musnix.enable = true;
 
@@ -77,11 +79,17 @@
     services.avahi.publish.enable = true;
     services.avahi.publish.userServices = true;
 
-    # audio server
-    networking.firewall.allowedTCPPorts = [ 4656 ];
+    networking.firewall.allowedTCPPorts =
+      # audio server
+      [ 4656 ] ++
+      # crusader kings
+      range 1630 1641 ++ [ 443 ];
 
-    # ds tunneling
-    networking.firewall.allowedUDPPorts = [ 29519 ];
+    networking.firewall.allowedUDPPorts =
+      # ds tunneling
+      [ 29519 ] ++
+      # crusader kings
+      range 1630 1641 ++ [ 443 ];
 
     # ssh server
     services.openssh = {
