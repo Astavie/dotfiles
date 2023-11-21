@@ -68,6 +68,14 @@ in
   pipewire.enable = true;
 
   modules = [{
+    # docker
+    virtualisation.docker.enable = true;
+    virtualisation.docker.rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
+    users.extraGroups.docker.members = [ "astavie" ];
+
     # nvidia
     hardware.nvidia.modesetting.enable = true;
     services.xserver.videoDrivers = [ "nvidia" "intel" ];
