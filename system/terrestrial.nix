@@ -23,6 +23,7 @@
         torrential
         gimp
         peek
+        obsidian
 
         popcorntime
         vlc
@@ -40,6 +41,7 @@
         ../home/firefox.nix
         ../home/git.nix
         ../home/shell.nix
+        ../home/typst.nix
         ../home/minecraft.nix
         ../home/music.nix
         {
@@ -49,6 +51,8 @@
           };
         }
       ];
+
+      backup.directories = ["obsidian/.config/obsidian"];
     };
     streamer = {
       packages = with pkgs; [
@@ -67,6 +71,7 @@
   impermanence.enable = true;
   steam.enable = true;
   vbhost.enable = true;
+  docker.enable = true;
 
   xserver.enable = true;
   pipewire.enable = true;

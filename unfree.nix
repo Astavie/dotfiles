@@ -12,4 +12,5 @@
   "zerotierone"
   "parsec-bin"
   "linuxsampler"
+  "obsidian"
 ]

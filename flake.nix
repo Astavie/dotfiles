@@ -20,6 +20,10 @@
       url = "github:Astavie/lucu";
       inputs.astapkgs.follows = "overlay-astapkgs";
     };
+    overlay-helix = {
+      url = "github:helix-editor/helix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, home-manager, nixpkgs, impermanence, nur, musnix, ... }@urls:
