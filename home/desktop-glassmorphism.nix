@@ -83,8 +83,8 @@
     bind = $mod, P, togglefloating,
     bind = $mod, F, fakefullscreen
 
-    bind = $mod, U, exec, [float] alacritty --hold -e time uup /data/astavie/dotfiles/
-    bind = $mod SHIFT, U, exec, [float] alacritty --hold -e time sup /data/astavie/dotfiles/
+    bind = $mod, U, exec, [float] alacritty -e bash -lic "uup /data/astavie/dotfiles/ ; read -p Done!"
+    bind = $mod SHIFT, U, exec, [float] alacritty -e bash -lic "sup /data/astavie/dotfiles/ ; read -p Done!"
 
     bind = $mod SHIFT, P, exec, grim -g "$(slurp)" -t png - | wl-copy  -t image/png
     bind = $mod SHIFT, R, exec, ${pkgs.writeShellScript "record.sh" ''
