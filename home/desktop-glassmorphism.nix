@@ -90,6 +90,8 @@
     bind = $mod, K, movefocus, u
     bind = $mod, L, movefocus, r
 
+    bind = $mod, F, fakefullscreen
+
     bind = $mod SHIFT, H, movewindow, l
     bind = $mod SHIFT, J, movewindow, d
     bind = $mod SHIFT, K, movewindow, u

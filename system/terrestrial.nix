@@ -41,7 +41,6 @@
         ../home/firefox.nix
         ../home/git.nix
         ../home/shell.nix
-        ../home/typst.nix
         ../home/minecraft.nix
         ../home/music.nix
         {

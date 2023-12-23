@@ -1,4 +1,5 @@
 [
+  # unfree
   "nvidia-x11"
   "nvidia-settings"
   "cudatoolkit"
@@ -13,4 +14,7 @@
   "parsec-bin"
   "linuxsampler"
   "obsidian"
+
+  # insecure
+  "electron-25.9.0"
 ]

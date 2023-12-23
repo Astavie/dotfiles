@@ -272,7 +272,7 @@ in
         '';
       };
       superusers = mkOption {
-        type = with types; listOf string;
+        type = with types; listOf str;
         readOnly = true;
         description = ''
           The list of superusers.
@@ -302,7 +302,7 @@ in
             security.doas.enable = config.sudo == "doas";
 
             # NOTE: we could add options for this?
-            # console.font = ../res/cozette.psf;
+            console.font = ../res/cozette.psf;
             boot.supportedFilesystems = [ "ntfs" ];
           };
         })

@@ -7,7 +7,6 @@ let
   };
   hyprland = pkgs.hyprland.override {
     enableXWayland = true;
-    enableNvidiaPatches = true;
   };
   hyprland-users = filterAttrs (_: usercfg: usercfg.hyprland.enable) config.users;
 in
@@ -50,9 +49,8 @@ in
 
     xdg.portal = {
       enable = true;
-      extraPortals = [
-        pkgs.xdg-desktop-portal-hyprland
-      ];
+      extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+      config.common.default = "*";
     };
   }];
 }
