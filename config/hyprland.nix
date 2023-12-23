@@ -28,13 +28,7 @@ in
           WLR_NO_HARDWARE_CURSORS = 1;
         };
         home.file.".config/hypr/hyprland.conf".onChange = ''
-          (
-            shopt -s nullglob
-            for instance in /tmp/hypr/*; do
-              HYPRLAND_INSTANCE_SIGNATURE=''${instance##*/} ${hyprland}/bin/hyprctl reload config-only \
-                || true
-            done
-          )
+          ${hyprland}/bin/hyprctl reload config-only
         '';
       }];
     };
