@@ -5,6 +5,7 @@
     hyprpaper                # wallpaper
     tofi                     # app launcher
     grim slurp wl-clipboard  # screenshots
+    wf-recorder              # recording
                              # notifications
     opentabletdriver         # wacom
 
@@ -80,10 +81,17 @@
     bind = $mod, Q, killactive,
     bind = $mod SHIFT, Q, exit,
     bind = $mod, P, togglefloating,
-    bind = $mod SHIFT, P, exec, grim -g "$(slurp)" -t png - | wl-copy  -t image/png
+    bind = $mod, F, fakefullscreen
 
-    bind = $mod, U, exec, [float] alacritty --hold -e time uup /data/astavie/dotfiles/
-    bind = $mod SHIFT, U, exec, [float] alacritty --hold -e time sup /data/astavie/dotfiles/
+    bind = $mod, U, exec, [float] alacritty -e bash -lic "uup /data/astavie/dotfiles/ ; read -p Done!"
+    bind = $mod SHIFT, U, exec, [float] alacritty -e bash -lic "sup /data/astavie/dotfiles/ ; read -p Done!"
+
+    bind = $mod SHIFT, P, exec, grim -g "$(slurp)" -t png - | wl-copy  -t image/png
+    bind = $mod SHIFT, R, exec, ${pkgs.writeShellScript "record.sh" ''
+      pkill --euid "$USER" --signal SIGINT wf-recorder && exit
+      Coords=$(slurp) || exit
+      wf-recorder -g "$Coords" -f "/home/$USER/new.mp4" || exit
+    ''}
 
     bind = $mod, H, movefocus, l
     bind = $mod, J, movefocus, d

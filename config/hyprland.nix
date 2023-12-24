@@ -7,7 +7,6 @@ let
   };
   hyprland = pkgs.hyprland.override {
     enableXWayland = true;
-    enableNvidiaPatches = true;
   };
   hyprland-users = filterAttrs (_: usercfg: usercfg.hyprland.enable) config.users;
 in
@@ -29,13 +28,7 @@ in
           WLR_NO_HARDWARE_CURSORS = 1;
         };
         home.file.".config/hypr/hyprland.conf".onChange = ''
-          (
-            shopt -s nullglob
-            for instance in /tmp/hypr/*; do
-              HYPRLAND_INSTANCE_SIGNATURE=''${instance##*/} ${hyprland}/bin/hyprctl reload config-only \
-                || true
-            done
-          )
+          ${hyprland}/bin/hyprctl reload config-only
         '';
       }];
     };
@@ -50,9 +43,8 @@ in
 
     xdg.portal = {
       enable = true;
-      extraPortals = [
-        pkgs.xdg-desktop-portal-hyprland
-      ];
+      extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+      config.common.default = "*";
     };
   }];
 }

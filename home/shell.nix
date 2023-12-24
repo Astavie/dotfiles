@@ -2,10 +2,14 @@
 
 {
   home.packages = with pkgs; [
+    # cmd utils
     mc
     pulseaudio
-    nil
     shell_gpt
+    pre-commit
+
+    # languages
+    nil
     lucu
   ];
 
