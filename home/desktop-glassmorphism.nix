@@ -5,7 +5,7 @@
     hyprpaper                # wallpaper
     tofi                     # app launcher
     grim slurp wl-clipboard  # screenshots
-    wf-recorder              # recording
+    wf-recorder vlc          # recording
                              # notifications
     opentabletdriver         # wacom
 
@@ -90,7 +90,9 @@
     bind = $mod SHIFT, R, exec, ${pkgs.writeShellScript "record.sh" ''
       pkill --euid "$USER" --signal SIGINT wf-recorder && exit
       Coords=$(slurp) || exit
+      rm -f "/home/$USER/new.mp4"
       wf-recorder -g "$Coords" -f "/home/$USER/new.mp4" || exit
+      vlc "/home/$USER/new.mp4"
     ''}
 
     bind = $mod, H, movefocus, l
