@@ -27,8 +27,8 @@
 
   # hyprpaper config
   home.file.".config/hypr/hyprpaper.conf".text = ''
-    preload = ${../res/glassmorphism/wallpaper.jpg}
-    wallpaper = ,${../res/glassmorphism/wallpaper.jpg}
+    preload = ${../res/glassmorphism/wallpaper.png}
+    wallpaper = ,${../res/glassmorphism/wallpaper.png}
   '';
 
   # hyprland config
@@ -93,6 +93,12 @@
       rm -f "/home/$USER/new.mp4"
       wf-recorder -g "$Coords" -f "/home/$USER/new.mp4" || exit
       vlc "/home/$USER/new.mp4"
+    ''}
+    bind = $mod SHIFT, A, exec, ${pkgs.writeShellScript "audio.sh" ''
+      pkill --euid "$USER" --signal SIGINT pw-cat && exit
+      rm -f "/home/$USER/new.wav"
+      pw-cat --record --target=85 "/home/$USER/new.wav"
+      vlc "/home/$USER/new.wav"
     ''}
 
     bind = $mod, H, movefocus, l

@@ -43,6 +43,7 @@
         ../home/shell.nix
         ../home/minecraft.nix
         ../home/music.nix
+        ../home/vr.nix
         {
           programs.git = {
             userEmail = "astavie@pm.me";
@@ -89,12 +90,16 @@
     networking.firewall.allowedTCPPorts =
       # audio server
       [ 4656 ] ++
+      # ALVR
+      [ 9943 9944 ] ++
       # crusader kings
       range 1630 1641 ++ [ 443 ];
 
     networking.firewall.allowedUDPPorts =
       # ds tunneling
       [ 29519 ] ++
+      # ALVR
+      [ 9943 9944 ] ++
       # crusader kings
       range 1630 1641 ++ [ 443 ];
 
