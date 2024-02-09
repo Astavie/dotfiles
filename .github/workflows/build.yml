@@ -10,8 +10,10 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build nixos configuration
       run: nix build -L .#nixosConfigurations.terrestrial.config.system.build.toplevel
+    - name: Tar configuration
+      run: tar -cvf terrestrial.tar result/
     - name: Archive configuration
       uses: actions/upload-artifact@v4
       with:
         name: terrestrial
-        path: result/
+        path: terrestrial.tar
