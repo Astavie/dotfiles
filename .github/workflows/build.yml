@@ -6,14 +6,17 @@ on:
 jobs:
   build:
     runs-on: self-hosted
+    strategy:
+      matrix:
+        system: [terrestrial, satellite]
     steps:
     - uses: actions/checkout@v3
     - name: Build nixos configuration
       run: nix build -L .#nixosConfigurations.terrestrial.config.system.build.toplevel
     - name: Tar configuration
-      run: tar -cvf terrestrial.tar result/*
+      run: tar -hcvf result.tar result/
     - name: Archive configuration
       uses: actions/upload-artifact@v4
       with:
-        name: terrestrial
-        path: terrestrial.tar
+        name: ${{ matrix.system }}
+        path: result.tar
