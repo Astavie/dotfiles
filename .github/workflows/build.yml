@@ -4,11 +4,17 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 jobs:
-  tests:
+  build:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v22
       with:
         nix_path: nixpkgs=channel:nixos-unstable
-    - run: echo "hello world"
+    - name: Build nixos configuration
+      run: nix build -L .#nixosConfigurations.terrestrial.config.system.build.toplevel^C
+    - name: Archive configuration
+      uses: actions/upload-artifact@v4
+      with:
+        name: terrestrial
+        path: result/
