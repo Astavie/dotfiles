@@ -1,0 +1,14 @@
+name: "Build"
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+jobs:
+  tests:
+    runs-on: debian-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v22
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+    - run: echo "hello world"
