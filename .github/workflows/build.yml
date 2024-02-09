@@ -9,7 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build nixos configuration
-      run: nix build -L .#nixosConfigurations.terrestrial.config.system.build.toplevel^C
+      run: nix build -L .#nixosConfigurations.terrestrial.config.system.build.toplevel
     - name: Archive configuration
       uses: actions/upload-artifact@v4
       with:
