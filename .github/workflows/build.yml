@@ -13,10 +13,10 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build nixos configuration
       run: nix build -L .#nixosConfigurations.${{ matrix.system }}.config.system.build.toplevel
-    - name: Tar configuration
-      run: tar -hcf result.tar result/ || [[ $? -eq 1 ]]
+    - name: Get nix store path
+      run: readlink -f result > store.txt
     - name: Archive configuration
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.system }}
-        path: result.tar
+        path: store.txt
