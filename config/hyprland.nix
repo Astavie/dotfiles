@@ -27,9 +27,6 @@ in
           __GLX_VENDOR_LIBRARY_NAME = "nvidia";
           WLR_NO_HARDWARE_CURSORS = 1;
         };
-        home.file.".config/hypr/hyprland.conf".onChange = ''
-          ${hyprland}/bin/hyprctl reload config-only
-        '';
       }];
     };
   });
