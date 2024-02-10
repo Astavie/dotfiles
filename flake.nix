@@ -70,12 +70,6 @@
         nixosConfigurations = builtins.listToAttrs (builtins.map (systemcfg:
           nameValuePair systemcfg.hostname systemcfg.nixos
         ) configs);
-
-        homeConfigurations = foldr (a: b: a // b) {} (builtins.map (systemcfg:
-          mapAttrs' (username: usercfg:
-            nameValuePair "${username}@${systemcfg.hostname}" usercfg.hm
-          ) systemcfg.users
-        ) configs);
       };
 
 }

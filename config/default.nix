@@ -1,4 +1,4 @@
-{ lib, config, flake, home-manager, nixpkgs, overlays, musnix, ... }:
+{ lib, config, flake, home-manager,  overlays, musnix, ... }:
 
 with lib;
 let
@@ -137,63 +137,50 @@ in
             dir.data = mkDefault "/data/${name}";
             dir.config = mkDefault (_: u.config.dir.home);
 
-            hm = home-manager.lib.homeManagerConfiguration {
-              pkgs = nixpkgs.legacyPackages.${config.system};
-
-              extraSpecialArgs = {
-                inherit (u.config) dir;
+            hm = u.config.modules ++ [{
+              config = {
+                home.packages = u.config.packages;
+                home.homeDirectory = u.config.dir.home;
+                home.username = name;
+                home.stateVersion = config.stateVersion;
+                backup.files = u.config.backup.files;
+                backup.directories = u.config.backup.directories;
               };
 
-              modules = u.config.modules ++ [{
-                config = {
-                  home.packages = u.config.packages;
-                  home.homeDirectory = u.config.dir.home;
-                  home.username = name;
-                  home.stateVersion = config.stateVersion;
-                  nixpkgs.overlays = overlays;
-                  nixpkgs.config = {
-                    inherit allowUnfreePredicate;
-                    permittedInsecurePackages = unfree;
-                  };
-                  backup.files = u.config.backup.files;
-                  backup.directories = u.config.backup.directories;
-                };
-
-                # TODO: remove the use for the following two options
-                options.backup.files = mkOption {
-                  type = with types; listOf str;
-                  default = [];
-                  description = ''
-                    The files inside home to backup.
-                  '';
-                };
-                options.backup.directories = mkOption {
-                  type = with types; listOf (either str (submodule {
-                    options = {
-                      directory = mkOption {
-                        type = str;
-                        default = null;
-                        description = "The directory path to be linked.";
-                      };
-                      method = mkOption {
-                        type = types.enum [ "bindfs" "symlink" ];
-                        default = "bindfs";
-                        description = ''
-                          The linking method that should be used for this
-                          directory. bindfs is the default and works for most use
-                          cases, however some programs may behave better with
-                          symlinks.
-                        '';
-                      };
+              # TODO: remove the use for the following two options
+              options.backup.files = mkOption {
+                type = with types; listOf str;
+                default = [];
+                description = ''
+                  The files inside home to backup.
+                '';
+              };
+              options.backup.directories = mkOption {
+                type = with types; listOf (either str (submodule {
+                  options = {
+                    directory = mkOption {
+                      type = str;
+                      default = null;
+                      description = "The directory path to be linked.";
                     };
-                  }));
-                  default = [];
-                  description = ''
-                    The directories inside home to backup.
-                  '';
-                };
-              }];
-            };
+                    method = mkOption {
+                      type = types.enum [ "bindfs" "symlink" ];
+                      default = "bindfs";
+                      description = ''
+                        The linking method that should be used for this
+                        directory. bindfs is the default and works for most use
+                        cases, however some programs may behave better with
+                        symlinks.
+                      '';
+                    };
+                  };
+                }));
+                default = [];
+                description = ''
+                  The directories inside home to backup.
+                '';
+              };
+            }];
           };
         }));
         description = ''
@@ -282,8 +269,10 @@ in
     config = {
       modules = [
         musnix.nixosModules.musnix
+        home-manager.nixosModules.home-manager
         ({ lib, pkgs, ... }: with lib; {
           config = {
+            # config settings
             nixpkgs.overlays = overlays;
             nixpkgs.config = {
               inherit allowUnfreePredicate;
@@ -301,9 +290,15 @@ in
             security.sudo.enable = config.sudo == "sudo";
             security.doas.enable = config.sudo == "doas";
 
+            # reasonable defaults
             # NOTE: we could add options for this?
             console.font = ../res/cozette.psf;
             boot.supportedFilesystems = [ "ntfs" ];
+
+            # home manager
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users = mapAttrs (_: usercfg: { imports = usercfg.hm; }) config.users;
           };
         })
       ];
