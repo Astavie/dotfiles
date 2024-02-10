@@ -17,3 +17,4 @@ jobs:
       with:
         add: 'flake.lock'
         message: 'Weekly flake update'
+        default_author: github_actions
