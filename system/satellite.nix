@@ -43,7 +43,6 @@ in
     ];
 
     ssh.enable = true;
-    wireshark.enable = true;
 
     modules = [
       ../home/desktop-catppuccin.nix

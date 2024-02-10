@@ -1,18 +1,13 @@
 { pkgs, ... }:
 
-let
-  # wine staging is currently at 9.0-rc1, which broke the system for some reason
-  # so for now we are back using wine stable
-  wine = pkgs.wineWowPackages.stableFull;
-in
 {
   home.packages = with pkgs; [
     ardour
     soundfont-fluid
     wine
     execline
-    (yabridge.override { inherit wine; })
-    (yabridgectl.override { inherit wine; })
+    yabridge
+    yabridgectl
 
     x42-plugins
     # linuxsampler

@@ -128,7 +128,7 @@
   programs.alacritty = {
     enable = true;
     settings = {
-      window.opacity = 0.1;
+      window.opacity = 0.66;
       window.dynamic_padding = true;
       window.padding.x = 4;
       window.padding.y = 4;
@@ -141,7 +141,7 @@
 
       colors = {
         primary.foreground = "#cdd6f4";
-        primary.background = "#585b70";
+        primary.background = "#1e1e2e";
 
         normal.black   = "#1e1e2e";
         normal.red     = "#eba0ac";

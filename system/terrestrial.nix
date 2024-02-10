@@ -33,7 +33,6 @@
 
       ssh.enable = true;
       hyprland.enable = true;
-      wireshark.enable = true;
 
       modules = [
         ../home/desktop-glassmorphism.nix
@@ -78,9 +77,12 @@
 
   modules = let
     range = start: end: if start > end then [] else [ start ] ++ range (start + 1) end;
-  in [{
+  in [({ config, ... }: {
     # musnix
     musnix.enable = true;
+
+    boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+    boot.kernelModules = [ "v4l2loopback" ];
 
     # avahi for wyvrn
     services.avahi.openFirewall = true;
@@ -125,7 +127,7 @@
 
     # firmware
     hardware.enableRedistributableFirmware = true;
-  }];
+  })];
 
   backup.directories = [
     "/etc/ssh"
