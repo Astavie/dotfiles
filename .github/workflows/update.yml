@@ -4,7 +4,7 @@ on:
     - cron: '0 0 * * 0'
   workflow_dispatch:
 jobs:
-  build:
+  update:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
@@ -16,5 +16,4 @@ jobs:
       uses: EndBug/add-and-commit@v9
       with:
         add: 'flake.lock'
-        path: store.txt
         message: 'Weekly flake update'
