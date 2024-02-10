@@ -41,6 +41,12 @@
         ${config.sudo} ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ''${1:-.}
         ${usercfg.dir.persist}/generation/activate
       '');
+      flex = pkgs.writeShellScriptBin "flex" ''
+        STORE=$(curl -L "https://nightly.link/Astavie/dotfiles/workflows/build/main/${config.hostname}.zip" -s | funzip)
+        nix copy --from ssh://user@10.241.250.179 $STORE --no-check-sigs
+        doas nix-env -p /nix/var/nix/profiles/system --set $STORE
+        doas /nix/var/nix/profiles/system/bin/switch-to-configuration switch
+      '';
     in
     {
       # Create users
@@ -63,6 +69,7 @@
         packages = [
           (sup username usercfg)
           (uup username usercfg)
+          flex
         ];
       }) config.users;
 
