@@ -10,7 +10,7 @@
           exec ${config.sudo} "$0"
         fi
         STORE=$(curl -L "https://nightly.link/Astavie/dotfiles/workflows/build/main/${config.hostname}.zip" -s | funzip)
-        nix copy --from ssh://user@10.241.250.179 $STORE --no-check-sigs
+        nix copy --from ssh://astavie@10.241.158.162 $STORE --no-check-sigs
         nix-env -p /nix/var/nix/profiles/system --set $STORE
         /nix/var/nix/profiles/system/bin/switch-to-configuration switch
       '';
