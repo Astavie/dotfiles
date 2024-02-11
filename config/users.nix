@@ -4,15 +4,10 @@
   modules = [({ pkgs, lib, utils, ... }:
     let
       flex = pkgs.writeShellScriptBin "flex" ''
-        set -e
-        if [ "$EUID" -ne 0 ]
-        then
-          exec ${config.sudo} "$0"
-        fi
-        STORE=$(curl -L "https://nightly.link/Astavie/dotfiles/workflows/build/main/${config.hostname}.zip" -s | funzip)
+        STORE=$(curl -L "https://nightly.link/Astavie/dotfiles/workflows/build/main/${config.hostname}.zip" -s | ${pkgs.unzip}/bin/funzip)
         nix copy --from ssh://astavie@10.241.158.162 $STORE --no-check-sigs
-        nix-env -p /nix/var/nix/profiles/system --set $STORE
-        /nix/var/nix/profiles/system/bin/switch-to-configuration switch
+        ${config.sudo} nix-env -p /nix/var/nix/profiles/system --set $STORE
+        ${config.sudo} /nix/var/nix/profiles/system/bin/switch-to-configuration switch
       '';
     in
     {
