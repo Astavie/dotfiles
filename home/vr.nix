@@ -6,7 +6,6 @@
 
   home.packages = with pkgs; [
     wivrn-server
-    wivrn-client-install
     alvr
   ];
 }
