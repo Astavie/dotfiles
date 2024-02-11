@@ -10,7 +10,7 @@ jobs:
       matrix:
         system: [terrestrial, satellite]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Build nixos configuration
       run: nix build -L .#nixosConfigurations.${{ matrix.system }}.config.system.build.toplevel
     - name: Get nix store path
