@@ -21,7 +21,7 @@
         home = usercfg.dir.home;
 
         isNormalUser = true;
-        password = ""; # TODO
+        password = "admin"; # TODO
 
         # Use fish shell
         shell = pkgs.fish;
