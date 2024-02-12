@@ -15,6 +15,7 @@
 
   fonts.fontconfig.enable = true;
   home.file.".local/share/fonts/misc/cozette.bdf".source = ../res/cozette.bdf;
+  home.file.".local/share/fonts/misc/cozette_hidpi.bdf".source = ../res/cozette_hidpi.bdf;
 
   # custom theme
   home.file.".config/discocss/custom.css".source = ../res/glassmorphism/discord.css;
@@ -133,7 +134,7 @@
       window.padding.x = 4;
       window.padding.y = 4;
 
-      font.normal.family = "cozette";
+      font.normal.family = "CozetteHiDpi";
       font.offset.x = 1;
       font.offset.y = 0;
 

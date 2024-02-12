@@ -23,7 +23,9 @@ with lib;
         swapDevices = [{
           device = "/dev/disk/by-label/swap";
         }];
+
         boot.loader.systemd-boot.enable = true;
+        boot.loader.systemd-boot.configurationLimit = 20;
 
       } ++
       optional (config.boot.fs == "zfs") {
