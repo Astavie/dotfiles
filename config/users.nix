@@ -5,7 +5,7 @@
     let
       flex = pkgs.writeShellScriptBin "flex" ''
         STORE=$(curl -L "https://nightly.link/Astavie/dotfiles/workflows/build/main/${config.hostname}.zip" -s | ${pkgs.unzip}/bin/funzip)
-        nix copy --from ssh://astavie@10.241.158.162 $STORE --no-check-sigs
+        nix copy --from ssh://astavie@10.241.158.162 $STORE --no-check-sigs --substitute-on-destination
         ${config.sudo} nix-env -p /nix/var/nix/profiles/system --set $STORE
         ${config.sudo} /nix/var/nix/profiles/system/bin/switch-to-configuration switch
       '';
@@ -21,7 +21,7 @@
         home = usercfg.dir.home;
 
         isNormalUser = true;
-        password = ""; # TODO
+        password = "admin"; # TODO
 
         # Use fish shell
         shell = pkgs.fish;

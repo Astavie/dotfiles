@@ -40,6 +40,9 @@
 
         set -U GLOBAL_PWD $PWD
       '';
+      fish_greeting = ''
+        ${pkgs.krabby}/bin/krabby random
+      '';
     };
   };
 
@@ -73,9 +76,16 @@
 
   # LSP settings
   programs.helix.languages = {
+    # JAVA
     language-server.java-language-server = {
       command = "java-language-server";
     };
+    language-server.deno-lsp = {
+      command = "deno";
+      args = ["lsp" "--unstable"];
+      config = { enable = true; lint = true; unstable = true; };
+    };
+
     language = [{
       name = "java";
       scope = "source.java";
@@ -98,6 +108,18 @@
           }
         ];
       };
+    } {
+      name = "typescript";
+      language-id = "typescript";
+      scope = "source.ts";
+      injection-regex = "^(ts|typescript)$";
+      file-types = ["ts"];
+      shebangs = ["deno" "node"];
+      roots = ["deno.json" "deno.jsonc" "package.json" "tsconfig.json"];
+      comment-token = "//";
+      indent = { tab-width = 2; unit = "  "; };
+      grammar = "typescript";
+      language-servers = ["deno-lsp"];
     }];
   };
 

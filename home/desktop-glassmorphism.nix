@@ -16,6 +16,12 @@
   fonts.fontconfig.enable = true;
   home.file.".local/share/fonts/misc/cozette.bdf".source = ../res/cozette.bdf;
   home.file.".local/share/fonts/misc/cozette_hidpi.bdf".source = ../res/cozette_hidpi.bdf;
+  home.file.".local/share/fonts/misc/spleen-5x8.bdf".source = ../res/spleen-5x8.bdf;
+  home.file.".local/share/fonts/misc/spleen-6x12.bdf".source = ../res/spleen-6x12.bdf;
+  home.file.".local/share/fonts/misc/spleen-8x16.bdf".source = ../res/spleen-8x16.bdf;
+  home.file.".local/share/fonts/misc/spleen-12x24.bdf".source = ../res/spleen-12x24.bdf;
+  home.file.".local/share/fonts/misc/spleen-16x32.bdf".source = ../res/spleen-16x32.bdf;
+  home.file.".local/share/fonts/misc/spleen-32x64.bdf".source = ../res/spleen-32x64.bdf;
 
   # custom theme
   home.file.".config/discocss/custom.css".source = ../res/glassmorphism/discord.css;
@@ -34,7 +40,9 @@
 
   # hyprland config
   home.file.".config/hypr/hyprland.conf".text = ''
-    monitor = ,preferred,auto,auto
+    monitor=HDMI-A-1, 1920x1080@60, 0x0, 1
+    monitor=DP-1, 3840x2160@144, 1920x0, 1.5
+
     env = XCURSOR_SIZE,24
 
     exec-once = hyprpaper
@@ -134,9 +142,15 @@
       window.padding.x = 4;
       window.padding.y = 4;
 
-      font.normal.family = "CozetteHiDpi";
+      # font.normal.family = "Ark Pixel 16px Monospaced latin";
+      # font.offset.x = 1;
+      # font.offset.y = 6;
+      # font.glyph_offset.x = 1;
+      # font.glyph_offset.y = 6;
+
+      font.normal.family = "Spleen";
       font.offset.x = 1;
-      font.offset.y = 0;
+      font.size = 8;
 
       cursor.style.shape = "Beam";
 
