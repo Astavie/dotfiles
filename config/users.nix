@@ -26,7 +26,7 @@
         # Use fish shell
         shell = pkgs.fish;
 
-        extraGroups = [ "audio" "video" ] ++ lib.optionals usercfg.superuser [ "wheel" "networkmanager" ];
+        extraGroups = [ "audio" "video" ] ++ lib.optionals usercfg.superuser [ "wheel" "networkmanager" "dialout" ];
 
         packages = [
           flex

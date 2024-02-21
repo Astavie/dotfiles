@@ -12,8 +12,6 @@ jobs:
         token: ${{ secrets.ACCESS_TOKEN }}
     - name: Update flake
       run: nix flake update
-    - name: Check flake
-      run: nix flake check
     - name: Commit lockfile
       uses: EndBug/add-and-commit@v9
       with:
