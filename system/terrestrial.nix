@@ -43,6 +43,7 @@
         ../home/shell.nix
         ../home/minecraft.nix
         ../home/music.nix
+        ../home/music-player.nix
         ../home/vr.nix
         {
           programs.git = {
