@@ -14,7 +14,6 @@
     # ---- OVERLAYS ----
     overlay-astapkgs = {
       url = "github:Astavie/astapkgs";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
