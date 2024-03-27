@@ -40,8 +40,10 @@
 
   # hyprland config
   home.file.".config/hypr/hyprland.conf".text = ''
-    monitor=HDMI-A-1, 1920x1080@60, 0x0, 1
-    monitor=DP-1, 3840x2160@144, 1920x0, 1.5
+    monitor=HDMI-A-1, 1920x1080@60, 2560x0, 1
+    monitor=DP-1, 3840x2160@144, 0x0, 1.5
+
+    monitor=HDMI-A-1, transform, 1
 
     # unscale XWayland
     xwayland {

@@ -29,6 +29,7 @@
         vlc
 
         godot_4
+        jetbrains.idea-community
       ];
 
       ssh.enable = true;
@@ -42,6 +43,8 @@
         ../home/shell.nix
         ../home/minecraft.nix
         ../home/music.nix
+        ../home/music-player.nix
+        ../home/obs.nix
         ../home/vr.nix
         {
           programs.git = {
@@ -123,11 +126,15 @@
     ];
 
     # nvidia with modes for dual monitors
+
+    # NVIDIA has flickering issues on xwayland since 545, so we downgrade to 535
+    hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.production;
     hardware.nvidia.modesetting.enable = true;
     services.xserver.videoDrivers = [ "nvidia" ];
-    services.xserver.screenSection = ''
-      Option "metamodes" "nvidia-auto-select { ForceCompositionPipeline = On, ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On }, nvidia-auto-select { ForceCompositionPipeline = On, ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On }"
-    '';
+
+    # services.xserver.screenSection = ''
+    #   Option "metamodes" "nvidia-auto-select { ForceCompositionPipeline = On, ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On }, nvidia-auto-select { ForceCompositionPipeline = On, ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On }"
+    # '';
 
     # firmware
     hardware.enableRedistributableFirmware = true;
