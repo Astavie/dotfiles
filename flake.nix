@@ -16,10 +16,6 @@
       url = "github:Astavie/astapkgs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    overlay-lucu = {
-      url = "github:Astavie/lucu";
-      inputs.astapkgs.follows = "overlay-astapkgs";
-    };
   };
 
   outputs = { self, home-manager, nixpkgs, impermanence, nur, musnix, ... }@urls:

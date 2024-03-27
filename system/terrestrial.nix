@@ -44,6 +44,7 @@
         ../home/minecraft.nix
         ../home/music.nix
         ../home/music-player.nix
+        ../home/obs.nix
         ../home/vr.nix
         {
           programs.git = {

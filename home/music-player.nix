@@ -8,8 +8,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "SimonPersson";
       repo = "davis";
-      rev = version;
-      hash = "sha256-Xw4X9n0PCuigZhBA6so8pVI26pLRGeGjtR0l7uHw1vA=";
+      rev = "5d056d0c33c2c3ca664d216f79b7fc1317e34bd5";
+      hash = "sha256-p4l1nF6M28OyIaPorgsyR7NJtmVwpmuws67KvVnJa8s=";
     };
 
     cargoHash = "sha256-gpxcJbl2FrWjsPUi/BBZ/uyoVxmbBlXT7KYbESpI1+I=";
@@ -20,7 +20,7 @@ in
   # This is for connecting to that server
 
   # commandline mpd client
-  home.packages = [ davis pkgs.skim ];
+  home.packages = [ davis pkgs.fzf pkgs.picat ];
 
   home.file.".config/davis/davis.conf".text = ''
     [tags]
@@ -34,7 +34,17 @@ in
   '';
 
   home.file.".config/davis/bin/davis-fzf" = {
-    source = ./davis-fzf.sh;
+    source = "${davis.src}/subcommands/fzf/davis-fzf";
+    executable = true;
+  };
+
+  home.file.".config/davis/bin/davis-cur" = {
+    source = "${davis.src}/subcommands/cur/davis-cur-horizontal";
+    executable = true;
+  };
+
+  home.file.".config/davis/bin/davis-cover" = {
+    source = "${davis.src}/subcommands/cover/davis-cover";
     executable = true;
   };
 
@@ -51,7 +61,7 @@ in
       ];
     };
     Service = {
-      ExecStart = "${pkgs.snapcast}/bin/snapclient -h 10.241.158.162";
+      ExecStart = "${pkgs.snapcast}/bin/snapclient -h 10.241.158.162 --player pulse";
     };
   };
 }

@@ -10,7 +10,6 @@
 
     # languages
     nil
-    lucu
   ];
 
   programs.fish = {
