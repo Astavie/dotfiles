@@ -34,6 +34,7 @@ in
       peek
       networkmanagerapplet
       turbovnc
+      runelite
 
       popcorntime
       vlc
@@ -50,6 +51,7 @@ in
       ../home/firefox.nix
       ../home/git.nix
       ../home/shell.nix
+      ../home/minecraft.nix
       {
         programs.git = {
           userEmail = "astavie@pm.me";
