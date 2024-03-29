@@ -45,6 +45,8 @@ in
 
     ssh.enable = true;
 
+    flatpak.enable = true;
+
     modules = [
       ../home/desktop-catppuccin.nix
       ../home/discord.nix
