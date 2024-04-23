@@ -56,6 +56,7 @@
       backup.directories = [
         "obsidian/.config/obsidian"
         "xfce/.config/xfce4"
+        "xfce/Desktop"
       ];
     };
     streamer = {
