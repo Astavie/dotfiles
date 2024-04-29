@@ -14,6 +14,7 @@
   "parsec-bin"
   "linuxsampler"
   "obsidian"
+  "rider"
 
   "cuda-merged"
   "cuda_cuobjdump"

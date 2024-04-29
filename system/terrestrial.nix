@@ -30,6 +30,7 @@
 
         godot_4
         jetbrains.idea-community
+        jetbrains.rider
       ];
 
       ssh.enable = true;
