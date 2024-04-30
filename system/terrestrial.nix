@@ -21,9 +21,12 @@
 
         # apps
         torrential
-        gimp
         peek
         obsidian
+
+        gimp
+        krita
+        inkscape
 
         popcorntime
         vlc
