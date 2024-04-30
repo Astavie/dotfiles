@@ -35,17 +35,16 @@ in
       networkmanagerapplet
       turbovnc
       runelite
+      obsidian
 
       popcorntime
       vlc
 
       # teams-for-linux
-      # parsec-bin
+      jetbrains.rider
     ];
 
     ssh.enable = true;
-
-    flatpak.enable = true;
 
     modules = [
       ../home/desktop-catppuccin.nix
@@ -61,10 +60,16 @@ in
         };
       }
     ];
+
+    backup.directories = [ 
+      "runelite/.runelite"
+      "obsidian/.config/obsidian"
+    ];
   };
 
   impermanence.enable = true;
   steam.enable = true;
+  vbhost.enable = true;
   docker.enable = true;
 
   xserver.enable = true;
@@ -74,6 +79,9 @@ in
     # nvidia
     hardware.nvidia.modesetting.enable = true;
     services.xserver.videoDrivers = [ "nvidia" "intel" ];
+
+    networking.firewall.allowedTCPPorts = [ 5900 ];
+    networking.firewall.allowedUDPPorts = [ 5900 ];
 
     environment.systemPackages = [ nvidia-offload ];
     hardware.nvidia.prime = {
