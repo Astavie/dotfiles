@@ -41,7 +41,7 @@ in
       vlc
 
       # teams-for-linux
-      # parsec-bin
+      jetbrains.rider
     ];
 
     ssh.enable = true;
