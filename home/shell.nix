@@ -5,7 +5,7 @@
     # cmd utils
     mc
     pulseaudio
-    shell_gpt
+    shell-gpt
     pre-commit
 
     # languages

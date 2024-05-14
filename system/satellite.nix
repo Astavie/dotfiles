@@ -42,6 +42,7 @@ in
 
       # teams-for-linux
       jetbrains.rider
+      dotnet-sdk
     ];
 
     ssh.enable = true;
