@@ -3,6 +3,7 @@
 {
   home.packages = with pkgs; [
     ardour
+    zrythm
     soundfont-fluid
     wine
     execline
