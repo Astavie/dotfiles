@@ -36,13 +36,14 @@ in
       turbovnc
       runelite
       obsidian
+      desmume
 
       popcorntime
       vlc
 
       # teams-for-linux
       jetbrains.rider
-      dotnet-sdk
+      dotnet-sdk_7
     ];
 
     ssh.enable = true;
