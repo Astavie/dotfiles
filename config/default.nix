@@ -137,6 +137,8 @@ in
             dir.data = mkDefault "/data/${name}";
             dir.config = mkDefault (_: u.config.dir.home);
 
+            backup.directories = ["gsettings/.config/dconf"];
+
             hm = u.config.modules ++ [{
               config = {
                 home.packages = u.config.packages;

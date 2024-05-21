@@ -15,6 +15,7 @@
   "linuxsampler"
   "obsidian"
   "rider"
+  "vital"
 
   "cuda-merged"
   "cuda_cuobjdump"

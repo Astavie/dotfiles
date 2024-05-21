@@ -34,6 +34,8 @@
         godot_4
         jetbrains.idea-community
         jetbrains.rider
+
+        dotnet-sdk_7
       ];
 
       ssh.enable = true;
