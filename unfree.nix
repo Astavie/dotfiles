@@ -39,6 +39,7 @@
   "libnvjitlink"
   "libcusparse"
   "libnpp"
+  "libXNVCtrl"
 
   # insecure
   "electron-25.9.0"

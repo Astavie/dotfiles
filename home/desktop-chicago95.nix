@@ -52,6 +52,9 @@ in
   home.file.".local/share/fonts/misc/spleen-16x32.bdf".source = ../res/spleen-16x32.bdf;
   home.file.".local/share/fonts/misc/spleen-32x64.bdf".source = ../res/spleen-32x64.bdf;
 
+  # theme
+  home.file.".config/discocss/custom.css".source = ../res/catppuccin/discord.css;
+
   # terminal emulator
   programs.alacritty = {
     enable = true;
