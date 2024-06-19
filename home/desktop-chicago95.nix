@@ -37,6 +37,7 @@ in
   home.packages = with pkgs; [
     chicago95
     xfce.thunar
+    xfce.thunar-archive-plugin
     scrot xclip peek
     xorg.xkill
   ];

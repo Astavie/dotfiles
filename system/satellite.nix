@@ -34,16 +34,17 @@ in
       peek
       networkmanagerapplet
       turbovnc
-      runelite
       obsidian
-      desmume
 
       popcorntime
       vlc
 
-      # teams-for-linux
       jetbrains.rider
       dotnet-sdk_7
+
+      # games
+      desmume
+      runelite
     ];
 
     ssh.enable = true;
@@ -72,7 +73,6 @@ in
   impermanence.enable = true;
   steam.enable = true;
   vbhost.enable = true;
-  docker.enable = true;
 
   xserver.enable = true;
   pipewire.enable = true;
@@ -81,9 +81,6 @@ in
     # nvidia
     hardware.nvidia.modesetting.enable = true;
     services.xserver.videoDrivers = [ "nvidia" "intel" ];
-
-    networking.firewall.allowedTCPPorts = [ 5900 ];
-    networking.firewall.allowedUDPPorts = [ 5900 ];
 
     environment.systemPackages = [ nvidia-offload ];
     hardware.nvidia.prime = {
@@ -99,7 +96,6 @@ in
     # cpu
     hardware.enableRedistributableFirmware = true;
     hardware.cpu.intel.updateMicrocode = true;
-    # powerManagement.cpuFreqGovernor = "powersave";
   }];
 
   backup.directories = [

@@ -20,6 +20,8 @@ in
           directory = "steam/.local/share/Steam";
           method = "symlink";
         }
+        "steam/.local/share/icons"
+        "steam/.local/share/vulkan"
 
         # Game specific directories
         "factorio/.factorio"
