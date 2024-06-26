@@ -31,6 +31,7 @@ in
       # apps
       torrential
       gimp
+      inkscape
       peek
       networkmanagerapplet
       turbovnc
@@ -41,9 +42,7 @@ in
       popcorntime
       vlc
 
-      # teams-for-linux
-      jetbrains.rider
-      dotnet-sdk_7
+      godot_4
     ];
 
     ssh.enable = true;
