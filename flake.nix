@@ -1,12 +1,11 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
 
-    home-manager.url = "github:nix-community/home-manager";
+    home-manager.url = "github:nix-community/home-manager/release-24.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     impermanence.url = "github:nix-community/impermanence";
-    nur.url = "github:nix-community/NUR";
 
     musnix.url = "github:musnix/musnix";
     musnix.inputs.nixpkgs.follows = "nixpkgs";
@@ -17,7 +16,7 @@
     };
   };
 
-  outputs = { self, home-manager, nixpkgs, impermanence, nur, musnix, ... }@urls:
+  outputs = { self, home-manager, nixpkgs, impermanence, musnix, ... }@urls:
 
     with nixpkgs.lib;
     let
@@ -36,12 +35,8 @@
         ./config/ssh.nix
         ./config/steam.nix
         ./config/vbhost.nix
-        ./config/docker.nix
         ./config/xserver.nix
         ./config/pipewire.nix
-        ./config/hyprland.nix
-        ./config/wireshark.nix
-        ./config/flatpak.nix
       ];
 
       overlay-names = builtins.filter (hasPrefix "overlay-") (mapAttrsToList (name: _: name) urls);
@@ -52,7 +47,7 @@
           ({ config, ... }: {
             _module.args = {
               flake = self;
-              overlays = overlays ++ [ nur.overlay ];
+              inherit overlays;
               inherit home-manager impermanence nixpkgs musnix;
               inherit (config.nixos) pkgs;
             };
