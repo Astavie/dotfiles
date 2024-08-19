@@ -4,6 +4,7 @@
   home.packages = with pkgs; [
     ardour
     zrythm
+
     soundfont-fluid
     wine
     execline
@@ -30,7 +31,7 @@
   #   patches = [];
   # }}/lib/lxvst";
 
-  backup.directories = [
+  asta.backup.directories = [
     "yabridge/.wine"
     "yabridge/.vst/yabridge"
     "yabridge/.vst3/yabridge"

@@ -2,5 +2,6 @@
 
 {
   home.packages = [ pkgs.obs-studio ];
-  backup.directories = [ "obs/.config/obs-studio" ];
+
+  asta.backup.directories = [ "obs/.config/obs-studio" ];
 }

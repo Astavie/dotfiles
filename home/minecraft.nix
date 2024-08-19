@@ -6,7 +6,7 @@
     glfw-wayland-minecraft
   ];
 
-  backup.directories = [{
+  asta.backup.directories = [{
     directory = "PrismLauncher/.local/share/PrismLauncher";
     # OH MY GOD THIS ISSUE
     # so, i kept crashing due to "too many open files"

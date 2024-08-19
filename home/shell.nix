@@ -49,13 +49,6 @@
   programs.direnv.nix-direnv.enable = true;
   programs.autojump.enable = true;
 
-  backup.directories = [
-    "autojump/.local/share/autojump"
-    "direnv/.local/share/direnv/allow"
-    "fish/.local/share/fish"
-    "shell_gpt/.config/shell_gpt"
-  ];
-
   # Helix
   programs.helix.enable = true;
   programs.helix.settings.editor = {
@@ -73,38 +66,6 @@
     rustc-wrapper = "${pkgs.sccache}/bin/sccache"
   '';
 
-  # LSP settings
-  programs.helix.languages = {
-    # JAVA
-    language-server.java-language-server = {
-      command = "java-language-server";
-    };
-
-    language = [{
-      name = "java";
-      scope = "source.java";
-      injection-regex = "java";
-      file-types = ["java"];
-      roots = ["pom.xml"];
-      language-servers = [ "java-language-server" ];
-      indent = { tab-width = 4; unit = "    "; };
-      debugger = {
-        name = "java-debug-adapter";
-        transport = "stdio";
-        command = "java-debug-adapter";
-        args = [ "--quiet" ];
-        templates = [
-          {
-            name = "attach to jvm";
-            request = "attach";
-            completion = [{ name = "port"; default = "5005"; }];
-            args = { port = "{0}"; sourceRoots = [ "src/main/java" "src/client/java" ]; };
-          }
-        ];
-      };
-    }];
-  };
-
   # midnight commander
   home.file.".config/mc/ini".text = ''
     [Midnight-Commander]
@@ -112,4 +73,11 @@
     use_internal_edit=false
   '';
 
+  # backup
+  asta.backup.directories = [
+    "autojump/.local/share/autojump"
+    "direnv/.local/share/direnv/allow"
+    "fish/.local/share/fish"
+    "shell_gpt/.config/shell_gpt"
+  ];
 }

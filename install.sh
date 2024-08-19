@@ -109,7 +109,6 @@ info "Mounting..."
 info "Installing..."
 mkdir /mnt/persist/root
 nixos-install --flake .\#$SYSTEM --no-root-passwd
-nixos-enter -c 'rehome'
 
 info "Running post-install scripts..."
 nixos-enter -c 'postinstall'

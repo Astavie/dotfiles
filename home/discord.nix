@@ -14,7 +14,7 @@
     })
   ];
 
-  backup.directories = [
+  asta.backup.directories = [
     "discord/.config/discord"
   ];
 }

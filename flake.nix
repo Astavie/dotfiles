@@ -16,51 +16,18 @@
     };
   };
 
-  outputs = { self, home-manager, nixpkgs, impermanence, musnix, ... }@urls:
+  outputs = { self, home-manager, nixpkgs, ... }@inputs:
 
-    with nixpkgs.lib;
-    let
-      systems = [
-        ./system/terrestrial.nix
-        ./system/satellite.nix
-        ./system/vb.nix
-      ];
-      modules = [
-        ./config/hardware.nix
-        ./config/users.nix
-        ./config/impermanence.nix
-        ./config/postinstall.nix
-        ./config/services.nix
-
-        ./config/ssh.nix
-        ./config/steam.nix
-        ./config/vbhost.nix
-        ./config/xserver.nix
-        ./config/pipewire.nix
-      ];
-
-      overlay-names = builtins.filter (hasPrefix "overlay-") (mapAttrsToList (name: _: name) urls);
-      overlays = builtins.map (name: urls.${name}.overlays.default) overlay-names;
-
-      configs = builtins.map (config: (evalModules {
-        modules = [
-          ({ config, ... }: {
-            _module.args = {
-              flake = self;
-              inherit overlays;
-              inherit home-manager impermanence nixpkgs musnix;
-              inherit (config.nixos) pkgs;
-            };
-          })
-          ./config
-          config
-        ] ++ modules;
-      }).config) systems;
-    in
-      {
-        nixosConfigurations = builtins.listToAttrs (builtins.map (systemcfg:
-          nameValuePair systemcfg.hostname systemcfg.nixos
-        ) configs);
+    {
+      nixosConfigurations = {
+        terrestrial = nixpkgs.lib.nixosSystem {
+          modules = [ ./system/terrestrial.nix ];
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs;
+          };
+        };
       };
+    };
 
 }
