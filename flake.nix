@@ -21,7 +21,7 @@
     {
       nixosConfigurations = {
         terrestrial = nixpkgs.lib.nixosSystem {
-          modules = [ ./system/terrestrial.nix ];
+          modules = [ ./hosts/terrestrial.nix ];
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs;

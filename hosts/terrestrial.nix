@@ -3,7 +3,7 @@
 {
   imports = [
     # base config
-    ../config
+    ../shared
   ];
 
   networking.hostName = "terrestrial";
