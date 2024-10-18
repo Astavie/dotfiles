@@ -60,6 +60,13 @@
 
             dotnet-sdk_7
 
+            kdenlive
+            ffmpeg
+            audacity
+
+            minecraftia
+            corefonts
+
             # games
             ckan
           ];
@@ -73,15 +80,17 @@
             "obsidian/.config/obsidian"
             "xfce/.config/xfce4"
             "xfce/Desktop"
+            "fonts/.local/share/fonts"
           ];
         }
         ../home/desktop-chicago95.nix
         ../home/discord.nix
         ../home/firefox.nix
+        ../home/zen.nix
         ../home/git.nix
         ../home/shell.nix
         ../home/minecraft.nix
-        ../home/music.nix
+        # ../home/music.nix
         ../home/obs.nix
       ];
     };

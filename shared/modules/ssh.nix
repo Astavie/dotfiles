@@ -19,9 +19,8 @@ in
     };
     config = lib.mkIf u.config.ssh.enable {
       modules = [{
-        home.packages = [
-          flex
-        ];
+        home.packages = [ flex ];
+        asta.backup.directories = [ "ssh/.ssh" ];
       }];
     };
   });

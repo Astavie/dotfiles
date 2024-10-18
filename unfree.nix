@@ -16,6 +16,7 @@
   "obsidian"
   "rider"
   "vital"
+  "corefonts"
 
   "cuda-merged"
   "cuda_cuobjdump"
