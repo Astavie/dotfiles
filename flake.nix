@@ -10,13 +10,16 @@
     musnix.url = "github:musnix/musnix";
     musnix.inputs.nixpkgs.follows = "nixpkgs";
 
+    zen-browser.url = "github:MarceColl/zen-browser-flake";
+    zen-browser.inputs.nixpkgs.follows = "nixpkgs";
+
     # ---- OVERLAYS ----
     overlay-astapkgs = {
       url = "github:Astavie/astapkgs";
     };
   };
 
-  outputs = { self, home-manager, nixpkgs, ... }@inputs:
+  outputs = { nixpkgs, ... }@inputs:
 
     {
       nixosConfigurations = {

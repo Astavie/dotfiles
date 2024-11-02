@@ -178,6 +178,7 @@ in
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;
     home-manager.users = lib.mapAttrs (_: usercfg: { imports = config.asta.modules ++ usercfg.modules; }) config.asta.users;
+    home-manager.extraSpecialArgs = { inherit inputs; };
 
     # dconf
     programs.dconf.enable = true;

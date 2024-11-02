@@ -85,7 +85,6 @@
         }
         ../home/desktop-chicago95.nix
         ../home/discord.nix
-        ../home/firefox.nix
         ../home/zen.nix
         ../home/git.nix
         ../home/shell.nix
@@ -95,6 +94,8 @@
       ];
     };
   };
+
+  programs.nix-ld.enable = true;
 
   # musnix
   musnix.enable = true;
