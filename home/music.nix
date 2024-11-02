@@ -6,10 +6,10 @@
     zrythm
 
     soundfont-fluid
-    wine
+    # wine
     execline
-    yabridge
-    yabridgectl
+    # yabridge
+    # yabridgectl
 
     x42-plugins
     # linuxsampler
@@ -32,10 +32,10 @@
   # }}/lib/lxvst";
 
   asta.backup.directories = [
-    "yabridge/.wine"
-    "yabridge/.vst/yabridge"
-    "yabridge/.vst3/yabridge"
-    "yabridge/.config/yabridgectl"
+    # "yabridge/.wine"
+    # "yabridge/.vst/yabridge"
+    # "yabridge/.vst3/yabridge"
+    # "yabridge/.config/yabridgectl"
     "ardour/.config/ardour7"
     "ardour/.cache/ardour7"
     "ardour/.config/ardour8"

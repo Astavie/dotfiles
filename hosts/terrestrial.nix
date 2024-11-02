@@ -89,7 +89,7 @@
         ../home/git.nix
         ../home/shell.nix
         ../home/minecraft.nix
-        # ../home/music.nix
+        ../home/music.nix
         ../home/obs.nix
       ];
     };
