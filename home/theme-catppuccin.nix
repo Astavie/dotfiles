@@ -8,7 +8,7 @@
     decoration = {
       blur = {
         enabled = true;
-        size = 12;
+        size = 8;
         passes = 3;
       };
 
@@ -42,7 +42,7 @@
       ];
       
       flash = {
-        flash_opacity = 0.8;
+        flash_opacity = 0.93;
         in_bezier = "realsmooth";
         in_speed = 0.5;
         out_bezier = "realsmooth";
@@ -70,8 +70,8 @@
   programs.helix.settings.theme = "catppuccin";
   home.file.".config/helix/themes/catppuccin.toml".source = ../res/catppuccin/helix.toml;
   home.file.".config/hypr/hyprpaper.conf".text = ''
-    preload = ${../res/glassmorphism/wallpaper.png}
-    wallpaper = ,${../res/glassmorphism/wallpaper.png}
+    preload = ${../res/glassmorphism/Anime-Room.png}
+    wallpaper = ,${../res/glassmorphism/Anime-Room.png}
   '';
 
   # terminal emulator
@@ -81,9 +81,9 @@
     window.padding.x = 4;
     window.padding.y = 4;
 
-    font.normal.family = "Spleen";
-    font.offset.x = 1;
-    font.size = 8;
+    font.normal.family = "CaskaydiaCove Nerd Font";
+    # font.offset.x = 1;
+    # font.size = 8;
 
     cursor.style.shape = "Beam";
 
