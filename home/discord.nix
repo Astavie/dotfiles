@@ -9,5 +9,6 @@
 
   asta.backup.directories = [
     "discord/.config/discord"
+    "discord/.config/vesktop"
   ];
 }

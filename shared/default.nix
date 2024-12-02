@@ -158,7 +158,7 @@ in
     system.configurationRevision = lib.mkIf (inputs.self ? rev) inputs.self.rev;
     system.stateVersion = "23.05";
 
-    nix.package = pkgs.nixFlakes;
+    nix.package = pkgs.nixVersions.stable;
     nix.extraOptions = "experimental-features = nix-command flakes";
     nix.settings.trusted-users = [ "@wheel" ];
 
