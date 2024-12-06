@@ -10,10 +10,19 @@ in
     grim slurp wl-clipboard  # screenshots
     wf-recorder vlc          # recording
     waybar
-
-    # fonts
-    (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
   ];
+
+  programs.wezterm = {
+    enable = true;
+    package = inputs.wezterm.packages.${system}.default.overrideAttrs (final: prev: {
+      patches = [(
+        pkgs.fetchpatch {
+          url = "https://patch-diff.githubusercontent.com/raw/wez/wezterm/pull/4093.patch";
+          hash = "sha256-kk1OuP8Vh6gs9+vk8CNcrRMXqyCvU2qs41OG9uJAAFk=";
+        }
+      )];
+    });
+  };
 
   wayland.windowManager.hyprland = {
     enable = true;
@@ -36,15 +45,17 @@ in
       ];
 
       "$mod" = "SUPER";
-      "$term" = "alacritty";
+      "$term" = "wezterm";
 
       bind = [
         # window creation / destruction
-        "$mod, return, exec, fish -c '$term --working-directory $GLOBAL_PWD'"
+        "$mod, return, exec, $term"
         "$mod, space, exec, exec $(tofi-drun --config ${../res/glassmorphism/tofi})"
-        "$mod, Q, killactive,"
-        "$mod SHIFT, Q, exit,"
-        "$mod, P, togglefloating,"
+        "$mod, Q, killactive"
+        "$mod SHIFT, Q, exit"
+
+        "$mod, P, togglefloating"
+        "$mod, P, pin"
 
         # TODO: fix these
         "$mod, U, exec, [float] $term -e bash -lic \"uup /data/astavie/dotfiles/ ; read -p Done!\""
@@ -81,7 +92,8 @@ in
         "$mod, period, workspace, e+1"
         "$mod SHIFT, comma, movetoworkspace, e-1"
         "$mod SHIFT, period, movetoworkspace, e+1"
-        "$mod, N, movetoworkspace, empty"
+        "$mod, N, workspace, empty"
+        "$mod SHIFT, N, movetoworkspace, empty"
       ];
 
       bindm = [
@@ -93,12 +105,10 @@ in
 
     plugins = [
       # inputs.hyprland-plugins.packages.${system}.hyprbars
-      inputs.hy3.packages.${system}.hy3
+      # inputs.hy3.packages.${system}.hy3
       inputs.hyprfocus.packages.${system}.hyprfocus
     ];
   };
-
-  programs.alacritty.enable = true;
 
   programs.waybar = {
     enable = true;

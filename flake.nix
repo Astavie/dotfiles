@@ -16,14 +16,17 @@
     hyprland.url = "github:hyprwm/Hyprland";
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
 
-    hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
-    hyprland-plugins.inputs.hyprland.follows = "hyprland";
+    # hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
+    # hyprland-plugins.inputs.hyprland.follows = "hyprland";
 
-    hy3.url = "github:outfoxxed/hy3";
-    hy3.inputs.hyprland.follows = "hyprland";
+    # hy3.url = "github:outfoxxed/hy3";
+    # hy3.inputs.hyprland.follows = "hyprland";
 
     hyprfocus.url = "github:pyt0xic/hyprfocus";
     hyprfocus.inputs.hyprland.follows = "hyprland";
+
+    wezterm.url = "github:wez/wezterm?dir=nix";
+    wezterm.inputs.nixpkgs.follows = "nixpkgs";
 
     # ---- OVERLAYS ----
     overlay-astapkgs = {

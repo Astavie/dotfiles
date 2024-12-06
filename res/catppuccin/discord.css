@@ -2,7 +2,7 @@
 @import url('https://capnkitten.github.io/BetterDiscord/Themes/Translucence/css/source.css');
 
 :root {
-  --app-bg: rgba(30, 30, 46, 0,7);
+  --app-bg: rgba(30, 30, 46, 0,75);
   --app-blur: 0px;
   --app-margin: 0px;
   --app-radius: 0px;
@@ -10,8 +10,8 @@
   --accent-saturation: 77%;
   --accent-lightness: 47%;
   --accent-opacity: 1;
-  --sidebar-color: rgba(30, 30, 46, 0.7);
-  --main-content-color: rgba(30, 30, 46, 0.5);
+  --sidebar-color: rgba(30, 30, 46, 0.75);
+  --main-content-color: rgba(30, 30, 46, 0.6);
   --undefined: 0;
   --interactive-normal: #aaa;
   --interactive-hover: #ddd;
@@ -34,8 +34,8 @@
   --textarea-alpha-focus: 0.15;
   --textarea-radius: 22px;
   --card-color: rgba(0,0,0,0.4);
-  --card-color-hover: rgba(0,0,0,0.5);
-  --card-color-select: rgba(0,0,0,0.7);
+  --card-color-hover: rgba(0,0,0,0.6);
+  --card-color-select: rgba(0,0,0,0.75);
   --button-height: 32px;
   --button-padding: 0 16px;
   --button-radius: 16px;

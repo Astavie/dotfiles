@@ -1,6 +1,11 @@
 { pkgs, ... }:
 
 {
+  home.packages = with pkgs; [
+    (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
+    cascadia-code
+  ];
+
   # hyprland settings
   wayland.windowManager.hyprland.settings = {
     general.border_size = 0;
@@ -70,46 +75,53 @@
   programs.helix.settings.theme = "catppuccin";
   home.file.".config/helix/themes/catppuccin.toml".source = ../res/catppuccin/helix.toml;
   home.file.".config/hypr/hyprpaper.conf".text = ''
-    preload = ${../res/glassmorphism/Anime-Room.png}
-    wallpaper = ,${../res/glassmorphism/Anime-Room.png}
+    preload = ${../res/glassmorphism/neoncity.jpg}
+    wallpaper = ,${../res/glassmorphism/neoncity.jpg}
   '';
 
   # terminal emulator
-  programs.alacritty.settings = {
-    window.opacity = 0.7;
-    window.dynamic_padding = true;
-    window.padding.x = 4;
-    window.padding.y = 4;
+  programs.wezterm.extraConfig = ''
+    local config = wezterm.config_builder()
 
-    font.normal.family = "CaskaydiaCove Nerd Font";
-    # font.offset.x = 1;
-    # font.size = 8;
+    config.font = wezterm.font 'Cascadia Code'
+    config.font_size = 10.0
 
-    cursor.style.shape = "Beam";
+    config.force_reverse_video_cursor = true
+    config.force_reverse_video_selection = true
 
-    colors = {
-      primary.foreground = "#cdd6f4";
-      primary.background = "#1e1e2e";
+    config.colors = {
+      foreground = '#cdd6f4',
+      background = '#1e1e2e',
 
-      normal.black   = "#1e1e2e";
-      normal.red     = "#eba0ac";
-      normal.green   = "#a6e3a1";
-      normal.yellow  = "#f9e2af";
-      normal.blue    = "#89b4fa";
-      normal.magenta = "#f5c2e7";
-      normal.cyan    = "#94e2d5";
-      normal.white   = "#bac2de";
+      cursor_border = '#cdd6f4',
 
-      bright.black   = "#585b70";
-      bright.red     = "#eba0ac";
-      bright.green   = "#a6e3a1";
-      bright.yellow  = "#f9e2af";
-      bright.blue    = "#89b4fa";
-      bright.magenta = "#f5c2e7";
-      bright.cyan    = "#94e2d5";
-      bright.white   = "#a6adc8";
-    };
-  };
+      ansi = {
+        '#1e1e2e',
+        '#eba0ac',
+        '#a6e3a1',
+        '#f9e2af',
+        '#89b4fa',
+        '#f5c2e7',
+        '#94e2d5',
+        '#bac2de',
+      },
+      brights = {
+        '#585b70',
+        '#eba0ac',
+        '#a6e3a1',
+        '#f9e2af',
+        '#89b4fa',
+        '#f5c2e7',
+        '#94e2d5',
+        '#a6adc8',
+      },
+    }
+
+    config.enable_tab_bar = false
+    config.window_background_opacity = 0.6
+
+    return config
+  '';
 
   # cursor
   home.pointerCursor = 
