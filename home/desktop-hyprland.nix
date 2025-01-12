@@ -10,6 +10,7 @@ in
     grim slurp wl-clipboard  # screenshots
     wf-recorder vlc          # recording
     waybar
+    kando
   ];
 
   programs.wezterm = {
@@ -29,7 +30,7 @@ in
     package = inputs.hyprland.packages.${system}.hyprland;
 
     settings = {
-      monitor = ["DP-1, 3840x2160@144, 0x0, 1.5"];
+      monitor = ["DP-1, 3840x2160@60, 0x0, 1.5"];
       input.follow_mouse = 2;
       xwayland.force_zero_scaling = true;
       env = [
@@ -41,6 +42,7 @@ in
       exec-once = [
         "hyprpaper"
         "systemctl --user start easyeffects.service"
+        "kando --ozone-platform-hint=auto"
         "waybar"
       ];
 
@@ -49,8 +51,8 @@ in
 
       bind = [
         # window creation / destruction
+        "CTRL SHIFT, Super_R, global, kando:run"
         "$mod, return, exec, $term"
-        "$mod, space, exec, exec $(tofi-drun --config ${../res/glassmorphism/tofi})"
         "$mod, Q, killactive"
         "$mod SHIFT, Q, exit"
 
@@ -99,6 +101,17 @@ in
       bindm = [
         "$mod, mouse:272, movewindow"
         "$mod, mouse:273, resizewindow"
+      ];
+
+      windowrule = [
+        "noblur, kando"
+        "opaque, kando"
+        "size 100% 100%, kando"
+        "center, kando"
+        "noborder, kando"
+        "noanim, kando"
+        "float, kando"
+        "pin, kando"
       ];
 
     };

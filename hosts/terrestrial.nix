@@ -90,12 +90,20 @@
     };
   };
 
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+    config.common.default = "*";
+  };
+
   programs.nix-ld.enable = true;
 
   # musnix
   musnix.enable = true;
 
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+  boot.kernelPackages = pkgs.linuxPackages_6_11;
+  boot.zfs.package = pkgs.zfs_unstable;
   boot.kernelModules = [ "v4l2loopback" "amdgpu" ];
 
   # ssh server
@@ -112,5 +120,6 @@
   ];
 
   # firmware
-  hardware.enableRedistributableFirmware = true;
+  hardware.enableAllFirmware = true;
+  nixpkgs.config.allowUnfree = true;
 }
