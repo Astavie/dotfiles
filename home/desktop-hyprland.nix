@@ -13,6 +13,10 @@ in
     kando
   ];
 
+  asta.backup.directories = [
+    "kando/.config/kando"
+  ];
+
   programs.wezterm = {
     enable = true;
     package = inputs.wezterm.packages.${system}.default.overrideAttrs (final: prev: {
@@ -27,7 +31,6 @@ in
 
   wayland.windowManager.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${system}.hyprland;
 
     settings = {
       monitor = ["DP-1, 3840x2160@60, 0x0, 1.5"];
@@ -117,9 +120,7 @@ in
     };
 
     plugins = [
-      # inputs.hyprland-plugins.packages.${system}.hyprbars
-      # inputs.hy3.packages.${system}.hy3
-      inputs.hyprfocus.packages.${system}.hyprfocus
+      pkgs.hyprlandPlugins.hyprfocus
     ];
   };
 

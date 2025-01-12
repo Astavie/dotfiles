@@ -10,20 +10,8 @@
     musnix.url = "github:musnix/musnix";
     musnix.inputs.nixpkgs.follows = "nixpkgs";
 
-    zen-browser.url = "github:bodenlosus/zen-browser-flake";
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
-
-    hyprland.url = "github:hyprwm/Hyprland";
-    hyprland.inputs.nixpkgs.follows = "nixpkgs";
-
-    # hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
-    # hyprland-plugins.inputs.hyprland.follows = "hyprland";
-
-    # hy3.url = "github:outfoxxed/hy3";
-    # hy3.inputs.hyprland.follows = "hyprland";
-
-    hyprfocus.url = "github:pyt0xic/hyprfocus";
-    hyprfocus.inputs.hyprland.follows = "hyprland";
 
     wezterm.url = "github:wez/wezterm?dir=nix";
     wezterm.inputs.nixpkgs.follows = "nixpkgs";
