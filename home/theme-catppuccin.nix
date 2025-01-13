@@ -56,6 +56,7 @@
     };
   };
 
+  home.file.".config/tofi/config".source = ../res/glassmorphism/tofi;
   home.file.".config/waybar/style.css".source = ../res/catppuccin/waybar.css;
   home.file.".config/discocss/custom.css".source = ../res/catppuccin/discord.css;
   home.file.".config/vesktop/themes/catppuccin.css".source = ../res/catppuccin/discord.css;

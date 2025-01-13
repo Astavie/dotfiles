@@ -44,7 +44,6 @@
 
             # apps
             torrential
-            peek
             obsidian
 
             gimp
