@@ -33,13 +33,13 @@ in
     enable = true;
 
     settings = {
-      monitor = ["DP-1, 3840x2160@60, 0x0, 1.5"];
+      monitor = ["DP-1, 3840x2160@60, 0x0, 2.0"];
       input.follow_mouse = 2;
       xwayland.force_zero_scaling = true;
       env = [
         "XCURSOR_SIZE,24"
         "HYPRCURSOR_SIZE,24"
-        "GDK_SCALE,1.5"
+        "GDK_SCALE,2.0"
       ];
 
       exec-once = [
