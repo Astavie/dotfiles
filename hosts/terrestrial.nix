@@ -85,6 +85,7 @@
         ../home/minecraft.nix
         ../home/music.nix
         ../home/obs.nix
+        ../home/stuck.nix
       ];
     };
   };
