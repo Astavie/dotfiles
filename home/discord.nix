@@ -3,7 +3,6 @@
 {
   home.packages = with pkgs; [
     xdg-utils
-    xwaylandvideobridge
     vesktop
   ];
 

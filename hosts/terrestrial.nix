@@ -53,7 +53,7 @@
             popcorntime
             vlc
 
-            kdenlive
+            kdePackages.kdenlive
             ffmpeg
             audacity
 
@@ -86,9 +86,17 @@
         ../home/music.nix
         ../home/obs.nix
         ../home/stuck.nix
+        ../home/libtas.nix
+        ../home/godot.nix
       ];
     };
   };
+
+  # WIVRN
+  services.avahi.publish.enable = true;
+  services.avahi.publish.userServices = true;
+  networking.firewall.allowedTCPPorts = [ 9757 ];
+  networking.firewall.allowedUDPPorts = [ 9757 5353 ];
 
   xdg.portal = {
     enable = true;
@@ -102,8 +110,8 @@
   musnix.enable = true;
 
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
-  boot.kernelPackages = pkgs.linuxPackages_6_11;
-  boot.zfs.package = pkgs.zfs_unstable;
+  # boot.kernelPackages = pkgs.linuxPackages_6_11;
+  # boot.zfs.package = pkgs.zfs_unstable;
   boot.kernelModules = [ "v4l2loopback" "amdgpu" ];
 
   # ssh server

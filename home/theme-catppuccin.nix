@@ -2,7 +2,7 @@
 
 {
   home.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
+    nerd-fonts.caskaydia-mono
     cascadia-code
   ];
 
@@ -89,6 +89,7 @@
 
     config.force_reverse_video_cursor = true
     config.force_reverse_video_selection = true
+    config.check_for_updates = false
 
     config.colors = {
       foreground = '#cdd6f4',

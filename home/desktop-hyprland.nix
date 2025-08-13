@@ -107,20 +107,22 @@ in
       ];
 
       windowrule = [
-        "noblur, kando"
-        "opaque, kando"
-        "size 100% 100%, kando"
-        "center, kando"
-        "noborder, kando"
-        "noanim, kando"
-        "float, kando"
-        "pin, kando"
+        "noblur, class:kando"
+        "opaque, class:kando"
+        "size 100% 100%, class:kando"
+        "center, class:kando"
+        "noborder, class:kando"
+        "noanim, class:kando"
+        "float, class:kando"
+        "float, xwayland:1"
+        "pin, class:kando"
       ];
 
     };
 
     plugins = [
-      pkgs.hyprlandPlugins.hyprfocus
+      # TODO: re-enable once it isn't broken anymore
+      # pkgs.hyprlandPlugins.hyprfocus
     ];
   };
 

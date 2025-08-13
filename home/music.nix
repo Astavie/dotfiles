@@ -28,6 +28,7 @@ in
     soundfont-fluid
     execline
     x42-plugins
+    helm
 
     musescore
     muse-sounds-manager
