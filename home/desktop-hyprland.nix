@@ -31,8 +31,11 @@ in
 
   wayland.windowManager.hyprland = {
     enable = true;
+    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
 
     settings = {
+      ecosystem.no_update_news = true;
+
       monitor = ["DP-1, 3840x2160@60, 0x0, 2.0"];
       input.follow_mouse = 2;
       xwayland.force_zero_scaling = true;
@@ -120,9 +123,8 @@ in
 
     };
 
-    plugins = [
-      # TODO: re-enable once it isn't broken anymore
-      # pkgs.hyprlandPlugins.hyprfocus
+    plugins = with inputs.hyprland-plugins.packages.${pkgs.system}; [
+      hyprfocus
     ];
   };
 

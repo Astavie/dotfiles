@@ -84,6 +84,8 @@
   programs.wezterm.extraConfig = ''
     local config = wezterm.config_builder()
 
+    config.dpi = 384.0
+
     config.font = wezterm.font 'Cascadia Code'
     config.font_size = 10.0
 
