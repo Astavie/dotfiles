@@ -22,6 +22,8 @@
       inputs.hyprland.follows = "hyprland";
     };
 
+    cros.url = "github:ninelore/flake";
+
     # ---- OVERLAYS ----
     overlay-astapkgs = {
       url = "github:Astavie/astapkgs";
@@ -35,6 +37,13 @@
         terrestrial = nixpkgs.lib.nixosSystem {
           modules = [ ./hosts/terrestrial.nix ];
           system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs;
+          };
+        };
+        satellite = nixpkgs.lib.nixosSystem {
+          modules = [ ./hosts/satellite.nix ];
+          system = "aarch64-linux";
           specialArgs = {
             inherit inputs;
           };

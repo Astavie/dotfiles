@@ -92,12 +92,16 @@
     };
   };
 
-  # WIVRN
+  # enable cross compiling to aarch64-linux
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
+  # WIVRN / ALVR
   services.avahi.publish.enable = true;
   services.avahi.publish.userServices = true;
   networking.firewall.allowedTCPPorts = [ 9943 9944 9757 ];
   networking.firewall.allowedUDPPorts = [ 9943 9944 9757 5353 ];
 
+  # some other stuff
   networking.interfaces."enp4s0".wakeOnLan.enable = true;
 
   xdg.portal = {
@@ -108,12 +112,9 @@
 
   programs.nix-ld.enable = true;
 
-  # musnix
   musnix.enable = true;
 
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
-  # boot.kernelPackages = pkgs.linuxPackages_6_11;
-  # boot.zfs.package = pkgs.zfs_unstable;
   boot.kernelModules = [ "v4l2loopback" "amdgpu" ];
 
   # ssh server
