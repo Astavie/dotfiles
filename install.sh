@@ -39,7 +39,7 @@ echo $SYSTEM
 
 info "Select the device to install system"
 
-DEVICE=$(lsblk -o name,size,label -p -n -d | gum filter | cut -d ' ' -f1)
+DEVICE=$(lsblk -o name,size,label -p -n -d | gum choose | cut -d ' ' -f1)
 
 if [ "$DEVICE" = "" ]
 then
@@ -67,7 +67,7 @@ if [ $PARTITION -eq 0 ]; then
     PART_BOOT=${DEVICE}3
 else
     info "Select the nixos partition"
-    PART_NIXOS=$(lsblk -o name,size,label -p -n -l $DEVICE | tail -n +2 | gum filter | cut -d ' ' -f1)
+    PART_NIXOS=$(lsblk -o name,size,label -p -n -l $DEVICE | tail -n +2 | gum choose | cut -d ' ' -f1)
     if [ "$PART_NIXOS" = "" ]
     then
         echo "invalid partition"
@@ -76,7 +76,7 @@ else
     echo $PART_NIXOS
 
     info "Select the swap partition"
-    PART_SWAP=$(lsblk -o name,size,label -p -n -l $DEVICE | tail -n +2 | gum filter | cut -d ' ' -f1)
+    PART_SWAP=$(lsblk -o name,size,label -p -n -l $DEVICE | tail -n +2 | gum choose | cut -d ' ' -f1)
     if [ "$PART_SWAP" = "" ]
     then
         echo "invalid partition"
@@ -85,7 +85,7 @@ else
     echo $PART_SWAP
 
     info "Select the boot partition"
-    PART_BOOT=$(lsblk -o name,size,label -p -n -l $DEVICE | tail -n +2 | gum filter | cut -d ' ' -f1)
+    PART_BOOT=$(lsblk -o name,size,label -p -n -l $DEVICE | tail -n +2 | gum choose | cut -d ' ' -f1)
     if [ "$PART_BOOT" = "" ]
     then
         echo "invalid partition"
