@@ -62,6 +62,7 @@
 
             # games
             ckan
+            osu-lazer-bin
           ];
 
           programs.git = {
@@ -74,6 +75,7 @@
             "xfce/.config/xfce4"
             "xfce/Desktop"
             "fonts/.local/share/fonts"
+            "osu/.local/share/osu"
           ];
         }
         ../home/desktop-hyprland.nix
@@ -114,6 +116,7 @@
 
   musnix.enable = true;
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
   boot.kernelModules = [ "v4l2loopback" "amdgpu" ];
 
