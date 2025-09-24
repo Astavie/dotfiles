@@ -48,6 +48,13 @@
             inherit inputs;
           };
         };
+        newhorizons = nixpkgs.lib.nixosSystem {
+          modules = [ ./hosts/newhorizons.nix ];
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs;
+          };
+        };
       };
     };
 

@@ -79,6 +79,9 @@
     preload = ${../res/glassmorphism/neoncity.jpg}
     wallpaper = ,${../res/glassmorphism/neoncity.jpg}
   '';
+  home.file.".config/dunst/dunstrc".source = ../res/catppuccin/dunstrc;
+  home.file.".config/rofi/config.rasi".source = ../res/catppuccin/rofi/config.rasi;
+  home.file.".local/share/rofi/themes/theme.rasi".source = ../res/catppuccin/rofi/theme.rasi;
 
   # terminal emulator
   programs.wezterm.extraConfig = ''
@@ -126,6 +129,41 @@
 
     return config
   '';
+
+  programs.alacritty.settings = {
+    window.opacity = 0.8;
+
+    font.normal.family = "Spleen";
+    font.size = 8.0;
+
+    font.offset.x = 1;
+    font.offset.y = 0;
+
+    cursor.style.shape = "Beam";
+
+    colors = {
+      primary.foreground = "#cdd6f4";
+      primary.background = "#1e1e2e";
+
+      normal.black   = "#1e1e2e";
+      normal.red     = "#eba0ac";
+      normal.green   = "#a6e3a1";
+      normal.yellow  = "#f9e2af";
+      normal.blue    = "#89b4fa";
+      normal.magenta = "#f5c2e7";
+      normal.cyan    = "#94e2d5";
+      normal.white   = "#bac2de";
+
+      bright.black   = "#585b70";
+      bright.red     = "#eba0ac";
+      bright.green   = "#a6e3a1";
+      bright.yellow  = "#f9e2af";
+      bright.blue    = "#89b4fa";
+      bright.magenta = "#f5c2e7";
+      bright.cyan    = "#94e2d5";
+      bright.white   = "#a6adc8";
+    };
+  };
 
   # cursor
   home.pointerCursor = 

@@ -3,9 +3,7 @@
 {
   home.packages = with pkgs; [
     # cmd utils
-    mc
     pulseaudio
-    shell-gpt
     pre-commit
 
     # languages
@@ -66,18 +64,10 @@
     rustc-wrapper = "${pkgs.sccache}/bin/sccache"
   '';
 
-  # midnight commander
-  home.file.".config/mc/ini".text = ''
-    [Midnight-Commander]
-    skin=theme
-    use_internal_edit=false
-  '';
-
   # backup
   asta.backup.directories = [
     "autojump/.local/share/autojump"
     "direnv/.local/share/direnv/allow"
     "fish/.local/share/fish"
-    "shell_gpt/.config/shell_gpt"
   ];
 }

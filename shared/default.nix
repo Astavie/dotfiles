@@ -164,6 +164,8 @@ in
 
     security.sudo.enable = config.asta.sudo == "sudo";
     security.doas.enable = config.asta.sudo == "doas";
+    environment.systemPackages =
+      lib.optionals (config.asta.sudo == "doas") [ pkgs.doas-sudo-shim ];
 
     # reasonable defaults
     time.timeZone = "Europe/Amsterdam";
