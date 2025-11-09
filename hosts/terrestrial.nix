@@ -59,6 +59,7 @@
 
             minecraftia
             corefonts
+            aegyptus
 
             # games
             ckan
@@ -94,9 +95,6 @@
     };
   };
 
-  # enable cross compiling to aarch64-linux
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
   # WIVRN / ALVR
   services.avahi.publish.enable = true;
   services.avahi.publish.userServices = true;
@@ -116,7 +114,7 @@
 
   musnix.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
   boot.kernelModules = [ "v4l2loopback" "amdgpu" ];
 

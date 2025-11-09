@@ -43,7 +43,7 @@
       focus_animation = "flash";
 
       bezier = [
-        "realsmooth, 0.28,0.29,.69,1.08"
+        "realsmooth, 0.28, 0.29, 0.69, 1.08"
       ];
       
       flash = {

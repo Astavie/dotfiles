@@ -7,6 +7,7 @@
     pulseaudio
     shell-gpt
     pre-commit
+    unstable.devenv
 
     # languages
     nil
@@ -57,6 +58,11 @@
     lsp.display-messages = true;
     lsp.display-inlay-hints = true;
     # soft-wrap.enable = true;
+  };
+  programs.helix.languages = {
+    language-server.rust-analyzer.config = {
+      check.command = "clippy";
+    };
   };
   home.sessionVariables.EDITOR = "${config.programs.helix.package}/bin/hx";
 
