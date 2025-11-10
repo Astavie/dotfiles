@@ -89,6 +89,33 @@
     config.font = wezterm.font 'Cascadia Code'
     config.font_size = 10.0
 
+    local editor = os.getenv("EDITOR")
+
+    config.hyperlink_rules = wezterm.default_hyperlink_rules()
+    table.insert(config.hyperlink_rules, {
+      regex = [[\b[^\s:]*:\d+(:\d+)?\b]],
+      format = "$EDITOR:$0",
+    })
+    wezterm.on("open-uri", function(window, pane, uri)
+      local start, match_end = uri:find("$EDITOR:")
+      if start == 1 then
+        local file = uri:sub(match_end + 1)
+        pane:window():spawn_tab {
+          args = {"${pkgs.direnv}/bin/direnv", "exec", ".", editor, file},
+        }
+        return false
+      end
+    end)
+    config.keys = {
+      {
+        key = 'e',
+        mods = 'SUPER',
+        action = wezterm.action.SpawnCommandInNewTab {
+          args = {"${pkgs.direnv}/bin/direnv", "exec", ".", editor},
+        },
+      },
+    }
+
     config.force_reverse_video_cursor = true
     config.force_reverse_video_selection = true
     config.check_for_updates = false
