@@ -49,7 +49,8 @@ in
             sutils
             skim
             silver-searcher
-            (GPUOffloadApp unityhub "unityhub")
+            jujutsu
+            unityhub
           ];
           programs.git = {
             userEmail = "astavie@pm.me";
@@ -57,6 +58,8 @@ in
           };
           asta.backup.directories = [
             "unity3d/.config/unity3d"
+            "unity3d/.config/unityhub"
+            "unity3d/Unity"
           ];
         }
         ../home/desktop-herbstluftwm
@@ -65,19 +68,18 @@ in
         ../home/zen.nix
         ../home/git.nix
         ../home/shell.nix
+        ../home/music.nix
       ];
     };
   };
 
+  hardware.enableRedistributableFirmware = true;
+
   # nvidia
-  hardware.nvidia.forceFullCompositionPipeline = true;
   hardware.nvidia.modesetting.enable = true;
   hardware.nvidia.open = false;
+  services.xserver.videoDrivers = [ "modesetting" "nvidia" ];
 
-  services.xserver.videoDrivers = [
-    "modesetting"
-    "nvidia"
-  ];
   hardware.nvidia.prime = {
     offload = {
       enable = true;
@@ -92,10 +94,24 @@ in
   networking.networkmanager.wifi.backend = "wpa_supplicant";
 
   # cpu
-  hardware.enableRedistributableFirmware = true;
   hardware.cpu.intel.updateMicrocode = true;
 
   # graphics
   hardware.graphics.enable = true;
   hardware.graphics.enable32Bit = true;
+
+  # bluetooth
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings = {
+      General = {
+        Experimental = true;
+        FastConnectable = true;
+      };
+      Policy = {
+        AutoEnable = true;
+      };
+    };
+  };
 }

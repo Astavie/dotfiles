@@ -13,7 +13,7 @@ hc set_layout max
 hc rename default one
 hc add two
 
-hc keybind Print spawn scrot /tmp/ -s -e 'xclip -selection clipboard -t image/png -i $f'
+hc keybind Print spawn scrot /tmp/scrot.png -s -e 'xclip -selection clipboard -t image/png -i $f'
 
 hc keybind $Mod-o shift_to_monitor +1
 hc keybind $Mod-i use_index +1

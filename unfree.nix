@@ -18,4 +18,5 @@
   "nvidia-x11"
   "nvidia-settings"
   "unityhub"
+  "muse-sounds-manager"
 ]

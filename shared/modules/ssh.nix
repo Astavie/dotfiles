@@ -7,6 +7,26 @@ let
     ${config.asta.sudo} nix-env -p /nix/var/nix/profiles/system --set $STORE
     ${config.asta.sudo} /nix/var/nix/profiles/system/bin/switch-to-configuration switch
   '';
+  reentry = pkgs.writeShellScriptBin "reentry" ''
+    TERRESTRIAL="terrestrial.local"
+    MACADDR="18:c0:4d:e0:b6:3e"
+    HOUSTON="raspberrypi.local"
+
+    # try pinging terrestrial
+    ping -c 1 -w 1 "$TERRESTRIAL"
+
+    if [ $? -ne 0 ]; then
+            echo "PC IS OFF? WAKEY WAKEY!"
+            # no connection, we wake it up
+            ${lib.getExe' pkgs.sshpass "sshpass"} -ppi ssh "$HOUSTON" "~/.local/bin/wakeonlan $MACADDR"
+            sleep 1m
+            echo "OKAY PC, TIME TO GET UP"
+    fi
+
+    # time to ssh now
+    exec ssh "$TERRESTRIAL" 
+  '';
+
   subset = module: lib.mkOption {
     type = with lib.types; attrsOf (submodule module);
   };
@@ -19,7 +39,7 @@ in
     };
     config = lib.mkIf u.config.ssh.enable {
       modules = [{
-        home.packages = [ flex ];
+        home.packages = [ flex reentry ];
         asta.backup.directories = [ "ssh/.ssh" ];
       }];
     };

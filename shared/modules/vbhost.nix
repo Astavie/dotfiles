@@ -22,6 +22,7 @@ in
 
   config = lib.mkIf (vbhost-users != {}) {
     virtualisation.virtualbox.host.enable = true;
+    boot.kernelParams = [ "kvm.enable_virt_at_load=0" ];
     users.extraGroups.vboxusers.members = builtins.attrNames vbhost-users;
   };
 }
