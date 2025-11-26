@@ -32,8 +32,8 @@
     ];
 
     layerrule = [
-      "blur,waybar"
-      "blur,launcher"
+      "blur 1, match:namespace waybar"
+      "blur 1, match:namespace launcher"
     ];
 
     "plugin:hyprfocus" = {

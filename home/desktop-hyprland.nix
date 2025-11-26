@@ -110,15 +110,15 @@ in
       ];
 
       windowrule = [
-        "noblur, class:kando"
-        "opaque, class:kando"
-        "size 100% 100%, class:kando"
-        "center, class:kando"
-        "noborder, class:kando"
-        "noanim, class:kando"
-        "float, class:kando"
-        "float, xwayland:1"
-        "pin, class:kando"
+        "no_blur 1, match:class kando"
+        "opaque 1, match:class kando"
+        "size 100% 100%, match:class kando"
+        "center 1, match:class kando"
+        "border_size 0, match:class kando"
+        "no_anim 1, match:class kando"
+        "float 1, match:class kando"
+        "float 1, match:xwayland 1"
+        "pin 1, match:class kando"
       ];
 
     };
