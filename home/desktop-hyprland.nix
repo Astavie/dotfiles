@@ -31,7 +31,7 @@ in
 
   wayland.windowManager.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    package = inputs.hyprland.packages.${system}.hyprland;
 
     settings = {
       ecosystem.no_update_news = true;
@@ -57,7 +57,8 @@ in
 
       bind = [
         # window creation / destruction
-        "CTRL SHIFT, Super_R, global, kando:run"
+        "CTRL SHIFT ALT SUPER, T, global, org.chromium.Chromium:run"
+        "$mod, Space, global, org.chromium.Chromium:run"
         "$mod, return, exec, $term"
         "$mod, Q, killactive"
         "$mod SHIFT, Q, exit"
@@ -66,8 +67,9 @@ in
         "$mod, P, pin"
 
         # TODO: fix these
-        "$mod, U, exec, [float] $term -e bash -lic \"uup /data/astavie/dotfiles/ ; read -p Done!\""
-        "$mod SHIFT, U, exec, [float] $term -e bash -lic \"sup /data/astavie/dotfiles/ ; read -p Done!\""
+        # "$mod, U, exec, [float] $term -e bash -lic \"uup /data/astavie/dotfiles/ ; read -p Done!\""
+        # "$mod SHIFT, U, exec, [float] $term -e bash -lic \"sup /data/astavie/dotfiles/ ; read -p Done!\""
+        "$mod, Y, exec, $term -e fish -C yazi"
 
         # screenshot / recording
         "$mod SHIFT, P, exec, grim -g \"$(slurp)\" -t png - | wl-copy  -t image/png"
@@ -110,20 +112,20 @@ in
       ];
 
       windowrule = [
-        "noblur, class:kando"
-        "opaque, class:kando"
-        "size 100% 100%, class:kando"
-        "center, class:kando"
-        "noborder, class:kando"
-        "noanim, class:kando"
-        "float, class:kando"
-        "float, xwayland:1"
-        "pin, class:kando"
+        "no_blur 1, match:class kando"
+        "opaque 1, match:class kando"
+        "size 100% 100%, match:class kando"
+        "center 1, match:class kando"
+        "border_size 0, match:class kando"
+        "no_anim 1, match:class kando"
+        "float 1, match:class kando"
+        "float 1, match:xwayland 1"
+        "pin 1, match:class kando"
       ];
 
     };
 
-    plugins = with inputs.hyprland-plugins.packages.${pkgs.system}; [
+    plugins = with inputs.hyprland-plugins.packages.${system}; [
       hyprfocus
     ];
   };

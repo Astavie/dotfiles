@@ -1,13 +1,10 @@
 { lib, config, ... }:
 
 let
-  subset = module: lib.mkOption {
-    type = with lib.types; attrsOf (submodule module);
-  };
-  vbhost-users = lib.filterAttrs (_: cfg: cfg.vbhost.enable) config.asta.users;
+  vbhost-users = lib.enabled "vbhost" config.asta.users;
 in
 {
-  options.asta.users = subset (u: {
+  options.asta.users = lib.subset (u: {
     options = {
       vbhost.enable = lib.mkEnableOption "vbhost";
     };

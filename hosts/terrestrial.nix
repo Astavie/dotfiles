@@ -28,6 +28,7 @@
     users.astavie = {
       ssh.enable = true;
       steam.enable = true;
+      wivrn.enable = true;
       vbhost.enable = true;
 
       modules = [
@@ -43,21 +44,18 @@
             silver-searcher
 
             # apps
-            torrential
             obsidian
-
             gimp
             krita
             inkscape
-
             popcorntime
             vlc
-
             kdePackages.kdenlive
             ffmpeg
             audacity
 
-            minecraftia
+            # fonts
+            # minecraftia
             corefonts
             aegyptus
 
@@ -66,9 +64,11 @@
             osu-lazer-bin
           ];
 
-          programs.git = {
-            userEmail = "astavie@pm.me";
-            userName = "Astavie";
+          home.file.".local/share/fonts/truetype/Minecraftia-Regular.ttf".source = ../res/Minecraftia-Regular.ttf;
+
+          programs.git.settings.user = {
+            email = "astavie@pm.me";
+            name = "Astavie";
           };
 
           asta.backup.directories = [
@@ -95,12 +95,6 @@
     };
   };
 
-  # WIVRN / ALVR
-  services.avahi.publish.enable = true;
-  services.avahi.publish.userServices = true;
-  networking.firewall.allowedTCPPorts = [ 9943 9944 9757 ];
-  networking.firewall.allowedUDPPorts = [ 9943 9944 9757 5353 ];
-
   # some other stuff
   networking.interfaces."enp4s0".wakeOnLan.enable = true;
 
@@ -114,7 +108,9 @@
 
   musnix.enable = true;
 
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.zfs.package = pkgs.zfs_unstable;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
   boot.kernelModules = [ "v4l2loopback" "amdgpu" ];
 

@@ -27,6 +27,7 @@
   fileSystems."/persist" = {
     device = "nixos/safe/persist";
     fsType = "zfs";
+    neededForBoot = true;
   };
 
   boot.kernelParams = [ "elevator=none" "nohibernate" ];

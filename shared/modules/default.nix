@@ -11,5 +11,6 @@
     ./steam.nix
     ./vbhost.nix
     ./xserver.nix
+    ./wivrn.nix
   ];
 }

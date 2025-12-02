@@ -1,9 +1,9 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    home-manager.url = "github:nix-community/home-manager/release-25.05";
+    home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     impermanence.url = "github:nix-community/impermanence";
@@ -27,30 +27,45 @@
     cros.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     # ---- OVERLAYS ----
-    overlay-astapkgs = {
-      url = "github:Astavie/astapkgs";
-    };
+    # overlay-astapkgs = {
+    #   url = "github:Astavie/astapkgs";
+    # };
   };
 
   outputs = { nixpkgs, ... }@inputs:
 
+    let
+      lib = nixpkgs.lib.extend (self: super: {
+        subset = module: super.mkOption {
+          type = with lib.types; attrsOf (submodule module);
+        };
+        enabled = name: users: super.filterAttrs (_: cfg: cfg.${name}.enable) users;
+        module = config: name: home: system: {
+          options.asta.users = self.subset (user: {
+            options.${name}.enable = super.mkEnableOption name;
+            config = super.mkIf user.config.${name}.enable { modules = [home]; };
+          });
+          config = super.mkIf (self.enabled name config.asta.users != {}) system;
+        };
+      });
+    in
     {
       nixosConfigurations = {
-        terrestrial = nixpkgs.lib.nixosSystem {
+        terrestrial = lib.nixosSystem {
           modules = [ ./hosts/terrestrial.nix ];
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs;
           };
         };
-        satellite = nixpkgs.lib.nixosSystem {
+        satellite = lib.nixosSystem {
           modules = [ ./hosts/satellite.nix ];
           system = "aarch64-linux";
           specialArgs = {
             inherit inputs;
           };
         };
-        newhorizons = nixpkgs.lib.nixosSystem {
+        newhorizons = lib.nixosSystem {
           modules = [ ./hosts/newhorizons.nix ];
           system = "x86_64-linux";
           specialArgs = {

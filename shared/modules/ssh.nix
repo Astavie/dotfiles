@@ -26,14 +26,10 @@ let
     # time to ssh now
     exec ssh "$TERRESTRIAL" 
   '';
-
-  subset = module: lib.mkOption {
-    type = with lib.types; attrsOf (submodule module);
-  };
-  ssh-users = lib.filterAttrs (_: cfg: cfg.ssh.enable) config.asta.users;
+  ssh-users = lib.enabled "ssh" config.asta.users;
 in
 {
-  options.asta.users = subset (u: {
+  options.asta.users = lib.subset (u: {
     options = {
       ssh.enable = lib.mkEnableOption "ssh";
     };
