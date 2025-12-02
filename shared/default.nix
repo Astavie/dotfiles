@@ -150,7 +150,11 @@ in
 
   config = {
     # nixos settings
-    nixpkgs.overlays = overlays;
+    nixpkgs.overlays = overlays ++ [(final: _prev: {
+      unstable = import inputs.nixpkgs-unstable {
+        system = config.nixpkgs.system;
+      };
+    })];
     nixpkgs.config = {
       inherit allowUnfreePredicate;
       permittedInsecurePackages = unfree;
