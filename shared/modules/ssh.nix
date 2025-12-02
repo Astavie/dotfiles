@@ -7,13 +7,10 @@ let
     ${config.asta.sudo} nix-env -p /nix/var/nix/profiles/system --set $STORE
     ${config.asta.sudo} /nix/var/nix/profiles/system/bin/switch-to-configuration switch
   '';
-  subset = module: lib.mkOption {
-    type = with lib.types; attrsOf (submodule module);
-  };
-  ssh-users = lib.filterAttrs (_: cfg: cfg.ssh.enable) config.asta.users;
+  ssh-users = lib.enabled "ssh" config.asta.users;
 in
 {
-  options.asta.users = subset (u: {
+  options.asta.users = lib.subset (u: {
     options = {
       ssh.enable = lib.mkEnableOption "ssh";
     };

@@ -3,11 +3,10 @@
 {
   home.packages = with pkgs; [
     # cmd utils
-    mc
     pulseaudio
     shell-gpt
     pre-commit
-    unstable.devenv
+    devenv
 
     # languages
     nil
@@ -48,7 +47,12 @@
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
-  programs.autojump.enable = true;
+
+  # rust cmd utils
+  programs.yazi.enable = true;
+  programs.yazi.enableFishIntegration = true;
+  programs.zoxide.enable = true;
+  programs.zoxide.enableFishIntegration = true;
 
   # Helix
   programs.helix.enable = true;
@@ -81,7 +85,7 @@
 
   # backup
   asta.backup.directories = [
-    "autojump/.local/share/autojump"
+    "zoxide/.local/share/zoxide"
     "direnv/.local/share/direnv/allow"
     "fish/.local/share/fish"
     "shell_gpt/.config/shell_gpt"

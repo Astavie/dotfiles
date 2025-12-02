@@ -40,9 +40,9 @@
             skim
             silver-searcher
           ];
-          programs.git = {
-            userEmail = "astavie@pm.me";
-            userName = "Astavie";
+          programs.git.settings.user = {
+            email = "astavie@pm.me";
+            name = "Astavie";
           };
         }
         ../home/desktop-hyprland.nix

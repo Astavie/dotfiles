@@ -152,7 +152,11 @@ in
     # nixos settings
     nixpkgs.overlays = overlays ++ [(final: _prev: {
       unstable = import inputs.nixpkgs-unstable {
-        system = config.nixpkgs.system;
+        system = pkgs.stdenv.hostPlatform.system;
+        config = {
+          inherit allowUnfreePredicate;
+          permittedInsecurePackages = unfree;
+        };
       };
     })];
     nixpkgs.config = {
@@ -165,9 +169,21 @@ in
     nix.package = pkgs.nixVersions.stable;
     nix.extraOptions = "experimental-features = nix-command flakes";
     nix.settings.trusted-users = [ "@wheel" ];
+    nix.settings.download-buffer-size = 524288000; # https://github.com/NixOS/nix/issues/11728#issuecomment-2725297584
 
     security.sudo.enable = config.asta.sudo == "sudo";
     security.doas.enable = config.asta.sudo == "doas";
+    security.doas.extraRules = [{
+      groups = [ "wheel" ];
+      persist = true;
+    }];
+    environment.systemPackages = lib.optionals (config.asta.sudo == "doas") [
+      pkgs.doas-sudo-shim
+    ];
+
+    asta.backup.directories = [
+      "/var/lib/nixos"
+    ];
 
     # reasonable defaults
     time.timeZone = "Europe/Amsterdam";
@@ -187,7 +203,9 @@ in
     # dconf
     programs.dconf.enable = true;
     asta.modules = [{
-      asta.backup.directories = ["gsettings/.config/dconf"];
+      asta.backup.directories = [
+        "gsettings/.config/dconf"
+      ];
     }];
 
     # users
