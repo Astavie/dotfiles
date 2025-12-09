@@ -8,16 +8,17 @@
     soundfont-fluid
     execline
     x42-plugins
-    helm
 
     musescore
     muse-sounds-manager
   ];
 
-  home.file.".vst3/sfizz.vst3".source = "${pkgs.sfizz}/lib/vst3/sfizz.vst3";
+  home.file.".lv2/helm.lv2".source = "${pkgs.helm}/lib/lv2/helm.lv2";
+
   home.file.".vst3/Vital.vst3".source = "${pkgs.vital}/lib/vst3/Vital.vst3";
 
-  home.file.".vst/Vital.so".source = "${pkgs.vital}/lib/vst/Vital.so";
+  # home.file.".vst/Vital.so".source = "${pkgs.vital}/lib/vst/Vital.so";
+  # home.file.".vst/helm.so".source = "${pkgs.helm}/lib/lxvst/helm.so";
   home.file.".vst/lsp-plugins".source = "${pkgs.lsp-plugins}/lib/vst/lsp-plugins";
 
   asta.backup.directories = [
