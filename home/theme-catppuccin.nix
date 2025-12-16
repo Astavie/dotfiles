@@ -1,5 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, system, ... }:
 
+let
+  scale = (builtins.head system.asta.hardware.monitors).scale;
+in
 {
   home.packages = with pkgs; [
     nerd-fonts.caskaydia-mono
@@ -45,7 +48,7 @@
       bezier = [
         "realsmooth, 0.28, 0.29, 0.69, 1.08"
       ];
-      
+
       flash = {
         flash_opacity = 0.93;
         in_bezier = "realsmooth";
@@ -87,7 +90,7 @@
   programs.wezterm.extraConfig = ''
     local config = wezterm.config_builder()
 
-    config.dpi = 384.0
+    config.dpi = ${builtins.toString (96 * scale * scale)}
 
     config.font = wezterm.font 'Cascadia Code'
     config.font_size = 10.0

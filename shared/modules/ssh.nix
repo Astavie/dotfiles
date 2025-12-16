@@ -26,24 +26,14 @@ let
     # time to ssh now
     exec ssh "$TERRESTRIAL" 
   '';
-  ssh-users = lib.enabled "ssh" config.asta.users;
 in
-{
-  options.asta.users = lib.subset (u: {
-    options = {
-      ssh.enable = lib.mkEnableOption "ssh";
-    };
-    config = lib.mkIf u.config.ssh.enable {
-      modules = [{
-        home.packages = [ flex reentry ];
-        asta.backup.directories = [ "ssh/.ssh" ];
-      }];
-    };
-  });
-
-  config.asta.postinstall.scripts = lib.mapAttrsToList (user: cfg: {
+lib.module config "ssh" {
+  home.packages = [ flex reentry ];
+  asta.backup.directories = [ "ssh/.ssh" ];
+} (users: {
+  asta.postinstall.scripts = lib.mapAttrsToList (user: cfg: {
     inherit user;
     script = "${pkgs.openssh}/bin/ssh-keygen -t rsa -b 4096 -f ${cfg.dir.config "ssh"}/.ssh/id_rsa -N ''";
     dirs = [ "${cfg.dir.config "ssh"}/.ssh" ];
-  }) ssh-users;
-}
+  }) users;
+})

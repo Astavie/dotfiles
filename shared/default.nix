@@ -3,9 +3,6 @@
 let
   unfree = import ../unfree.nix;
   allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) unfree;
-  subset = module: lib.mkOption {
-    type = with lib.types; attrsOf (submodule module);
-  };
   overlay-names = builtins.filter (lib.hasPrefix "overlay-") (lib.mapAttrsToList (name: _: name) inputs);
   overlays = builtins.map (name: inputs.${name}.overlays.default) overlay-names;
 in
@@ -16,7 +13,7 @@ in
       default = "doas";
       example = "sudo";
       description = ''
-        What package to use for sudo
+        What package to use for sudo.
       '';
     };
     backup.files = lib.mkOption {
@@ -58,7 +55,7 @@ in
         Extra modules for all users.
       '';
     };
-    users = subset ({ name, ... }@u: {
+    users = lib.subset ({ name, ... }@u: {
       options = {
         # Required options
         modules = lib.mkOption {
@@ -96,11 +93,12 @@ in
         dir.data = lib.mkDefault "/data/${name}";
         dir.config = lib.mkDefault (_: u.config.dir.home);
 
-        modules = [{
+        modules = [({ config, ... }: {
           config = {
             home.homeDirectory = u.config.dir.home;
             home.username = name;
             home.stateVersion = "23.05";
+            home.file."data".source = config.lib.file.mkOutOfStoreSymlink u.config.dir.data;
           };
 
           options.asta = {
@@ -137,7 +135,7 @@ in
               '';
             };
           };
-        }];
+        })];
       };
     });
   };
@@ -198,7 +196,10 @@ in
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;
     home-manager.users = lib.mapAttrs (_: usercfg: { imports = config.asta.modules ++ usercfg.modules; }) config.asta.users;
-    home-manager.extraSpecialArgs = { inherit inputs; };
+    home-manager.extraSpecialArgs = {
+      inherit inputs;
+      system = config;
+    };
 
     # dconf
     programs.dconf.enable = true;

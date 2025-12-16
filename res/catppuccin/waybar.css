@@ -111,7 +111,8 @@ button {
 #wireplumber,
 #cpu,
 #memory,
-#temperature {
+#temperature,
+#battery {
     padding-left: 6px;
     padding-right: 4px;
 }
@@ -137,26 +138,23 @@ button {
 }
 
 #battery {
-    background-color: #ffffff;
-    color: #000000;
+    background-color: #f9e2af;
+    color: #1e1e2e;
 }
 
-#battery.charging, #battery.plugged {
-    color: #ffffff;
-    background-color: #26A65B;
+#battery.charging, #battery.plugged, #battery.full {
+    background-color: #a6e3a1;
 }
 
 @keyframes blink {
     to {
-        background-color: #ffffff;
-        color: #000000;
+        background-color: rgba(243, 139, 168, 0.33);
     }
 }
 
 /* Using steps() instead of linear as a timing function to limit cpu usage */
 #battery.critical:not(.charging) {
-    background-color: #f53c3c;
-    color: #ffffff;
+    background-color: #f38ba8;
     animation-name: blink;
     animation-duration: 0.5s;
     animation-timing-function: steps(12);
@@ -188,7 +186,7 @@ label:focus {
 }
 
 #cpu {
-    background-color: #a6e3a1;
+    background-color: #89dceb;
     color: #1e1e2e;
 }
 
@@ -229,7 +227,7 @@ label:focus {
 }
 
 #wireplumber.muted {
-    background-color: #f53c3c;
+    background-color: #f38ba8;
 }
 
 #custom-media {
