@@ -6,7 +6,7 @@
     pulseaudio
     shell-gpt
     pre-commit
-    devenv
+    unstable.devenv
 
     # languages
     nil

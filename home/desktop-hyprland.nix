@@ -65,6 +65,7 @@ in
 
         "$mod, P, togglefloating"
         "$mod, P, pin"
+        "$mod, F, fullscreen"
 
         # TODO: fix these
         # "$mod, U, exec, [float] $term -e bash -lic \"uup /data/astavie/dotfiles/ ; read -p Done!\""

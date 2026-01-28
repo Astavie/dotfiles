@@ -32,7 +32,7 @@
       vbhost.enable = true;
 
       modules = [
-        {
+        ({ config, ... }: {
           home.packages = with pkgs; [
             # base
             unzip
@@ -65,6 +65,7 @@
           ];
 
           home.file.".local/share/fonts/truetype/Minecraftia-Regular.ttf".source = ../res/Minecraftia-Regular.ttf;
+          home.file."data".source = config.lib.file.mkOutOfStoreSymlink /data/astavie;
 
           programs.git.settings.user = {
             email = "astavie@pm.me";
@@ -78,7 +79,7 @@
             "fonts/.local/share/fonts"
             "osu/.local/share/osu"
           ];
-        }
+        })
         ../home/desktop-hyprland.nix
         ../home/theme-catppuccin.nix
         ../home/discord.nix
@@ -94,6 +95,11 @@
       ];
     };
   };
+
+  networking.firewall.trustedInterfaces = [ "p2p-wl+" ];
+  networking.firewall.allowedTCPPorts = [ 7236 7250 ];
+  networking.firewall.allowedUDPPorts = [ 7236 5353 ];
+  xdg.portal.xdgOpenUsePortal = true;
 
   # some other stuff
   networking.interfaces."enp4s0".wakeOnLan.enable = true;
