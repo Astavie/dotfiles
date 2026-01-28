@@ -25,6 +25,9 @@
   asta = {
     pipewire.enable = true;
     networking.enable = true;
+    backup.directories = [
+      "/etc/NetworkManager/system-connections"
+    ];
 
     users.astavie = {
       ssh.enable = true;

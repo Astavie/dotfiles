@@ -14,6 +14,7 @@
   ];
 
   home.file.".lv2/helm.lv2".source = "${pkgs.helm}/lib/lv2/helm.lv2";
+  home.file.".lv2/sfizz.lv2".source = "${pkgs.unstable.sfizz-ui}/lib/lv2/sfizz.lv2";
 
   home.file.".vst3/Vital.vst3".source = "${pkgs.vital}/lib/vst3/Vital.vst3";
 

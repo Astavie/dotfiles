@@ -7,24 +7,33 @@ let
     ${config.asta.sudo} nix-env -p /nix/var/nix/profiles/system --set $STORE
     ${config.asta.sudo} /nix/var/nix/profiles/system/bin/switch-to-configuration switch
   '';
-  ssh-users = lib.enabled "ssh" config.asta.users;
-in
-{
-  options.asta.users = lib.subset (u: {
-    options = {
-      ssh.enable = lib.mkEnableOption "ssh";
-    };
-    config = lib.mkIf u.config.ssh.enable {
-      modules = [{
-        home.packages = [ flex ];
-        asta.backup.directories = [ "ssh/.ssh" ];
-      }];
-    };
-  });
+  reentry = pkgs.writeShellScriptBin "reentry" ''
+    TERRESTRIAL="terrestrial.local"
+    MACADDR="18:c0:4d:e0:b6:3e"
+    HOUSTON="raspberrypi.local"
 
-  config.asta.postinstall.scripts = lib.mapAttrsToList (user: cfg: {
+    # try pinging terrestrial
+    ping -c 1 -w 1 "$TERRESTRIAL"
+
+    if [ $? -ne 0 ]; then
+            echo "PC IS OFF? WAKEY WAKEY!"
+            # no connection, we wake it up
+            ${lib.getExe' pkgs.sshpass "sshpass"} -ppi ssh "$HOUSTON" "~/.local/bin/wakeonlan $MACADDR"
+            sleep 1m
+            echo "OKAY PC, TIME TO GET UP"
+    fi
+
+    # time to ssh now
+    exec ssh "$TERRESTRIAL" 
+  '';
+in
+lib.module config "ssh" {
+  home.packages = [ flex reentry ];
+  asta.backup.directories = [ "ssh/.ssh" ];
+} (users: {
+  asta.postinstall.scripts = lib.mapAttrsToList (user: cfg: {
     inherit user;
     script = "${pkgs.openssh}/bin/ssh-keygen -t rsa -b 4096 -f ${cfg.dir.config "ssh"}/.ssh/id_rsa -N ''";
     dirs = [ "${cfg.dir.config "ssh"}/.ssh" ];
-  }) ssh-users;
-}
+  }) users;
+})

@@ -4,7 +4,6 @@
   home.packages = with pkgs; [
     # cmd utils
     pulseaudio
-    shell-gpt
     pre-commit
     unstable.devenv
 
@@ -76,18 +75,10 @@
     rustc-wrapper = "${pkgs.sccache}/bin/sccache"
   '';
 
-  # midnight commander
-  home.file.".config/mc/ini".text = ''
-    [Midnight-Commander]
-    skin=theme
-    use_internal_edit=false
-  '';
-
   # backup
   asta.backup.directories = [
     "zoxide/.local/share/zoxide"
     "direnv/.local/share/direnv/allow"
     "fish/.local/share/fish"
-    "shell_gpt/.config/shell_gpt"
   ];
 }

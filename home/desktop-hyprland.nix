@@ -1,7 +1,8 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, lib, system, ... }:
 
 let
-  system = pkgs.stdenv.hostPlatform.system;
+  platform = pkgs.stdenv.hostPlatform.system;
+  scale = (builtins.head system.asta.hardware.monitors).scale;
 in
 {
   home.packages = with pkgs; [
@@ -19,7 +20,7 @@ in
 
   programs.wezterm = {
     enable = true;
-    package = inputs.wezterm.packages.${system}.default.overrideAttrs (final: prev: {
+    package = inputs.wezterm.packages.${platform}.default.overrideAttrs (final: prev: {
       patches = [(
         pkgs.fetchpatch {
           url = "https://patch-diff.githubusercontent.com/raw/wez/wezterm/pull/4093.patch";
@@ -31,18 +32,27 @@ in
 
   wayland.windowManager.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${system}.hyprland;
+    package = inputs.hyprland.packages.${platform}.hyprland;
 
     settings = {
       ecosystem.no_update_news = true;
 
-      monitor = ["DP-1, 3840x2160@60, 0x0, 2.0"];
+      monitor = builtins.map (monitor:
+        let
+          name = monitor.portname;
+          resolution = "${builtins.toString monitor.width}x${builtins.toString monitor.height}@${builtins.toString monitor.refreshRate}";
+          position = "${builtins.toString monitor.x}x${builtins.toString monitor.y}";
+          scale = "${builtins.toString monitor.scale}";
+        in "${name}, ${resolution}, ${position}, ${scale}"
+      ) system.asta.hardware.monitors;
+
       input.follow_mouse = 2;
+
       xwayland.force_zero_scaling = true;
       env = [
         "XCURSOR_SIZE,24"
         "HYPRCURSOR_SIZE,24"
-        "GDK_SCALE,2.0"
+        "GDK_SCALE,${builtins.toString scale}"
       ];
 
       exec-once = [
@@ -58,7 +68,7 @@ in
       bind = [
         # window creation / destruction
         "CTRL SHIFT ALT SUPER, T, global, org.chromium.Chromium:run"
-        "$mod, Space, global, org.chromium.Chromium:run"
+        "$mod, Space, exec, tofi-drun --drun-launch=true"
         "$mod, return, exec, $term"
         "$mod, Q, killactive"
         "$mod SHIFT, Q, exit"
@@ -120,13 +130,12 @@ in
         "border_size 0, match:class kando"
         "no_anim 1, match:class kando"
         "float 1, match:class kando"
-        "float 1, match:xwayland 1"
         "pin 1, match:class kando"
       ];
 
     };
 
-    plugins = with inputs.hyprland-plugins.packages.${system}; [
+    plugins = with inputs.hyprland-plugins.packages.${platform}; [
       hyprfocus
     ];
   };
@@ -138,10 +147,13 @@ in
         layer = "top";
         position = "top";
         height = 24;
-        output = ["DP-1"];
+        output = builtins.map (monitor: monitor.portname) system.asta.hardware.monitors;
         modules-left = [ "hyprland/workspaces" ];
         modules-center = [ "hyprland/window" ];
-        modules-right = [ "tray" "wireplumber" "memory" "cpu" "temperature" "clock" "custom/power" ];     
+        modules-right =
+          [ "tray" "wireplumber" "memory" "cpu" "temperature" ] ++
+          lib.optionals (system.asta.hardware.battery) [ "battery" ] ++
+          [ "clock" "custom/power" ];     
         "hyprland/workspaces" = {
           format = "{id} {windows} ";
           format-window-separator = " ";
@@ -173,7 +185,7 @@ in
         };
         temperature = {
           format = "{icon}";
-          format-icons = ["   " " ▏  " " ▎  " "  ▍  " " ▌  " " ▋  " " ▊  " " ▉  " " █  " " █▏ " " █▍ " " █▌ " " █▋ " " █▊ " " █▉ " " ██ " " ██▏" " ██▎" " ██▍" " ██▌"];
+          format-icons = ["   " " ▏  " " ▎  " " ▍  " " ▌  " " ▋  " " ▊  " " ▉  " " █  " " █▏ " " █▍ " " █▌ " " █▋ " " █▊ " " █▉ " " ██ " " ██▏" " ██▎" " ██▍" " ██▌"];
         };
         wireplumber = {
           format = "{icon}";
@@ -183,6 +195,10 @@ in
           tooltip-format = "{volume}%";
           scroll-step = 5;
           on-click = "pavucontrol";
+        };
+        battery = {
+          format = "{icon}";
+          format-icons = ["󰂎    " "󰂎 ▏  " "󰂎 ▎  " "󰂎 ▍  " "󰂎 ▌  " "󱊡 ▋  " "󱊡 ▊  " "󱊡 ▉  " "󱊡 █  " "󱊡 █▏ " "󱊢 █▍ " "󱊢 █▌ " "󱊢 █▋ " "󱊢 █▊ " "󱊢 █▉ " "󱊣 ██ " "󱊣 ██▏" "󱊣 ██▎" "󱊣 ██▍" "󱊣 ██▌"];
         };
         clock = {
           format = "{:%H:%M}";

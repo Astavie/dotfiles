@@ -25,6 +25,16 @@
       "/etc/ssh"
     ];
 
+    hardware = {
+      monitors = [{
+        portname = "DP-1";
+        scale = 2.0;
+        width = 3840;
+        height = 2160;
+        # refreshRate = 144;
+      }];
+    };
+
     users.astavie = {
       ssh.enable = true;
       steam.enable = true;

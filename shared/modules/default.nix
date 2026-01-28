@@ -3,6 +3,7 @@
 {
   imports = [
     ./hardware.nix
+    ./filesystem.nix
     ./impermanence.nix
     ./networking.nix
     ./pipewire.nix
