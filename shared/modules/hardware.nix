@@ -1,8 +1,8 @@
 { lib, ... }:
 
 {
-  options.asta = {
-    hardware.battery = lib.mkOption {
+  options.asta.hardware = {
+    battery = lib.mkOption {
       type = lib.types.bool;
       default = false;
       example = true;
@@ -11,7 +11,27 @@
       '';
     };
 
-    hardware.monitors = lib.sublist {
+    mouse = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Does this system have a mouse.
+        If false, assumes a trackpad / touchscreen is being used.
+      '';
+    };
+
+    keyboard = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      example = false;
+      description = ''
+        Does this system have a keyboard.
+        If false, assumes a touchscreen is being used.
+      '';
+    };
+
+    monitors = lib.sublist {
       options = {
         portname = lib.mkOption {
           type = lib.types.str;

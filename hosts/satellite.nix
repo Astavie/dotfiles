@@ -31,6 +31,7 @@
 
     users.astavie = {
       ssh.enable = true;
+      steam.enable = true;
 
       modules = [
         {
