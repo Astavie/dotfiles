@@ -26,6 +26,7 @@
     ];
 
     hardware = {
+      mouse = true;
       monitors = [{
         portname = "DP-1";
         scale = 2.0;

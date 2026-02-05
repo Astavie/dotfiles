@@ -11,6 +11,9 @@
 
     musescore
     muse-sounds-manager
+
+    yabridge
+    yabridgectl
   ];
 
   home.file.".lv2/helm.lv2".source = "${pkgs.helm}/lib/lv2/helm.lv2";
@@ -27,10 +30,17 @@
     "ardour/.cache/ardour7"
     "ardour/.config/ardour8"
     "ardour/.cache/ardour8"
+
     "vital/.local/share/vital"
+
     "musescore/.local/share/MuseSampler"
     "musescore/.local/share/MuseScore"
     "musescore/.muse-sounds-manager"
     "musescore/.config/MuseScore"
+
+    "yabridge/.wine"
+    "yabridge/.vst/yabridge"
+    "yabridge/.vst3/yabridge"
+    "yabridge/.config/yabridgectl"
   ];
 }

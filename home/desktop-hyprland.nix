@@ -11,6 +11,7 @@ in
     grim slurp wl-clipboard  # screenshots
     wf-recorder vlc          # recording
     waybar
+  ] ++ lib.optionals system.asta.hardware.mouse [
     kando
   ];
 
@@ -58,16 +59,18 @@ in
       exec-once = [
         "hyprpaper"
         "systemctl --user start easyeffects.service"
-        "kando --ozone-platform-hint=auto"
         "waybar"
+      ] ++ lib.optionals system.asta.hardware.mouse [
+        "kando --ozone-platform-hint=auto"
       ];
 
       "$mod" = "SUPER";
       "$term" = "wezterm";
 
-      bind = [
-        # window creation / destruction
+      bind = lib.optionals system.asta.hardware.mouse [
         "CTRL SHIFT ALT SUPER, T, global, org.chromium.Chromium:run"
+      ] ++ [
+        # window creation / destruction
         "$mod, Space, exec, tofi-drun --drun-launch=true"
         "$mod, return, exec, $term"
         "$mod, Q, killactive"
