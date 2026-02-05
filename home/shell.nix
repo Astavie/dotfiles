@@ -5,7 +5,7 @@
     # cmd utils
     pulseaudio
     pre-commit
-    devenv
+    unstable.devenv
 
     # languages
     nil
