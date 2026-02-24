@@ -99,7 +99,7 @@ in
 
     config.hyperlink_rules = wezterm.default_hyperlink_rules()
     table.insert(config.hyperlink_rules, {
-      regex = [[(\b|\/)[^\s:]*:\d+(:\d+)?\b]],
+      regex = [[(\b|\/)[^\s:]*\b:\d+(:\d+)?\b]],
       format = "$EDITOR:$0",
     })
     wezterm.on("open-uri", function(window, pane, uri)
