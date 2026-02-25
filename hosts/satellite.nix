@@ -16,6 +16,9 @@
   networking.hostName = "satellite";
   networking.hostId = "577d321b";
 
+  networking.networkmanager.enable = true;
+  hardware.graphics.enable = true;
+
   users.users.astavie = {
     password = "admin"; # TODO
     extraGroups = [ "wheel" "networkmanager" "dialout" ];
@@ -23,6 +26,7 @@
   };
 
   asta = {
+    impermanence.enable = true;
     pipewire.enable = true;
     networking.enable = true;
 

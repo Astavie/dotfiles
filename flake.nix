@@ -22,6 +22,7 @@
       inputs.hyprland.follows = "hyprland";
     };
 
+    # ---- CHROMEBOOK SPECIFICS ----
     cros.url = "github:ninelore/flake";
 
     # ---- OVERLAYS ----
