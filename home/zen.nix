@@ -6,6 +6,7 @@
   ];
 
   programs.zen-browser.enable = true;
+  programs.zen-browser.suppressXdgMigrationWarning = true;
   programs.zen-browser.policies = {
     AutofillAddressEnabled = true;
     AutofillCreditCardEnabled = false;
@@ -26,7 +27,7 @@
   };
 
   asta.backup.directories = [
-    "zen/.zen"
+    "zen/.config/zen"
   ];
   home.file.".mime.types".text = ''
     type=text/plain exts=md,mkd,mkdn,mdwn,mdown,markdown, desc="Markdown document"
