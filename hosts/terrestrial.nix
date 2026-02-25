@@ -25,13 +25,25 @@
       "/etc/ssh"
     ];
 
+    hardware = {
+      mouse = true;
+      monitors = [{
+        portname = "DP-1";
+        scale = 2.0;
+        width = 3840;
+        height = 2160;
+        refreshRate = 120;
+      }];
+    };
+
     users.astavie = {
       ssh.enable = true;
       steam.enable = true;
+      wivrn.enable = true;
       vbhost.enable = true;
 
       modules = [
-        {
+        ({ config, ... }: {
           home.packages = with pkgs; [
             # base
             unzip
@@ -43,31 +55,32 @@
             silver-searcher
 
             # apps
-            torrential
             obsidian
-
             gimp
             krita
             inkscape
-
             popcorntime
             vlc
-
             kdePackages.kdenlive
             ffmpeg
             audacity
 
-            minecraftia
+            # fonts
+            # minecraftia
             corefonts
+            aegyptus
 
             # games
             ckan
             osu-lazer-bin
           ];
 
-          programs.git = {
-            userEmail = "astavie@pm.me";
-            userName = "Astavie";
+          home.file.".local/share/fonts/truetype/Minecraftia-Regular.ttf".source = ../res/Minecraftia-Regular.ttf;
+          home.file."data".source = config.lib.file.mkOutOfStoreSymlink /data/astavie;
+
+          programs.git.settings.user = {
+            email = "astavie@pm.me";
+            name = "Astavie";
           };
 
           asta.backup.directories = [
@@ -77,7 +90,7 @@
             "fonts/.local/share/fonts"
             "osu/.local/share/osu"
           ];
-        }
+        })
         ../home/desktop-hyprland.nix
         ../home/theme-catppuccin.nix
         ../home/discord.nix
@@ -94,14 +107,10 @@
     };
   };
 
-  # enable cross compiling to aarch64-linux
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
-  # WIVRN / ALVR
-  services.avahi.publish.enable = true;
-  services.avahi.publish.userServices = true;
-  networking.firewall.allowedTCPPorts = [ 9943 9944 9757 ];
-  networking.firewall.allowedUDPPorts = [ 9943 9944 9757 5353 ];
+  networking.firewall.trustedInterfaces = [ "p2p-wl+" ];
+  networking.firewall.allowedTCPPorts = [ 7236 7250 ];
+  networking.firewall.allowedUDPPorts = [ 7236 5353 ];
+  xdg.portal.xdgOpenUsePortal = true;
 
   # some other stuff
   networking.interfaces."enp4s0".wakeOnLan.enable = true;
@@ -116,7 +125,9 @@
 
   musnix.enable = true;
 
+  boot.zfs.package = pkgs.zfs_unstable;
   boot.kernelPackages = pkgs.linuxPackages_latest;
+
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
   boot.kernelModules = [ "v4l2loopback" "amdgpu" ];
 

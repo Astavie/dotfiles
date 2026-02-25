@@ -1,5 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, system, ... }:
 
+let
+  scale = (builtins.head system.asta.hardware.monitors).scale;
+in
 {
   home.packages = with pkgs; [
     nerd-fonts.caskaydia-mono
@@ -32,8 +35,8 @@
     ];
 
     layerrule = [
-      "blur,waybar"
-      "blur,launcher"
+      "blur 1, match:namespace waybar"
+      "blur 1, match:namespace launcher"
     ];
 
     "plugin:hyprfocus" = {
@@ -43,9 +46,9 @@
       focus_animation = "flash";
 
       bezier = [
-        "realsmooth, 0.28,0.29,.69,1.08"
+        "realsmooth, 0.28, 0.29, 0.69, 1.08"
       ];
-      
+
       flash = {
         flash_opacity = 0.93;
         in_bezier = "realsmooth";
@@ -79,15 +82,45 @@
     preload = ${../res/glassmorphism/neoncity.jpg}
     wallpaper = ,${../res/glassmorphism/neoncity.jpg}
   '';
+  home.file.".config/dunst/dunstrc".source = ../res/catppuccin/dunstrc;
+  home.file.".config/rofi/config.rasi".source = ../res/catppuccin/rofi/config.rasi;
+  home.file.".local/share/rofi/themes/theme.rasi".source = ../res/catppuccin/rofi/theme.rasi;
 
   # terminal emulator
   programs.wezterm.extraConfig = ''
     local config = wezterm.config_builder()
 
-    -- config.dpi = 384.0
+    config.dpi = ${builtins.toString (96 * scale * scale)}
 
     config.font = wezterm.font 'Cascadia Code'
     config.font_size = 10.0
+
+    local editor = os.getenv("EDITOR")
+
+    config.hyperlink_rules = wezterm.default_hyperlink_rules()
+    table.insert(config.hyperlink_rules, {
+      regex = [[(\b|\/)[^\s:]*\b:\d+(:\d+)?\b]],
+      format = "$EDITOR:$0",
+    })
+    wezterm.on("open-uri", function(window, pane, uri)
+      local start, match_end = uri:find("$EDITOR:")
+      if start == 1 then
+        local file = uri:sub(match_end + 1)
+        pane:window():spawn_tab {
+          args = {"${pkgs.direnv}/bin/direnv", "exec", ".", editor, file},
+        }
+        return false
+      end
+    end)
+    config.keys = {
+      {
+        key = 'e',
+        mods = 'SUPER',
+        action = wezterm.action.SpawnCommandInNewTab {
+          args = {"${pkgs.direnv}/bin/direnv", "exec", ".", editor},
+        },
+      },
+    }
 
     config.force_reverse_video_cursor = true
     config.force_reverse_video_selection = true
@@ -126,6 +159,41 @@
 
     return config
   '';
+
+  programs.alacritty.settings = {
+    window.opacity = 0.8;
+
+    font.normal.family = "Spleen";
+    font.size = 8.0;
+
+    font.offset.x = 1;
+    font.offset.y = 0;
+
+    cursor.style.shape = "Beam";
+
+    colors = {
+      primary.foreground = "#cdd6f4";
+      primary.background = "#1e1e2e";
+
+      normal.black   = "#1e1e2e";
+      normal.red     = "#eba0ac";
+      normal.green   = "#a6e3a1";
+      normal.yellow  = "#f9e2af";
+      normal.blue    = "#89b4fa";
+      normal.magenta = "#f5c2e7";
+      normal.cyan    = "#94e2d5";
+      normal.white   = "#bac2de";
+
+      bright.black   = "#585b70";
+      bright.red     = "#eba0ac";
+      bright.green   = "#a6e3a1";
+      bright.yellow  = "#f9e2af";
+      bright.blue    = "#89b4fa";
+      bright.magenta = "#f5c2e7";
+      bright.cyan    = "#94e2d5";
+      bright.white   = "#a6adc8";
+    };
+  };
 
   # cursor
   home.pointerCursor = 

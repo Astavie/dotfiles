@@ -1,10 +1,5 @@
 { lib, inputs, config, ... }:
 
-let
-  subset = module: lib.mkOption {
-    type = lib.types.attrsOf (lib.types.submodule module);
-  };
-in
 {
   imports = [ inputs.impermanence.nixosModule ];
 
@@ -18,7 +13,7 @@ in
         The persist directory of the system environment.
       '';
     };
-    users = subset ({ name, ...}@u: {
+    users = lib.subset ({ name, ...}@u: {
       options = {
         dir.persist = lib.mkOption {
           type = lib.types.path;

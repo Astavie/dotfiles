@@ -16,9 +16,6 @@
   networking.hostName = "satellite";
   networking.hostId = "577d321b";
 
-  networking.networkmanager.enable = true;
-  hardware.graphics.enable = true;
-
   users.users.astavie = {
     password = "admin"; # TODO
     extraGroups = [ "wheel" "networkmanager" "dialout" ];
@@ -29,6 +26,18 @@
     impermanence.enable = true;
     pipewire.enable = true;
     networking.enable = true;
+    backup.directories = [
+      "/etc/NetworkManager/system-connections"
+    ];
+
+    hardware = {
+      battery = true;
+      monitors = [{
+        portname = "eDP-1";
+        width = 1920;
+        height = 1080;
+      }];
+    };
 
     users.astavie = {
       ssh.enable = true;
@@ -44,9 +53,9 @@
             skim
             silver-searcher
           ];
-          programs.git = {
-            userEmail = "astavie@pm.me";
-            userName = "Astavie";
+          programs.git.settings.user = {
+            email = "astavie@pm.me";
+            name = "Astavie";
           };
         }
         ../home/desktop-hyprland.nix
@@ -64,4 +73,14 @@
     extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
     config.common.default = "*";
   };
+
+  # networking
+  networking.networkmanager.enable = true;
+  networking.networkmanager.wifi.backend = "wpa_supplicant";
+
+  # graphics
+  hardware.graphics.enable = true;
+
+  # firmware
+  hardware.enableRedistributableFirmware = true;
 }

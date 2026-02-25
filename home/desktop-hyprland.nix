@@ -1,7 +1,8 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, lib, system, ... }:
 
 let
-  system = pkgs.stdenv.hostPlatform.system;
+  platform = pkgs.stdenv.hostPlatform.system;
+  scale = (builtins.head system.asta.hardware.monitors).scale;
 in
 {
   home.packages = with pkgs; [
@@ -10,6 +11,7 @@ in
     grim slurp wl-clipboard  # screenshots
     wf-recorder vlc          # recording
     waybar
+  ] ++ lib.optionals system.asta.hardware.mouse [
     kando
   ];
 
@@ -19,7 +21,7 @@ in
 
   programs.wezterm = {
     enable = true;
-    package = inputs.wezterm.packages.${system}.default.overrideAttrs (final: prev: {
+    package = inputs.wezterm.packages.${platform}.default.overrideAttrs (final: prev: {
       patches = [(
         pkgs.fetchpatch {
           url = "https://patch-diff.githubusercontent.com/raw/wez/wezterm/pull/4093.patch";
@@ -31,42 +33,57 @@ in
 
   wayland.windowManager.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    package = inputs.hyprland.packages.${platform}.hyprland;
 
     settings = {
       ecosystem.no_update_news = true;
 
-      monitor = [",highres,auto,1"];
+      monitor = builtins.map (monitor:
+        let
+          name = monitor.portname;
+          resolution = "${builtins.toString monitor.width}x${builtins.toString monitor.height}@${builtins.toString monitor.refreshRate}";
+          position = "${builtins.toString monitor.x}x${builtins.toString monitor.y}";
+          scale = "${builtins.toString monitor.scale}";
+        in "${name}, ${resolution}, ${position}, ${scale}"
+      ) system.asta.hardware.monitors;
+
       input.follow_mouse = 2;
+
       xwayland.force_zero_scaling = true;
       env = [
         "XCURSOR_SIZE,24"
         "HYPRCURSOR_SIZE,24"
+        "GDK_SCALE,${builtins.toString scale}"
       ];
 
       exec-once = [
         "hyprpaper"
         "systemctl --user start easyeffects.service"
-        "kando --ozone-platform-hint=auto"
         "waybar"
+      ] ++ lib.optionals system.asta.hardware.mouse [
+        "kando --ozone-platform-hint=auto"
       ];
 
       "$mod" = "SUPER";
       "$term" = "wezterm";
 
-      bind = [
+      bind = lib.optionals system.asta.hardware.mouse [
+        "CTRL SHIFT ALT SUPER, T, global, org.chromium.Chromium:run"
+      ] ++ [
         # window creation / destruction
-        "CTRL SHIFT, Super_R, global, kando:run"
+        "$mod, Space, exec, tofi-drun --drun-launch=true"
         "$mod, return, exec, $term"
         "$mod, Q, killactive"
         "$mod SHIFT, Q, exit"
 
         "$mod, P, togglefloating"
         "$mod, P, pin"
+        "$mod, F, fullscreen"
 
         # TODO: fix these
-        "$mod, U, exec, [float] $term -e bash -lic \"uup /data/astavie/dotfiles/ ; read -p Done!\""
-        "$mod SHIFT, U, exec, [float] $term -e bash -lic \"sup /data/astavie/dotfiles/ ; read -p Done!\""
+        # "$mod, U, exec, [float] $term -e bash -lic \"uup /data/astavie/dotfiles/ ; read -p Done!\""
+        # "$mod SHIFT, U, exec, [float] $term -e bash -lic \"sup /data/astavie/dotfiles/ ; read -p Done!\""
+        "$mod, Y, exec, $term -e fish -C yazi"
 
         # screenshot / recording
         "$mod SHIFT, P, exec, grim -g \"$(slurp)\" -t png - | wl-copy  -t image/png"
@@ -109,20 +126,19 @@ in
       ];
 
       windowrule = [
-        "noblur, class:kando"
-        "opaque, class:kando"
-        "size 100% 100%, class:kando"
-        "center, class:kando"
-        "noborder, class:kando"
-        "noanim, class:kando"
-        "float, class:kando"
-        "float, xwayland:1"
-        "pin, class:kando"
+        "no_blur 1, match:class kando"
+        "opaque 1, match:class kando"
+        "size 100% 100%, match:class kando"
+        "center 1, match:class kando"
+        "border_size 0, match:class kando"
+        "no_anim 1, match:class kando"
+        "float 1, match:class kando"
+        "pin 1, match:class kando"
       ];
 
     };
 
-    plugins = with inputs.hyprland-plugins.packages.${pkgs.system}; [
+    plugins = with inputs.hyprland-plugins.packages.${platform}; [
       hyprfocus
     ];
   };
@@ -134,10 +150,13 @@ in
         layer = "top";
         position = "top";
         height = 24;
-        # output = ["DP-1"];
+        output = builtins.map (monitor: monitor.portname) system.asta.hardware.monitors;
         modules-left = [ "hyprland/workspaces" ];
         modules-center = [ "hyprland/window" ];
-        modules-right = [ "tray" "wireplumber" "memory" "cpu" "temperature" "clock" "custom/power" ];     
+        modules-right =
+          [ "tray" "wireplumber" "memory" "cpu" "temperature" ] ++
+          lib.optionals (system.asta.hardware.battery) [ "battery" ] ++
+          [ "clock" "custom/power" ];     
         "hyprland/workspaces" = {
           format = "{id} {windows} ";
           format-window-separator = " ";
@@ -169,7 +188,7 @@ in
         };
         temperature = {
           format = "{icon}";
-          format-icons = ["   " " ▏  " " ▎  " "  ▍  " " ▌  " " ▋  " " ▊  " " ▉  " " █  " " █▏ " " █▍ " " █▌ " " █▋ " " █▊ " " █▉ " " ██ " " ██▏" " ██▎" " ██▍" " ██▌"];
+          format-icons = ["   " " ▏  " " ▎  " " ▍  " " ▌  " " ▋  " " ▊  " " ▉  " " █  " " █▏ " " █▍ " " █▌ " " █▋ " " █▊ " " █▉ " " ██ " " ██▏" " ██▎" " ██▍" " ██▌"];
         };
         wireplumber = {
           format = "{icon}";
@@ -179,6 +198,10 @@ in
           tooltip-format = "{volume}%";
           scroll-step = 5;
           on-click = "pavucontrol";
+        };
+        battery = {
+          format = "{icon}";
+          format-icons = ["󰂎    " "󰂎 ▏  " "󰂎 ▎  " "󰂎 ▍  " "󰂎 ▌  " "󱊡 ▋  " "󱊡 ▊  " "󱊡 ▉  " "󱊡 █  " "󱊡 █▏ " "󱊢 █▍ " "󱊢 █▌ " "󱊢 █▋ " "󱊢 █▊ " "󱊢 █▉ " "󱊣 ██ " "󱊣 ██▏" "󱊣 ██▎" "󱊣 ██▍" "󱊣 ██▌"];
         };
         clock = {
           format = "{:%H:%M}";

@@ -7,19 +7,10 @@
         ffmpeg
       ];
     })
-    glfw-wayland-minecraft
-
-    wlx-overlay-s
-    wivrn
-    monado
-    opencomposite
+    glfw3-minecraft
   ];
 
-  home.file.".config/openxr/1/active_runtime.json".source =
-    "${pkgs.monado}/share/openxr/1/openxr_monado.json";
-
   asta.backup.directories = [
-    "WiVRn/.config/wivrn"
     {
       directory = "PrismLauncher/.local/share/PrismLauncher";
       # OH MY GOD THIS ISSUE

@@ -3,7 +3,7 @@
 {
   programs.git = {
     enable = true;
-    extraConfig = {
+    settings = {
       push.autoSetupRemote = true;
       pull.rebase = false;
       init.defaultBranch = "main";
