@@ -32,7 +32,7 @@
         scale = 2.0;
         width = 3840;
         height = 2160;
-        refreshRate = 120;
+        # refreshRate = 144;
       }];
     };
 
@@ -125,8 +125,8 @@
 
   musnix.enable = true;
 
-  boot.zfs.package = pkgs.zfs_unstable;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.zfs.package = pkgs.zfs_unstable;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
 
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
   boot.kernelModules = [ "v4l2loopback" "amdgpu" ];
