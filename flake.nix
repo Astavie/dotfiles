@@ -1,7 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-    nixpkgs-unstable.follows = "hyprland/nixpkgs";
+    nixpkgs-unstable.follows = "cros/nixpkgs";
 
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -17,14 +17,8 @@
     wezterm.url = "github:wez/wezterm?dir=nix";
     wezterm.inputs.nixpkgs.follows = "nixpkgs";
 
-    hyprland.url = "github:hyprwm/Hyprland";
-
-    hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
-    hyprland-plugins.inputs.hyprland.follows = "hyprland";
-
     # ---- CHROMEBOOK SPECIFICS ----
     cros.url = "github:ninelore/flake";
-    cros.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     # ---- OVERLAYS ----
     # overlay-astapkgs = {

@@ -8,8 +8,10 @@
     inputs.cros.nixosModules.default
     inputs.cros.nixosModules.crosAarch64
     {
-      boot.kernelParams = [ "console=tty0" ];
-      boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_cros_latest;
+      boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_cros_latest.override {
+        linux_latest = pkgs.unstable.linux_6_18;
+      });
+      boot.zfs.package = pkgs.unstable.zfs_2_4;
     }
   ];
 
@@ -78,9 +80,7 @@
   networking.networkmanager.enable = true;
   networking.networkmanager.wifi.backend = "wpa_supplicant";
 
-  # graphics
+  # drivers / firmware
   hardware.graphics.enable = true;
-
-  # firmware
   hardware.enableRedistributableFirmware = true;
 }

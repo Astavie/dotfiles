@@ -156,6 +156,13 @@ in
           permittedInsecurePackages = unfree;
         };
       };
+      master = import inputs.nixpkgs-master {
+        system = pkgs.stdenv.hostPlatform.system;
+        config = {
+          inherit allowUnfreePredicate;
+          permittedInsecurePackages = unfree;
+        };
+      };
     })];
     nixpkgs.config = {
       inherit allowUnfreePredicate;
