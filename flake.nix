@@ -1,29 +1,24 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-    nixpkgs-unstable.follows = "hyprland/nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    home-manager.url = "github:nix-community/home-manager/release-25.11";
+    home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    impermanence.url = "github:nix-community/impermanence/home-manager-v1";
+    # TODO: put back once https://github.com/nix-community/impermanence/pull/326 is merged
+    # impermanence.url = "github:nix-community/impermanence/home-manager-v1";
+    impermanence.url = "github:viceebun/impermanence-hm-v1-fix-26.05/home-manager-v1";
 
     musnix.url = "github:musnix/musnix";
     musnix.inputs.nixpkgs.follows = "nixpkgs";
 
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
+    zen-browser.inputs.home-manager.follows = "home-manager";
 
     wezterm.url = "github:wez/wezterm?dir=nix";
     wezterm.inputs.nixpkgs.follows = "nixpkgs";
-
-    hyprland.url = "github:hyprwm/Hyprland";
-
-    hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
-    hyprland-plugins.inputs.hyprland.follows = "hyprland";
-
-    cros.url = "github:ninelore/flake";
-    cros.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     # ---- OVERLAYS ----
     # overlay-astapkgs = {
@@ -66,13 +61,13 @@
             inherit inputs;
           };
         };
-        satellite = lib.nixosSystem {
-          modules = [ ./hosts/satellite.nix ];
-          system = "aarch64-linux";
-          specialArgs = {
-            inherit inputs;
-          };
-        };
+        # satellite = lib.nixosSystem {
+        #   modules = [ ./hosts/satellite.nix ];
+        #   system = "aarch64-linux";
+        #   specialArgs = {
+        #     inherit inputs;
+        #   };
+        # };
         newhorizons = lib.nixosSystem {
           modules = [ ./hosts/newhorizons.nix ];
           system = "x86_64-linux";

@@ -6,6 +6,13 @@
     pulseaudio
     pre-commit
     unstable.devenv
+    libqalculate
+    unzip
+    fastfetch
+    htop
+    sutils
+    skim
+    silver-searcher
 
     # languages
     nil
@@ -50,6 +57,7 @@
   # rust cmd utils
   programs.yazi.enable = true;
   programs.yazi.enableFishIntegration = true;
+  programs.yazi.shellWrapperName = "y";
   programs.zoxide.enable = true;
   programs.zoxide.enableFishIntegration = true;
 

@@ -50,13 +50,6 @@ in
       modules = [
         {
           home.packages = with pkgs; [
-            unzip
-            gnumake
-            neofetch
-            htop
-            sutils
-            skim
-            silver-searcher
             jujutsu
             (GPUOffloadApp unityhub "unityhub")
           ];

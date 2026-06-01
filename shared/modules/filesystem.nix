@@ -31,6 +31,7 @@
   };
 
   boot.kernelParams = [ "elevator=none" "nohibernate" ];
+  boot.zfs.forceImportRoot = false;
 
   services.zfs = {
     autoScrub.enable = true;

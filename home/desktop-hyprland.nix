@@ -33,7 +33,8 @@ in
 
   wayland.windowManager.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${platform}.hyprland;
+    package = pkgs.unstable.hyprland;
+    configType = "hyprlang";
 
     settings = {
       ecosystem.no_update_news = true;
@@ -138,7 +139,7 @@ in
 
     };
 
-    plugins = with inputs.hyprland-plugins.packages.${platform}; [
+    plugins = with pkgs.unstable.hyprlandPlugins; [
       hyprfocus
     ];
   };
