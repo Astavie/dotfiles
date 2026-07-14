@@ -89,11 +89,8 @@ in
   musnix.enable = true;
 
   # security.pam.services.hyprlock = {};
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
-    config.common.default = "*";
-  };
+
+  environment.pathsToLink = [ "/share/applications" "/share/xdg-desktop-portal" ];
 
   # nvidia
   hardware.nvidia.modesetting.enable = true;

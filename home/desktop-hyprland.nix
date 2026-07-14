@@ -92,7 +92,7 @@ in
           pkill --euid "$USER" --signal SIGINT wf-recorder && exit
           Coords=$(slurp) || exit
           rm -f "/home/$USER/new.mp4"
-          wf-recorder -g "$Coords" -f "/home/$USER/new.mp4" || exit
+          wf-recorder -audio=easyeffects_sink.monitor -g "$Coords" -f "/home/$USER/new.mp4" || exit
           vlc "/home/$USER/new.mp4"
         ''}"
         "$mod SHIFT, A, exec, ${pkgs.writeShellScript "audio.sh" ''

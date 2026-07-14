@@ -13,5 +13,6 @@
     ./vbhost.nix
     ./xserver.nix
     ./wivrn.nix
+    ./timekpr.nix
   ];
 }
