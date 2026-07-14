@@ -19,6 +19,7 @@
     impermanence.enable = true;
     pipewire.enable = true;
     networking.enable = true;
+    timekpr.enable = true;
 
     backup.directories = [
       "/etc/ssh"
@@ -104,19 +105,14 @@
     };
   };
 
+  # yay firewall
   networking.firewall.trustedInterfaces = [ "p2p-wl+" ];
   networking.firewall.allowedTCPPorts = [ 7236 7250 ];
   networking.firewall.allowedUDPPorts = [ 7236 5353 ];
-  xdg.portal.xdgOpenUsePortal = true;
 
   # some other stuff
   networking.interfaces."enp4s0".wakeOnLan.enable = true;
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
-    config.common.default = "*";
-  };
+  environment.pathsToLink = [ "/share/applications" "/share/xdg-desktop-portal" ];
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [

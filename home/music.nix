@@ -26,6 +26,8 @@
     "ardour/.cache/ardour7"
     "ardour/.config/ardour8"
     "ardour/.cache/ardour8"
+    "ardour/.config/ardour9"
+    "ardour/.cache/ardour9"
 
     "vital/.local/share/vital"
 

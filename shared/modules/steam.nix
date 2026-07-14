@@ -25,7 +25,7 @@ lib.module config "steam" {
   hardware.graphics.enable = true;
   hardware.graphics.enable32Bit = true;
 
-  # remote play / vr streaming
-  networking.firewall.allowedTCPPorts = [ 27036 27037 ];
+  # remote play / vr streaming / local transfer
+  networking.firewall.allowedTCPPorts = [ 27036 27037 27040 ];
   networking.firewall.allowedUDPPorts = [ 27031 27036 10400 10401 ];
 }
