@@ -47,8 +47,18 @@
     };
 
     # zfs rollback
-    boot.initrd.postResumeCommands = lib.mkAfter ''
-      zfs rollback -r nixos/local/root@blank
-    '';
+    # taken from https://discourse.nixos.org/t/systemd-stage-1-migration/77113/2
+    boot.initrd.systemd.enable = true;
+    boot.initrd.systemd.services.initrd-rollback-root = {
+      after = [ "zfs-import-nixos.service" ];
+      requires = [ "zfs-import-nixos.service" ];
+      before = [ "sysroot.mount" ];
+      wantedBy = [ "initrd.target" ];
+      description = "Rollback root fs";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${config.boot.zfs.package}/sbin/zfs rollback -r nixos/local/root@blank";
+      };
+    };
   };
 }

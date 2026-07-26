@@ -8,6 +8,7 @@
     {
       # from https://github.com/jmbaur/homelab/blob/bfd82fb4657aa7ff0d62898b383655ca75a39cfc/nixos-modules/hardware/google-asurada-spherion/default.nix
       hardware.enableRedistributableFirmware = true;
+      # FIXME: this seems to make the generation not show up in the bootloader
       # hardware.deviceTree.name = "mediatek/mt8192-asurada-spherion-r0.dtb";
       # boot.kernelParams = [
       #   "console=ttyS0,115200"
@@ -67,21 +68,17 @@
       ssh.enable = true;
 
       modules = [
-        {
-          home.packages = with pkgs; [
-            unzip
-            gnumake
-            neofetch
-            htop
-            sutils
-            skim
-            silver-searcher
-          ];
+        ({ config, ... }: {
+          # home.packages = with pkgs; [];
+
+          home.file.".local/share/fonts/truetype/Minecraftia-Regular.ttf".source = ../res/Minecraftia-Regular.ttf;
+          home.file."data".source = config.lib.file.mkOutOfStoreSymlink /data/astavie;
+
           programs.git.settings.user = {
             email = "astavie@pm.me";
             name = "Astavie";
           };
-        }
+        })
         ../home/desktop-hyprland.nix
         ../home/theme-catppuccin.nix
         ../home/discord.nix
@@ -92,11 +89,9 @@
     };
   };
 
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
-    config.common.default = "*";
-  };
+  # some other stuff
+  programs.nix-ld.enable = true;
+  environment.pathsToLink = [ "/share/applications" "/share/xdg-desktop-portal" ];
 
   # networking
   networking.networkmanager.enable = true;
@@ -105,8 +100,4 @@
   # drivers / firmware
   hardware.graphics.enable = true;
   hardware.enableRedistributableFirmware = true;
-
-  # kernel
-  boot.kernelPackages = pkgs.linuxPackages_6_18;
-  boot.zfs.package = pkgs.zfs_2_4;
 }

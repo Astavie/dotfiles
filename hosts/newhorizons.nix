@@ -50,13 +50,6 @@ in
       modules = [
         {
           home.packages = with pkgs; [
-            unzip
-            gnumake
-            neofetch
-            htop
-            sutils
-            skim
-            silver-searcher
             jujutsu
             (GPUOffloadApp unityhub "unityhub")
           ];
@@ -92,15 +85,8 @@ in
 
   # some other stuff
   programs.nix-ld.enable = true;
-
   musnix.enable = true;
-
-  # security.pam.services.hyprlock = {};
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
-    config.common.default = "*";
-  };
+  environment.pathsToLink = [ "/share/applications" "/share/xdg-desktop-portal" ];
 
   # nvidia
   hardware.nvidia.modesetting.enable = true;

@@ -19,4 +19,6 @@
   "nvidia-settings"
   "unityhub"
   "muse-sounds-manager"
+  "idea"
+  "osu-lazer-bin"
 ]
