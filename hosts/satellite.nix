@@ -1,17 +1,39 @@
-{ pkgs, inputs, ... }:
+{ lib, config, pkgs, ... }:
 
 {
   imports = [
     # base config
     ../shared
     # chromebook stuff
-    inputs.cros.nixosModules.default
-    inputs.cros.nixosModules.crosAarch64
     {
-      boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_cros_latest.override {
-        linux_latest = pkgs.unstable.linux_6_18;
-      });
-      boot.zfs.package = pkgs.unstable.zfs_2_4;
+      # from https://github.com/jmbaur/homelab/blob/bfd82fb4657aa7ff0d62898b383655ca75a39cfc/nixos-modules/hardware/google-asurada-spherion/default.nix
+      hardware.enableRedistributableFirmware = true;
+      # hardware.deviceTree.name = "mediatek/mt8192-asurada-spherion-r0.dtb";
+      # boot.kernelParams = [
+      #   "console=ttyS0,115200"
+      #   "console=tty1"
+      # ];
+      boot.initrd.availableKernelModules = [
+        "uas"
+        "sd_mod"
+      # from https://github.com/jmbaur/homelab/blob/bfd82fb4657aa7ff0d62898b383655ca75a39cfc/nixos-modules/hardware/chromebook/default.nix
+        "tpm_tis_spi"
+      ];
+      boot.kernelPatches = [
+        {
+          name = "google-firmware";
+          patch = null;
+          structuredExtraConfig.GOOGLE_FIRMWARE = lib.kernel.yes;
+        }
+      ];
+      services.udev.packages = [
+        (pkgs.runCommand "chromiumos-autosuspend-udev-rules" { } ''
+          mkdir -p $out/lib/udev/rules.d
+          ${lib.getExe pkgs.buildPackages.python3} \
+            ${config.systemd.package.src}/tools/chromiumos/gen_autosuspend_rules.py \
+            >$out/lib/udev/rules.d/01-chromium-autosuspend.rules
+        '')
+      ];
     }
   ];
 
@@ -83,4 +105,8 @@
   # drivers / firmware
   hardware.graphics.enable = true;
   hardware.enableRedistributableFirmware = true;
+
+  # kernel
+  boot.kernelPackages = pkgs.linuxPackages_6_18;
+  boot.zfs.package = pkgs.zfs_2_4;
 }
