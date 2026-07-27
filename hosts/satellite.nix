@@ -8,12 +8,11 @@
     {
       # from https://github.com/jmbaur/homelab/blob/bfd82fb4657aa7ff0d62898b383655ca75a39cfc/nixos-modules/hardware/google-asurada-spherion/default.nix
       hardware.enableRedistributableFirmware = true;
-      # FIXME: this seems to make the generation not show up in the bootloader
-      # hardware.deviceTree.name = "mediatek/mt8192-asurada-spherion-r0.dtb";
-      # boot.kernelParams = [
-      #   "console=ttyS0,115200"
-      #   "console=tty1"
-      # ];
+      hardware.deviceTree.name = "mediatek/mt8192-asurada-spherion-r0.dtb";
+      boot.kernelParams = [
+        "console=ttyS0,115200"
+        "console=tty1"
+      ];
       boot.initrd.availableKernelModules = [
         "uas"
         "sd_mod"
