@@ -112,49 +112,12 @@
 
   # some other stuff
   networking.interfaces."enp4s0".wakeOnLan.enable = true;
+
   environment.pathsToLink = [ "/share/applications" "/share/xdg-desktop-portal" ];
 
   programs.nix-ld.enable = true;
-  programs.nix-ld.libraries = with pkgs; [
-    # common requirement for several games
-    stdenv.cc.cc.lib
-
-    # from https://github.com/NixOS/nixpkgs/blob/nixos-23.05/pkgs/games/steam/fhsenv.nix#L72-L79
-    libxcomposite
-    libxtst
-    libxrandr
-    libxext
-    libx11
-    libxfixes
-    libGL
-    libva
-
-    # from https://github.com/NixOS/nixpkgs/blob/nixos-23.05/pkgs/games/steam/fhsenv.nix#L124-L136
-    fontconfig
-    freetype
-    libxt
-    libxmu
-    libogg
-    libvorbis
-    SDL
-    SDL2_image
-    glew_1_10
-    libdrm
-    libidn
-    tbb
-    zlib
-
-    # and some extras from me
-    libxcursor
-    libxkbcommon
-    libpulseaudio
-    ffmpeg
-  ];
 
   musnix.enable = true;
-
-  boot.kernelPackages = pkgs.linuxPackages_6_18;
-  boot.zfs.package = pkgs.zfs_2_4;
 
   boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
   boot.kernelModules = [ "v4l2loopback" "amdgpu" ];

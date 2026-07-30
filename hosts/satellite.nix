@@ -50,12 +50,10 @@
     impermanence.enable = true;
     pipewire.enable = true;
     networking.enable = true;
-    backup.directories = [
-      "/etc/NetworkManager/system-connections"
-    ];
 
     hardware = {
       battery = true;
+      laptop = true;
       monitors = [{
         portname = "eDP-1";
         width = 1920;
@@ -91,10 +89,6 @@
   # some other stuff
   programs.nix-ld.enable = true;
   environment.pathsToLink = [ "/share/applications" "/share/xdg-desktop-portal" ];
-
-  # networking
-  networking.networkmanager.enable = true;
-  networking.networkmanager.wifi.backend = "wpa_supplicant";
 
   # drivers / firmware
   hardware.graphics.enable = true;

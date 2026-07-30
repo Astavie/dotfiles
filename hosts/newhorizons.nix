@@ -30,12 +30,10 @@ in
     xserver.enable = true;
     pipewire.enable = true;
     networking.enable = true;
-    backup.directories = [
-      "/etc/NetworkManager/system-connections"
-    ];
 
     hardware = {
       battery = true;
+      laptop = true;
       monitors = [{
         portname = "eDP-1";
         width = 1920;
@@ -66,11 +64,6 @@ in
             "unity3d/.config/unityhub"
             "unity3d/Unity"
           ];
-
-          # programs.hyprlock.enable = true;
-          # wayland.windowManager.hyprland.settings.bind = [
-          #   "$mod, L, exec, hyprlock"
-          # ];
         }
         ../home/desktop-hyprland.nix
         ../home/theme-catppuccin.nix
@@ -101,10 +94,6 @@ in
     intelBusId = "PCI:0:2:0";
     nvidiaBusId = "PCI:1:0:0";
   };
-
-  # networking
-  networking.networkmanager.enable = true;
-  networking.networkmanager.wifi.backend = "wpa_supplicant";
 
   # cpu
   hardware.cpu.intel.updateMicrocode = true;
