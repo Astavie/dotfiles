@@ -2,7 +2,7 @@
 
 lib.module config "wivrn" {
   home.packages = with pkgs; [
-    wlx-overlay-s
+    wayvr
     wivrn
     monado
   ];

@@ -79,8 +79,10 @@ in
   programs.helix.settings.theme = "catppuccin";
   home.file.".config/helix/themes/catppuccin.toml".source = ../res/catppuccin/helix.toml;
   home.file.".config/hypr/hyprpaper.conf".text = ''
-    preload = ${../res/glassmorphism/neoncity.jpg}
-    wallpaper = ,${../res/glassmorphism/neoncity.jpg}
+    wallpaper {
+      monitor =
+      path = ${../res/glassmorphism/neoncity.jpg}
+    }
   '';
   home.file.".config/dunst/dunstrc".source = ../res/catppuccin/dunstrc;
   home.file.".config/rofi/config.rasi".source = ../res/catppuccin/rofi/config.rasi;

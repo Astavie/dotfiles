@@ -31,6 +31,16 @@
       '';
     };
 
+    laptop = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Is this system a laptop.
+        If true, will provide wifi settings.
+      '';
+    };
+
     monitors = lib.sublist {
       options = {
         portname = lib.mkOption {

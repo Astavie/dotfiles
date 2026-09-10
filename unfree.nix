@@ -17,6 +17,9 @@
   "corefonts"
   "nvidia-x11"
   "nvidia-settings"
+  "nvidia-kernel-modules"
   "unityhub"
   "muse-sounds-manager"
+  "idea"
+  "osu-lazer-bin"
 ]

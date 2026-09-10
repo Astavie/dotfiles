@@ -30,12 +30,10 @@ in
     xserver.enable = true;
     pipewire.enable = true;
     networking.enable = true;
-    backup.directories = [
-      "/etc/NetworkManager/system-connections"
-    ];
 
     hardware = {
       battery = true;
+      laptop = true;
       monitors = [{
         portname = "eDP-1";
         width = 1920;
@@ -58,13 +56,6 @@ in
       modules = [
         {
           home.packages = with pkgs; [
-            unzip
-            gnumake
-            neofetch
-            htop
-            sutils
-            skim
-            silver-searcher
             jujutsu
             obsidian
           ];
@@ -82,22 +73,14 @@ in
         ../home/zen.nix
         ../home/git.nix
         ../home/shell.nix
-        ../home/music.nix
       ];
     };
   };
 
   # some other stuff
   programs.nix-ld.enable = true;
-
   musnix.enable = true;
-
-  # security.pam.services.hyprlock = {};
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
-    config.common.default = "*";
-  };
+  environment.pathsToLink = [ "/share/applications" "/share/xdg-desktop-portal" ];
 
   # nvidia
   hardware.nvidia.modesetting.enable = true;
@@ -112,10 +95,6 @@ in
     intelBusId = "PCI:0:2:0";
     nvidiaBusId = "PCI:1:0:0";
   };
-
-  # networking
-  networking.networkmanager.enable = true;
-  networking.networkmanager.wifi.backend = "wpa_supplicant";
 
   # cpu
   hardware.cpu.intel.updateMicrocode = true;

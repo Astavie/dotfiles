@@ -13,5 +13,8 @@
     ./vbhost.nix
     ./xserver.nix
     ./wivrn.nix
+    ./timekpr.nix
+    ./nix-ld.nix
+    ./wifi.nix
   ];
 }
