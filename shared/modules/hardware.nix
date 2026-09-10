@@ -76,6 +76,13 @@
           type = lib.types.int;
           default = 0;
         };
+        transform = lib.mkOption {
+          type = lib.types.int;
+          default = 0;
+          description = ''
+            Monitor rotation and flipping
+          '';
+        };
       };
     };
   };

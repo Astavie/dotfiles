@@ -40,11 +40,19 @@ in
         portname = "eDP-1";
         width = 1920;
         height = 1080;
+      } {
+        portname = "HDMI-A-1";
+        width = 1920;
+        height = 1080;
+        x = 1920;
+        y = -840;
+        transform = 1;
       }];
     };
 
     users.astavie = {
       vbhost.enable = true;
+      steam.enable = true;
       ssh.enable = true;
 
       modules = [
@@ -58,7 +66,7 @@ in
             skim
             silver-searcher
             jujutsu
-            (GPUOffloadApp unityhub "unityhub")
+            obsidian
           ];
 
           home.file.".local/share/fonts/truetype/Minecraftia-Regular.ttf".source = ../res/Minecraftia-Regular.ttf;
@@ -67,17 +75,6 @@ in
             email = "astavie@pm.me";
             name = "Astavie";
           };
-
-          asta.backup.directories = [
-            "unity3d/.config/unity3d"
-            "unity3d/.config/unityhub"
-            "unity3d/Unity"
-          ];
-
-          # programs.hyprlock.enable = true;
-          # wayland.windowManager.hyprland.settings.bind = [
-          #   "$mod, L, exec, hyprlock"
-          # ];
         }
         ../home/desktop-hyprland.nix
         ../home/theme-catppuccin.nix
