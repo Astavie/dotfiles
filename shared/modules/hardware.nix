@@ -2,15 +2,6 @@
 
 {
   options.asta.hardware = {
-    battery = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      example = true;
-      description = ''
-        Does this system have a rechargable battery.
-      '';
-    };
-
     mouse = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -37,7 +28,7 @@
       example = true;
       description = ''
         Is this system a laptop.
-        If true, will provide wifi settings.
+        If true, will assume this device needs wifi and has a rechargable battery.
       '';
     };
 

@@ -159,7 +159,7 @@ in
         modules-center = [ "hyprland/window" ];
         modules-right =
           [ "tray" "wireplumber" "memory" "cpu" "temperature" ] ++
-          lib.optionals (system.asta.hardware.battery) [ "battery" ] ++
+          lib.optionals (system.asta.hardware.laptop) [ "battery" ] ++
           [ "clock" "custom/power" ];     
         "hyprland/workspaces" = {
           format = "{id} {windows} ";

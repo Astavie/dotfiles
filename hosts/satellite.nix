@@ -52,7 +52,6 @@
     networking.enable = true;
 
     hardware = {
-      battery = true;
       laptop = true;
       monitors = [{
         portname = "eDP-1";
