@@ -57,6 +57,7 @@
             kdePackages.kdenlive
             ffmpeg
             audacity
+            unstable.element-desktop
 
             # ide
             javaPackages.compiler.openjdk17
@@ -86,6 +87,7 @@
             "xfce/Desktop"
             "fonts/.local/share/fonts"
             "osu/.local/share/osu"
+            "element/.config/Element"
           ];
         })
         ../home/desktop-hyprland.nix
