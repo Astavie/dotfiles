@@ -30,28 +30,34 @@ in
     xserver.enable = true;
     pipewire.enable = true;
     networking.enable = true;
-    backup.directories = [
-      "/etc/NetworkManager/system-connections"
-    ];
 
     hardware = {
       battery = true;
+      laptop = true;
       monitors = [{
         portname = "eDP-1";
         width = 1920;
         height = 1080;
+      } {
+        portname = "HDMI-A-1";
+        width = 1920;
+        height = 1080;
+        x = 1920;
+        y = -840;
+        transform = 1;
       }];
     };
 
     users.astavie = {
       vbhost.enable = true;
+      steam.enable = true;
       ssh.enable = true;
 
       modules = [
         {
           home.packages = with pkgs; [
             jujutsu
-            (GPUOffloadApp unityhub "unityhub")
+            obsidian
           ];
 
           home.file.".local/share/fonts/truetype/Minecraftia-Regular.ttf".source = ../res/Minecraftia-Regular.ttf;
@@ -60,17 +66,6 @@ in
             email = "astavie@pm.me";
             name = "Astavie";
           };
-
-          asta.backup.directories = [
-            "unity3d/.config/unity3d"
-            "unity3d/.config/unityhub"
-            "unity3d/Unity"
-          ];
-
-          # programs.hyprlock.enable = true;
-          # wayland.windowManager.hyprland.settings.bind = [
-          #   "$mod, L, exec, hyprlock"
-          # ];
         }
         ../home/desktop-hyprland.nix
         ../home/theme-catppuccin.nix
@@ -78,7 +73,6 @@ in
         ../home/zen.nix
         ../home/git.nix
         ../home/shell.nix
-        ../home/music.nix
       ];
     };
   };
@@ -101,10 +95,6 @@ in
     intelBusId = "PCI:0:2:0";
     nvidiaBusId = "PCI:1:0:0";
   };
-
-  # networking
-  networking.networkmanager.enable = true;
-  networking.networkmanager.wifi.backend = "wpa_supplicant";
 
   # cpu
   hardware.cpu.intel.updateMicrocode = true;

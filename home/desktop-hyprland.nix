@@ -45,7 +45,8 @@ in
           resolution = "${builtins.toString monitor.width}x${builtins.toString monitor.height}@${builtins.toString monitor.refreshRate}";
           position = "${builtins.toString monitor.x}x${builtins.toString monitor.y}";
           scale = "${builtins.toString monitor.scale}";
-        in "${name}, ${resolution}, ${position}, ${scale}"
+          transform = "${builtins.toString monitor.transform}";
+        in "${name}, ${resolution}, ${position}, ${scale}, transform, ${transform}"
       ) system.asta.hardware.monitors;
 
       input.follow_mouse = 2;
@@ -107,18 +108,20 @@ in
         "$mod, J, movefocus, d"
         "$mod, K, movefocus, u"
         "$mod, L, movefocus, r"
+        "$mod, M, focusmonitor, +1"
 
         "$mod SHIFT, H, movewindow, l"
         "$mod SHIFT, J, movewindow, d"
         "$mod SHIFT, K, movewindow, u"
         "$mod SHIFT, L, movewindow, r"
+        "$mod SHIFT, M, movewindow, mon:+1"
 
-        "$mod, comma, workspace, e-1"
-        "$mod, period, workspace, e+1"
-        "$mod SHIFT, comma, movetoworkspace, e-1"
-        "$mod SHIFT, period, movetoworkspace, e+1"
-        "$mod, N, workspace, empty"
-        "$mod SHIFT, N, movetoworkspace, empty"
+        "$mod, comma, workspace, m-1"
+        "$mod, period, workspace, m+1"
+        "$mod SHIFT, comma, movetoworkspace, m-1"
+        "$mod SHIFT, period, movetoworkspace, m+1"
+        "$mod, N, workspace, emptym"
+        "$mod SHIFT, N, movetoworkspace, emptym"
       ];
 
       bindm = [

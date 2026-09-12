@@ -31,6 +31,16 @@
       '';
     };
 
+    laptop = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Is this system a laptop.
+        If true, will provide wifi settings.
+      '';
+    };
+
     monitors = lib.sublist {
       options = {
         portname = lib.mkOption {
@@ -75,6 +85,13 @@
         y = lib.mkOption {
           type = lib.types.int;
           default = 0;
+        };
+        transform = lib.mkOption {
+          type = lib.types.int;
+          default = 0;
+          description = ''
+            Monitor rotation and flipping
+          '';
         };
       };
     };

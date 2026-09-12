@@ -8,9 +8,9 @@ let
     ${config.asta.sudo} /nix/var/nix/profiles/system/bin/switch-to-configuration switch
   '';
   reentry = pkgs.writeShellScriptBin "reentry" ''
-    TERRESTRIAL="terrestrial.local"
+    TERRESTRIAL="10.241.31.252"
     MACADDR="18:c0:4d:e0:b6:3e"
-    HOUSTON="raspberrypi.local"
+    HOUSTON="10.241.176.21"
 
     # try pinging terrestrial
     ping -c 1 -w 1 "$TERRESTRIAL"
